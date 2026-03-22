@@ -64,11 +64,6 @@ class PathCandidateSorter:
                 return None
             edges.append(edge)
 
-        first_edge = edges[0]
-        if first_edge.from_diagram_id != "page_entry":
-            return None
-        if first_edge.from_state_id != graph.entry_state_id:
-            return None
         if not self._is_connected(edges):
             return None
 
