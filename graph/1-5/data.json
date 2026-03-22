@@ -1,0 +1,1666 @@
+{
+  "system": "InternalDocumentReviewApprovalSystem",
+  "version": "1.0",
+  "generatedAt": "2026-03-16T00:00:00.000Z",
+  "inputs": {
+    "specPath": "StateTranstionDiagram/spec.md",
+    "transitionPath": "StateTranstionDiagram/transition.md"
+  },
+  "spec": {
+    "raw": null,
+    "summary": {
+      "productName": "內部文件審核與簽核系統",
+      "goals": [
+        "建立文件草稿、上傳附件、版本化",
+        "送出文件進入簽核流程（依流程模板產生審核任務）",
+        "審核者依任務進行同意/退回，並留下理由",
+        "以嚴格狀態機管理文件生命週期（非法轉換一律拒絕）",
+        "以 append-only 的審核紀錄與稽核事件，確保歷史不可竄改"
+      ],
+      "roles": [
+        {"id": "guest", "label": "Guest"},
+        {"id": "user", "label": "User"},
+        {"id": "reviewer", "label": "Reviewer"},
+        {"id": "admin", "label": "Admin"}
+      ]
+    }
+  },
+  "diagrams": [
+    {
+      "id": "page_entry",
+      "name": "Entry",
+      "level": "page",
+      "parentDiagramId": null,
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {"type": "mermaid", "sectionTitle": "① Entry State Machine", "order": 1},
+      "groups": [],
+      "states": [
+        {
+          "id": "page.Entry.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": ["page"],
+          "meta": {
+            "diagramId": "page_entry",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "Entry.Init"},
+            "validations": [
+              {
+                "id": "v.s.page_Entry_Init.01",
+                "type": "semantic-check",
+                "description": "進站時只建立匿名入口狀態，不直接判定既有 User、Reviewer、Admin 身分，也不顯示受保護頁資料。",
+                "expected": null
+              }
+            ]
+          }
+        }
+      ],
+      "transitions": [],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_login",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_login", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 Login 頁面圖",
+            "taskDescription": "建立 Entry 與 Login 頁面的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_documents_user",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_documents_user", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 User 文件列表頁",
+            "taskDescription": "建立 Entry 與 User 文件列表頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_documents_admin",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_documents_admin", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 Admin 文件列表頁",
+            "taskDescription": "建立 Entry 與 Admin 文件列表頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_document_detail_user",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_document_detail_user", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 User 文件詳情頁",
+            "taskDescription": "建立 Entry 與 User 文件詳情頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_document_detail_reviewer",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_document_detail_reviewer", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 Reviewer 文件詳情頁",
+            "taskDescription": "建立 Entry 與 Reviewer 文件詳情頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_document_detail_admin",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_document_detail_admin", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 Admin 文件詳情頁",
+            "taskDescription": "建立 Entry 與 Admin 文件詳情頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_reviews",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_reviews", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含 Reviewer 待辦頁",
+            "taskDescription": "建立 Entry 與 Reviewer 待辦頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.page_admin_flows",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_admin_flows", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含流程模板管理頁",
+            "taskDescription": "建立 Entry 與流程模板管理頁的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_auth_login",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_auth_login", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含登入功能圖",
+            "taskDescription": "建立 Entry 與登入功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_create_document",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_create_document", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含建立文件功能圖",
+            "taskDescription": "建立 Entry 與建立文件功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_edit_draft",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_edit_draft", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含編輯草稿功能圖",
+            "taskDescription": "建立 Entry 與編輯草稿功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_upload_attachment",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_upload_attachment", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含上傳附件功能圖",
+            "taskDescription": "建立 Entry 與上傳附件功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_submit_document",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_submit_document", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含送審功能圖",
+            "taskDescription": "建立 Entry 與送審功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_reopen_rejected_document",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_reopen_rejected_document", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含重開退回文件功能圖",
+            "taskDescription": "建立 Entry 與重開退回文件功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_approve_review_task",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_approve_review_task", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含同意審核任務功能圖",
+            "taskDescription": "建立 Entry 與同意審核任務功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_reject_review_task",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_reject_review_task", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含退回審核任務功能圖",
+            "taskDescription": "建立 Entry 與退回審核任務功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_manage_flow_template",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_manage_flow_template", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含流程模板管理功能圖",
+            "taskDescription": "建立 Entry 與流程模板管理功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.contains.feature_archive_document",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "feature_archive_document", "stateId": null},
+          "narrative": {
+            "summary": "Entry 包含封存文件功能圖",
+            "taskDescription": "建立 Entry 與封存文件功能圖的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_entry.invokes.page_login.s.page_Entry_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_entry", "stateId": "page.Entry.Init"},
+          "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"},
+          "narrative": {
+            "summary": "從入口導向登入頁",
+            "taskDescription": "在 Entry.Init 觸發 startLogin，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_entry.invokes.page_login.01",
+              "type": "semantic-check",
+              "description": "入口只導向 /login；未登入時 Header 僅可見「登入」，不得出現「文件」「待辦」「流程模板」或重複登入 CTA。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "startLogin | navigate /login",
+            "action": "startLogin",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "Entry",
+        "featureName": null,
+        "entryStateId": "page.Entry.Init"
+      }
+    },
+    {
+      "id": "page_login",
+      "name": "Login Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {"type": "mermaid", "sectionTitle": "② /login Page", "order": 2},
+      "groups": [],
+      "states": [
+        {
+          "id": "page.LoginPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": ["page"],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "LoginPage.Init"},
+            "validations": [
+              {
+                "id": "v.s.page_LoginPage_Init.01",
+                "type": "semantic-check",
+                "description": "進入 /login 時頁面建立登入入口狀態，未預載任何受保護資料，且不顯示文件列表、待辦列表或流程模板內容。",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.LoginPage.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page"],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "LoginPage.Ready"}
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_login.0001",
+          "from": "page.LoginPage.Init",
+          "to": "page.LoginPage.Ready",
+          "event": "showLoginForm",
+          "roles": [],
+          "narrative": {
+            "summary": "登入頁顯示表單",
+            "taskDescription": "在 LoginPage.Init 觸發 showLoginForm，進入 LoginPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_login.0001.01",
+              "type": "semantic-check",
+              "description": "UI 顯示 Email 與 Password 欄位以及單一登入送出入口；Header 只顯示「登入」，同頁不得出現第二個登入按鈕。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "showLoginForm"},
+          "meta": {
+            "diagramId": "page_login",
+            "source": {"raw": "LoginPage.Init --> LoginPage.Ready : showLoginForm"}
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_login",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_login", "stateId": null},
+          "narrative": {
+            "summary": "Login 頁面隸屬 Entry",
+            "taskDescription": "保留 Login 頁面與 Entry 的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_login.invokes.feature_auth_login.s.page_LoginPage_Ready.to.feature_AuthLoginFeature_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_login", "stateId": "page.LoginPage.Ready"},
+          "to": {"diagramId": "feature_auth_login", "stateId": "feature.AuthLoginFeature.Init"},
+          "narrative": {
+            "summary": "從登入頁進入認證功能",
+            "taskDescription": "在 LoginPage.Ready 觸發 submitCredentials，導向 AuthLoginFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.feature_auth_login.01",
+              "type": "semantic-check",
+              "description": "送出登入時只發出一次認證請求並攜帶 Email/Password；送出按鈕進入 disabled 或 submitting 狀態以防重送。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "submitCredentials | navigate AuthLoginFeature",
+            "action": "submitCredentials",
+            "navigateTarget": "AuthLoginFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "LoginPage",
+        "featureName": null,
+        "entryStateId": "page.LoginPage.Init"
+      }
+    },
+    {
+      "id": "page_documents_user",
+      "name": "/documents Page (User)",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {"type": "mermaid", "sectionTitle": "③ /documents Page (User)", "order": 3},
+      "groups": [],
+      "states": [
+        {
+          "id": "page.DocumentsUserPage.user.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": ["page", "user"],
+          "meta": {
+            "diagramId": "page_documents_user",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsUserPage.Init"},
+            "validations": [
+              {
+                "id": "v.s.page_DocumentsUserPage_user_Init.01",
+                "type": "semantic-check",
+                "description": "進入 /documents 時需帶有效 token；若 token 無效則不載入列表並應回 401 後導向 /login。",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.DocumentsUserPage.user.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "user"],
+          "meta": {
+            "diagramId": "page_documents_user",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsUserPage.Ready"}
+          }
+        },
+        {
+          "id": "page.DocumentsUserPage.user.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "user"],
+          "meta": {
+            "diagramId": "page_documents_user",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsUserPage.Empty"}
+          }
+        },
+        {
+          "id": "page.DocumentsUserPage.user.Failed",
+          "label": "Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "user"],
+          "meta": {
+            "diagramId": "page_documents_user",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsUserPage.Failed"}
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_documents_user.0001",
+          "from": "page.DocumentsUserPage.user.Init",
+          "to": "page.DocumentsUserPage.user.Ready",
+          "event": "loadOwnDocuments [hasDocuments]",
+          "roles": ["user"],
+          "narrative": {
+            "summary": "載入自己的文件列表成功",
+            "taskDescription": "在 DocumentsUserPage.Init 觸發 loadOwnDocuments [hasDocuments]，進入 DocumentsUserPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_user.0001.01",
+              "type": "semantic-check",
+              "description": "文件列表 API 回 200 且只返回 owner_id 為目前 User 的文件；每列至少顯示 title、status、updated_at，且不包含他人文件。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadOwnDocuments [hasDocuments]"},
+          "meta": {
+            "diagramId": "page_documents_user",
+            "source": {"raw": "DocumentsUserPage.Init --> DocumentsUserPage.Ready : loadOwnDocuments [hasDocuments]"}
+          }
+        },
+        {
+          "id": "t.page_documents_user.0002",
+          "from": "page.DocumentsUserPage.user.Init",
+          "to": "page.DocumentsUserPage.user.Empty",
+          "event": "loadOwnDocuments [noDocuments]",
+          "roles": ["user"],
+          "narrative": {
+            "summary": "載入自己的文件列表為空",
+            "taskDescription": "在 DocumentsUserPage.Init 觸發 loadOwnDocuments [noDocuments]，進入 DocumentsUserPage.Empty。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_user.0002.01",
+              "type": "semantic-check",
+              "description": "文件列表 API 回 200 且資料筆數為 0；畫面顯示 Empty 狀態與單一「建立文件」入口，不顯示過期列表資料。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadOwnDocuments [noDocuments]"},
+          "meta": {
+            "diagramId": "page_documents_user",
+            "source": {"raw": "DocumentsUserPage.Init --> DocumentsUserPage.Empty : loadOwnDocuments [noDocuments]"}
+          }
+        },
+        {
+          "id": "t.page_documents_user.0003",
+          "from": "page.DocumentsUserPage.user.Init",
+          "to": "page.DocumentsUserPage.user.Failed",
+          "event": "loadOwnDocumentsFailed",
+          "roles": ["user"],
+          "narrative": {
+            "summary": "載入自己的文件列表失敗",
+            "taskDescription": "在 DocumentsUserPage.Init 觸發 loadOwnDocumentsFailed，進入 DocumentsUserPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_user.0003.01",
+              "type": "semantic-check",
+              "description": "讀取列表失敗時顯示 Error 狀態與 Retry；畫面不得殘留先前文件列，也不得把失敗當成 Empty。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadOwnDocumentsFailed"},
+          "meta": {
+            "diagramId": "page_documents_user",
+            "source": {"raw": "DocumentsUserPage.Init --> DocumentsUserPage.Failed : loadOwnDocumentsFailed"}
+          }
+        },
+        {
+          "id": "t.page_documents_user.0004",
+          "from": "page.DocumentsUserPage.user.Failed",
+          "to": "page.DocumentsUserPage.user.Init",
+          "event": "retryLoad",
+          "roles": ["user"],
+          "narrative": {
+            "summary": "重試載入文件列表",
+            "taskDescription": "在 DocumentsUserPage.Failed 觸發 retryLoad，回到 DocumentsUserPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_user.0004.01",
+              "type": "semantic-check",
+              "description": "點擊 Retry 會重新呼叫列表 API；成功後只會回到 Ready 或 Empty，且不會重複累積錯誤提示。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "retryLoad"},
+          "meta": {
+            "diagramId": "page_documents_user",
+            "source": {"raw": "DocumentsUserPage.Failed --> DocumentsUserPage.Init : retryLoad"}
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_documents_user",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_documents_user", "stateId": null},
+          "narrative": {
+            "summary": "User 文件列表頁隸屬 Entry",
+            "taskDescription": "保留 User 文件列表頁與 Entry 的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_documents_user.invokes.page_document_detail_user.s.page_DocumentsUserPage_user_Ready.to.page_DocumentDetailUserPage_user_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Ready"},
+          "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"},
+          "narrative": {
+            "summary": "從 User 文件列表開啟文件詳情",
+            "taskDescription": "在 DocumentsUserPage.Ready 觸發 openOwnedDocument，導向 DocumentDetailUserPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_user.invokes.page_document_detail_user.01",
+              "type": "semantic-check",
+              "description": "只能從列表開啟屬於目前 User 的文件；詳情 API 對自己的 document_id 回 200，對他人文件不得被此頁列出。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "openOwnedDocument | navigate /documents/:id",
+            "action": "openOwnedDocument",
+            "navigateTarget": "/documents/:id"
+          }
+        },
+        {
+          "id": "c.page_documents_user.invokes.feature_create_document.s.page_DocumentsUserPage_user_Ready.to.feature_CreateDocumentFeature_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Ready"},
+          "to": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Init"},
+          "narrative": {
+            "summary": "從 User 文件列表進入建立文件流程",
+            "taskDescription": "在 DocumentsUserPage.Ready 觸發 clickCreateDocument，導向 CreateDocumentFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_user.invokes.feature_create_document.01",
+              "type": "semantic-check",
+              "description": "Ready 狀態只存在一個「建立文件」入口；點擊後進入建立流程並防止同一點擊送出兩次 create request。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickCreateDocument | navigate CreateDocumentFeature",
+            "action": "clickCreateDocument",
+            "navigateTarget": "CreateDocumentFeature"
+          }
+        },
+        {
+          "id": "c.page_documents_user.invokes.page_login.s.page_DocumentsUserPage_user_Ready.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Ready"},
+          "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"},
+          "narrative": {
+            "summary": "從 User 文件列表登出",
+            "taskDescription": "在 DocumentsUserPage.Ready 觸發 clickLogout，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_user.invokes.page_login.01",
+              "type": "semantic-check",
+              "description": "登出後 token 被清除或失效；重新存取 /documents API 回 401，並返回 /login。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate /login",
+            "action": "clickLogout",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_documents_user.invokes.feature_create_document.s.page_DocumentsUserPage_user_Empty.to.feature_CreateDocumentFeature_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Empty"},
+          "to": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Init"},
+          "narrative": {
+            "summary": "從空列表進入建立文件流程",
+            "taskDescription": "在 DocumentsUserPage.Empty 觸發 clickCreateDocument，導向 CreateDocumentFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_user.invokes.feature_create_document.02",
+              "type": "semantic-check",
+              "description": "Empty 狀態仍提供單一「建立文件」入口；點擊後進入建立流程，不因 Empty 狀態隱藏建立能力。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickCreateDocument | navigate CreateDocumentFeature",
+            "action": "clickCreateDocument",
+            "navigateTarget": "CreateDocumentFeature"
+          }
+        },
+        {
+          "id": "c.page_documents_user.invokes.page_login.s.page_DocumentsUserPage_user_Empty.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Empty"},
+          "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"},
+          "narrative": {
+            "summary": "從空列表登出",
+            "taskDescription": "在 DocumentsUserPage.Empty 觸發 clickLogout，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_user.invokes.page_login.02",
+              "type": "semantic-check",
+              "description": "從 Empty 狀態登出後會離開受保護頁；重新整理 /documents 不得再看到空列表，而是被導向 /login。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate /login",
+            "action": "clickLogout",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "DocumentsUserPage",
+        "featureName": null,
+        "entryStateId": "page.DocumentsUserPage.user.Init"
+      }
+    },
+    {
+      "id": "page_documents_admin",
+      "name": "/documents Page (Admin)",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["admin"],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {"type": "mermaid", "sectionTitle": "④ /documents Page (Admin)", "order": 4},
+      "groups": [],
+      "states": [
+        {
+          "id": "page.DocumentsAdminPage.admin.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": ["page", "admin"],
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsAdminPage.Init"},
+            "validations": [
+              {
+                "id": "v.s.page_DocumentsAdminPage_admin_Init.01",
+                "type": "semantic-check",
+                "description": "只有 Admin 可進入此視角；若角色不是 Admin，/documents 不得暴露此管理視角資料與操作。",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.DocumentsAdminPage.admin.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "admin"],
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsAdminPage.Ready"}
+          }
+        },
+        {
+          "id": "page.DocumentsAdminPage.admin.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "admin"],
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsAdminPage.Empty"}
+          }
+        },
+        {
+          "id": "page.DocumentsAdminPage.admin.Failed",
+          "label": "Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": ["page", "admin"],
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentsAdminPage.Failed"}
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_documents_admin.0001",
+          "from": "page.DocumentsAdminPage.admin.Init",
+          "to": "page.DocumentsAdminPage.admin.Ready",
+          "event": "loadAllDocuments [hasDocuments]",
+          "roles": ["admin"],
+          "narrative": {
+            "summary": "載入全部文件成功",
+            "taskDescription": "在 DocumentsAdminPage.Init 觸發 loadAllDocuments [hasDocuments]，進入 DocumentsAdminPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_admin.0001.01",
+              "type": "semantic-check",
+              "description": "文件列表 API 回 200 並可返回任意 owner 的文件；每列顯示 title、status、updated_at，且資料與詳情頁一致。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadAllDocuments [hasDocuments]"},
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "source": {"raw": "DocumentsAdminPage.Init --> DocumentsAdminPage.Ready : loadAllDocuments [hasDocuments]"}
+          }
+        },
+        {
+          "id": "t.page_documents_admin.0002",
+          "from": "page.DocumentsAdminPage.admin.Init",
+          "to": "page.DocumentsAdminPage.admin.Empty",
+          "event": "loadAllDocuments [noDocuments]",
+          "roles": ["admin"],
+          "narrative": {
+            "summary": "載入全部文件為空",
+            "taskDescription": "在 DocumentsAdminPage.Init 觸發 loadAllDocuments [noDocuments]，進入 DocumentsAdminPage.Empty。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_admin.0002.01",
+              "type": "semantic-check",
+              "description": "文件列表 API 回 200 且沒有任何文件；畫面顯示 Empty 與建立入口，不殘留舊列表資料。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadAllDocuments [noDocuments]"},
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "source": {"raw": "DocumentsAdminPage.Init --> DocumentsAdminPage.Empty : loadAllDocuments [noDocuments]"}
+          }
+        },
+        {
+          "id": "t.page_documents_admin.0003",
+          "from": "page.DocumentsAdminPage.admin.Init",
+          "to": "page.DocumentsAdminPage.admin.Failed",
+          "event": "loadAllDocumentsFailed",
+          "roles": ["admin"],
+          "narrative": {
+            "summary": "載入全部文件失敗",
+            "taskDescription": "在 DocumentsAdminPage.Init 觸發 loadAllDocumentsFailed，進入 DocumentsAdminPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_admin.0003.01",
+              "type": "semantic-check",
+              "description": "載入全部文件失敗時顯示 Error 與 Retry；畫面不應錯誤顯示 Empty 或部分成功資料。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "loadAllDocumentsFailed"},
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "source": {"raw": "DocumentsAdminPage.Init --> DocumentsAdminPage.Failed : loadAllDocumentsFailed"}
+          }
+        },
+        {
+          "id": "t.page_documents_admin.0004",
+          "from": "page.DocumentsAdminPage.admin.Failed",
+          "to": "page.DocumentsAdminPage.admin.Init",
+          "event": "retryLoad",
+          "roles": ["admin"],
+          "narrative": {
+            "summary": "重試載入全部文件",
+            "taskDescription": "在 DocumentsAdminPage.Failed 觸發 retryLoad，回到 DocumentsAdminPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_documents_admin.0004.01",
+              "type": "semantic-check",
+              "description": "Retry 會重新要求全部文件列表；成功後資料筆數與伺服器返回一致，且錯誤提示被清除。",
+              "expected": null
+            }
+          ],
+          "intent": {"category": "action", "summary": "retryLoad"},
+          "meta": {
+            "diagramId": "page_documents_admin",
+            "source": {"raw": "DocumentsAdminPage.Failed --> DocumentsAdminPage.Init : retryLoad"}
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_documents_admin",
+          "type": "contains",
+          "from": {"diagramId": "page_entry", "stateId": null},
+          "to": {"diagramId": "page_documents_admin", "stateId": null},
+          "narrative": {
+            "summary": "Admin 文件列表頁隸屬 Entry",
+            "taskDescription": "保留 Admin 文件列表頁與 Entry 的父子關係。"
+          },
+          "validations": [],
+          "meta": {"reason": "derived from parentDiagramId"}
+        },
+        {
+          "id": "c.page_documents_admin.invokes.page_document_detail_admin.s.page_DocumentsAdminPage_admin_Ready.to.page_DocumentDetailAdminPage_admin_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Ready"},
+          "to": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Init"},
+          "narrative": {
+            "summary": "從 Admin 文件列表開啟文件詳情",
+            "taskDescription": "在 DocumentsAdminPage.Ready 觸發 openAnyDocument，導向 DocumentDetailAdminPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.page_document_detail_admin.01",
+              "type": "semantic-check",
+              "description": "Admin 可開啟任意文件詳情；詳情頁需回 200 並顯示文件、版本、附件、審核歷程與稽核事件。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "openAnyDocument | navigate /documents/:id",
+            "action": "openAnyDocument",
+            "navigateTarget": "/documents/:id"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.feature_create_document.s.page_DocumentsAdminPage_admin_Ready.to.feature_CreateDocumentFeature_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Ready"},
+          "to": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Init"},
+          "narrative": {
+            "summary": "從 Admin 文件列表進入建立文件流程",
+            "taskDescription": "在 DocumentsAdminPage.Ready 觸發 clickCreateDocument，導向 CreateDocumentFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.feature_create_document.01",
+              "type": "semantic-check",
+              "description": "Admin 也可建立新文件；列表頁只保留單一建立入口，點擊後進入 create flow 並防止重送。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickCreateDocument | navigate CreateDocumentFeature",
+            "action": "clickCreateDocument",
+            "navigateTarget": "CreateDocumentFeature"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.page_admin_flows.s.page_DocumentsAdminPage_admin_Ready.to.page_AdminFlowsPage_admin_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Ready"},
+          "to": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Init"},
+          "narrative": {
+            "summary": "從 Admin 文件列表前往流程模板頁",
+            "taskDescription": "在 DocumentsAdminPage.Ready 觸發 goToFlowTemplates，導向 AdminFlowsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.page_admin_flows.01",
+              "type": "semantic-check",
+              "description": "Admin Header 可見且僅可見一個「流程模板」入口；導向 /admin/flows 時不需要額外角色切換。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "goToFlowTemplates | navigate /admin/flows",
+            "action": "goToFlowTemplates",
+            "navigateTarget": "/admin/flows"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.page_login.s.page_DocumentsAdminPage_admin_Ready.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Ready"},
+          "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"},
+          "narrative": {
+            "summary": "從 Admin 文件列表登出",
+            "taskDescription": "在 DocumentsAdminPage.Ready 觸發 clickLogout，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.page_login.01",
+              "type": "semantic-check",
+              "description": "Admin 登出後受保護 API 回 401，/documents 與 /admin/flows 都不能再被存取。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate /login",
+            "action": "clickLogout",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.feature_create_document.s.page_DocumentsAdminPage_admin_Empty.to.feature_CreateDocumentFeature_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Empty"},
+          "to": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Init"},
+          "narrative": {
+            "summary": "從空的 Admin 文件列表建立第一份文件",
+            "taskDescription": "在 DocumentsAdminPage.Empty 觸發 clickCreateDocument，導向 CreateDocumentFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.feature_create_document.02",
+              "type": "semantic-check",
+              "description": "沒有文件時仍可建立第一份文件；點擊 create 只送一次請求，且不因 Empty 狀態重複顯示 CTA。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickCreateDocument | navigate CreateDocumentFeature",
+            "action": "clickCreateDocument",
+            "navigateTarget": "CreateDocumentFeature"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.page_admin_flows.s.page_DocumentsAdminPage_admin_Empty.to.page_AdminFlowsPage_admin_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Empty"},
+          "to": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Init"},
+          "narrative": {
+            "summary": "從空的 Admin 文件列表前往流程模板頁",
+            "taskDescription": "在 DocumentsAdminPage.Empty 觸發 goToFlowTemplates，導向 AdminFlowsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.page_admin_flows.02",
+              "type": "semantic-check",
+              "description": "即使列表為空，Admin 仍可進入流程模板管理；頁面導覽不受文件數量影響。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "goToFlowTemplates | navigate /admin/flows",
+            "action": "goToFlowTemplates",
+            "navigateTarget": "/admin/flows"
+          }
+        },
+        {
+          "id": "c.page_documents_admin.invokes.page_login.s.page_DocumentsAdminPage_admin_Empty.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Empty"},
+          "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"},
+          "narrative": {
+            "summary": "從空的 Admin 文件列表登出",
+            "taskDescription": "在 DocumentsAdminPage.Empty 觸發 clickLogout，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_documents_admin.invokes.page_login.02",
+              "type": "semantic-check",
+              "description": "從空列表登出後返回 /login；重新整理原頁不再顯示 Admin 空列表內容。",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate /login",
+            "action": "clickLogout",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "DocumentsAdminPage",
+        "featureName": null,
+        "entryStateId": "page.DocumentsAdminPage.admin.Init"
+      }
+    },
+    {
+      "id": "page_document_detail_user",
+      "name": "/documents/:id Page (User)",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {"type": "mermaid", "sectionTitle": "⑤ /documents/:id Page (User)", "order": 5},
+      "groups": [],
+      "states": [
+        {
+          "id": "page.DocumentDetailUserPage.user.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": ["page", "user"],
+          "meta": {
+            "diagramId": "page_document_detail_user",
+            "synthetic": false,
+            "source": {"scope": "root", "raw": "DocumentDetailUserPage.Init"},
+            "validations": [
+              {
+                "id": "v.s.page_DocumentDetailUserPage_user_Init.01",
+                "type": "semantic-check",
+                "description": "進入文件詳情時先以 document_id 載入資料；沒有有效 token 或不是 owner 的情況不得先渲染文件內容。",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {"id": "page.DocumentDetailUserPage.user.DraftReady", "label": "DraftReady", "type": "normal", "groupId": null, "tags": ["page", "user"], "meta": {"diagramId": "page_document_detail_user", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailUserPage.DraftReady"}}},
+        {"id": "page.DocumentDetailUserPage.user.RejectedReady", "label": "RejectedReady", "type": "normal", "groupId": null, "tags": ["page", "user"], "meta": {"diagramId": "page_document_detail_user", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailUserPage.RejectedReady"}}},
+        {"id": "page.DocumentDetailUserPage.user.Readonly", "label": "Readonly", "type": "normal", "groupId": null, "tags": ["page", "user"], "meta": {"diagramId": "page_document_detail_user", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailUserPage.Readonly"}}},
+        {"id": "page.DocumentDetailUserPage.user.NotFound", "label": "NotFound", "type": "normal", "groupId": null, "tags": ["page", "user"], "meta": {"diagramId": "page_document_detail_user", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailUserPage.NotFound"}}},
+        {"id": "page.DocumentDetailUserPage.user.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["page", "user"], "meta": {"diagramId": "page_document_detail_user", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailUserPage.Failed"}}}
+      ],
+      "transitions": [
+        {
+          "id": "t.page_document_detail_user.0001",
+          "from": "page.DocumentDetailUserPage.user.Init",
+          "to": "page.DocumentDetailUserPage.user.DraftReady",
+          "event": "loadOwnedDocument [status=Draft]",
+          "roles": ["user"],
+          "narrative": {"summary": "載入自己的 Draft 文件成功", "taskDescription": "在 DocumentDetailUserPage.Init 觸發 loadOwnedDocument [status=Draft]，進入 DraftReady。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0001.01", "type": "semantic-check", "description": "詳情 API 回 200 且 status=Draft；UI 顯示 title、content、versions、attachments，並只顯示「編輯」「上傳附件」「送出簽核」這些 Draft 專屬 CTA。", "expected": null}],
+          "intent": {"category": "action", "summary": "loadOwnedDocument [status=Draft]"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Init --> DocumentDetailUserPage.DraftReady : loadOwnedDocument [status=Draft]"}}
+        },
+        {
+          "id": "t.page_document_detail_user.0002",
+          "from": "page.DocumentDetailUserPage.user.Init",
+          "to": "page.DocumentDetailUserPage.user.RejectedReady",
+          "event": "loadOwnedDocument [status=Rejected]",
+          "roles": ["user"],
+          "narrative": {"summary": "載入自己的 Rejected 文件成功", "taskDescription": "在 DocumentDetailUserPage.Init 觸發 loadOwnedDocument [status=Rejected]，進入 RejectedReady。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0002.01", "type": "semantic-check", "description": "詳情 API 回 200 且 status=Rejected；畫面顯示退回結果與唯一本頁「退回後修改」入口，不顯示 Draft 編輯或 Reviewer/Admin CTA。", "expected": null}],
+          "intent": {"category": "action", "summary": "loadOwnedDocument [status=Rejected]"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Init --> DocumentDetailUserPage.RejectedReady : loadOwnedDocument [status=Rejected]"}}
+        },
+        {
+          "id": "t.page_document_detail_user.0003",
+          "from": "page.DocumentDetailUserPage.user.Init",
+          "to": "page.DocumentDetailUserPage.user.Readonly",
+          "event": "loadOwnedDocument [status=Submitted|In Review|Approved|Archived]",
+          "roles": ["user"],
+          "narrative": {"summary": "載入自己的只讀文件成功", "taskDescription": "在 DocumentDetailUserPage.Init 觸發 loadOwnedDocument [status=Submitted|In Review|Approved|Archived]，進入 Readonly。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0003.01", "type": "semantic-check", "description": "詳情 API 回 200 且 current_version_id 指向目前可展示版本；畫面隱藏編輯、上傳附件、送出簽核與退回後修改入口，保持只讀。", "expected": null}],
+          "intent": {"category": "action", "summary": "loadOwnedDocument [status=Submitted|In Review|Approved|Archived]"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Init --> DocumentDetailUserPage.Readonly : loadOwnedDocument [status=Submitted|In Review|Approved|Archived]"}}
+        },
+        {
+          "id": "t.page_document_detail_user.0004",
+          "from": "page.DocumentDetailUserPage.user.Init",
+          "to": "page.DocumentDetailUserPage.user.NotFound",
+          "event": "loadOwnedDocumentNotFound",
+          "roles": ["user"],
+          "narrative": {"summary": "載入自己的文件詳情未找到", "taskDescription": "在 DocumentDetailUserPage.Init 觸發 loadOwnedDocumentNotFound，進入 NotFound。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0004.01", "type": "semantic-check", "description": "他人文件或不存在的 document_id 應回 404；畫面顯示 Not Found，且不得透露文件 title、owner 或狀態。", "expected": null}],
+          "intent": {"category": "action", "summary": "loadOwnedDocumentNotFound"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Init --> DocumentDetailUserPage.NotFound : loadOwnedDocumentNotFound"}}
+        },
+        {
+          "id": "t.page_document_detail_user.0005",
+          "from": "page.DocumentDetailUserPage.user.Init",
+          "to": "page.DocumentDetailUserPage.user.Failed",
+          "event": "loadOwnedDocumentFailed",
+          "roles": ["user"],
+          "narrative": {"summary": "載入自己的文件詳情失敗", "taskDescription": "在 DocumentDetailUserPage.Init 觸發 loadOwnedDocumentFailed，進入 Failed。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0005.01", "type": "semantic-check", "description": "詳情載入失敗時顯示 Error 與 Retry；不保留前一份文件的 versions、attachments 或審核紀錄。", "expected": null}],
+          "intent": {"category": "action", "summary": "loadOwnedDocumentFailed"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Init --> DocumentDetailUserPage.Failed : loadOwnedDocumentFailed"}}
+        },
+        {
+          "id": "t.page_document_detail_user.0006",
+          "from": "page.DocumentDetailUserPage.user.Failed",
+          "to": "page.DocumentDetailUserPage.user.Init",
+          "event": "retryLoad",
+          "roles": ["user"],
+          "narrative": {"summary": "重試載入自己的文件詳情", "taskDescription": "在 DocumentDetailUserPage.Failed 觸發 retryLoad，回到 Init。"},
+          "validations": [{"id": "v.t.page_document_detail_user.0006.01", "type": "semantic-check", "description": "Retry 重新請求同一 document_id；成功後只會進入 DraftReady、RejectedReady、Readonly 或 NotFound 其中一種可觀測狀態。", "expected": null}],
+          "intent": {"category": "action", "summary": "retryLoad"},
+          "meta": {"diagramId": "page_document_detail_user", "source": {"raw": "DocumentDetailUserPage.Failed --> DocumentDetailUserPage.Init : retryLoad"}}
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_document_detail_user", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_document_detail_user", "stateId": null}, "narrative": {"summary": "User 文件詳情頁隸屬 Entry", "taskDescription": "保留 User 文件詳情頁與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_document_detail_user.invokes.feature_edit_draft.s.page_DocumentDetailUserPage_user_DraftReady.to.feature_EditDraftFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.DraftReady"}, "to": {"diagramId": "feature_edit_draft", "stateId": "feature.EditDraftFeature.Init"}, "narrative": {"summary": "從 User Draft 詳情進入編輯功能", "taskDescription": "在 DraftReady 觸發 clickEditDraft，導向 EditDraftFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.feature_edit_draft.01", "type": "semantic-check", "description": "只有 status=Draft 才能進入編輯流程；點擊後不應存在第二個同功能入口，且 Reviewer/Admin 操作不會出現在此頁。", "expected": null}], "meta": {"reason": "clickEditDraft | navigate EditDraftFeature", "action": "clickEditDraft", "navigateTarget": "EditDraftFeature"}},
+        {"id": "c.page_document_detail_user.invokes.feature_upload_attachment.s.page_DocumentDetailUserPage_user_DraftReady.to.feature_UploadAttachmentFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.DraftReady"}, "to": {"diagramId": "feature_upload_attachment", "stateId": "feature.UploadAttachmentFeature.Init"}, "narrative": {"summary": "從 User Draft 詳情進入附件上傳功能", "taskDescription": "在 DraftReady 觸發 clickUploadAttachment，導向 UploadAttachmentFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.feature_upload_attachment.01", "type": "semantic-check", "description": "只有 Draft 允許新增附件；點擊上傳會綁定目前 current_version_id，不允許覆寫既有附件內容。", "expected": null}], "meta": {"reason": "clickUploadAttachment | navigate UploadAttachmentFeature", "action": "clickUploadAttachment", "navigateTarget": "UploadAttachmentFeature"}},
+        {"id": "c.page_document_detail_user.invokes.feature_submit_document.s.page_DocumentDetailUserPage_user_DraftReady.to.feature_SubmitDocumentFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.DraftReady"}, "to": {"diagramId": "feature_submit_document", "stateId": "feature.SubmitDocumentFeature.Init"}, "narrative": {"summary": "從 User Draft 詳情進入送審功能", "taskDescription": "在 DraftReady 觸發 clickSubmitForReview，導向 SubmitDocumentFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.feature_submit_document.01", "type": "semantic-check", "description": "送出簽核入口僅在 Draft 顯示一次；點擊後進入送審流程，按鈕需防重送。", "expected": null}], "meta": {"reason": "clickSubmitForReview | navigate SubmitDocumentFeature", "action": "clickSubmitForReview", "navigateTarget": "SubmitDocumentFeature"}},
+        {"id": "c.page_document_detail_user.invokes.page_documents_user.s.page_DocumentDetailUserPage_user_DraftReady.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.DraftReady"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "從 User Draft 詳情返回文件列表", "taskDescription": "在 DraftReady 觸發 backToDocuments，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_documents_user.01", "type": "semantic-check", "description": "返回列表後該文件的 status、updated_at 應與詳情一致，且列表仍只包含目前 User 的文件。", "expected": null}], "meta": {"reason": "backToDocuments | navigate /documents", "action": "backToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_document_detail_user.invokes.page_login.s.page_DocumentDetailUserPage_user_DraftReady.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.DraftReady"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 User Draft 詳情登出", "taskDescription": "在 DraftReady 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_login.01", "type": "semantic-check", "description": "從 Draft 詳情登出後，任何保存、上傳或送審 API 再次呼叫都應回 401，並導回 /login。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_user.invokes.feature_reopen_rejected_document.s.page_DocumentDetailUserPage_user_RejectedReady.to.feature_ReopenRejectedDocumentFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.RejectedReady"}, "to": {"diagramId": "feature_reopen_rejected_document", "stateId": "feature.ReopenRejectedDocumentFeature.Init"}, "narrative": {"summary": "從 User Rejected 詳情進入重開 Draft 功能", "taskDescription": "在 RejectedReady 觸發 clickReopenAsDraft，導向 ReopenRejectedDocumentFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.feature_reopen_rejected_document.01", "type": "semantic-check", "description": "只有 status=Rejected 顯示「退回後修改」；點擊後進入建立新 Draft 版本流程，而不是直接修改被退回的鎖定版本。", "expected": null}], "meta": {"reason": "clickReopenAsDraft | navigate ReopenRejectedDocumentFeature", "action": "clickReopenAsDraft", "navigateTarget": "ReopenRejectedDocumentFeature"}},
+        {"id": "c.page_document_detail_user.invokes.page_documents_user.s.page_DocumentDetailUserPage_user_RejectedReady.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.RejectedReady"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "從 User Rejected 詳情返回文件列表", "taskDescription": "在 RejectedReady 觸發 backToDocuments，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_documents_user.02", "type": "semantic-check", "description": "返回列表時該文件仍顯示 Rejected；列表與詳情的 status、updated_at 需一致。", "expected": null}], "meta": {"reason": "backToDocuments | navigate /documents", "action": "backToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_document_detail_user.invokes.page_login.s.page_DocumentDetailUserPage_user_RejectedReady.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.RejectedReady"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 User Rejected 詳情登出", "taskDescription": "在 RejectedReady 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_login.02", "type": "semantic-check", "description": "登出後不得再對 Rejected 文件執行 reopen；重新進站需先重新登入。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_user.invokes.page_documents_user.s.page_DocumentDetailUserPage_user_Readonly.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Readonly"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "從 User 只讀詳情返回文件列表", "taskDescription": "在 Readonly 觸發 backToDocuments，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_documents_user.03", "type": "semantic-check", "description": "從只讀詳情返回列表後，status 與 current_version_id 對應的展示資料保持一致，且列表不會錯誤顯示可編輯狀態。", "expected": null}], "meta": {"reason": "backToDocuments | navigate /documents", "action": "backToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_document_detail_user.invokes.page_login.s.page_DocumentDetailUserPage_user_Readonly.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Readonly"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 User 只讀詳情登出", "taskDescription": "在 Readonly 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_login.03", "type": "semantic-check", "description": "從只讀詳情登出後，重新整理 /documents/:id 應回 401 並導向 /login，不保留文件內容。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_user.invokes.page_documents_user.s.page_DocumentDetailUserPage_user_NotFound.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.NotFound"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "從 User NotFound 詳情返回文件列表", "taskDescription": "在 NotFound 觸發 returnToDocuments，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_user.invokes.page_documents_user.04", "type": "semantic-check", "description": "從 Not Found 返回列表後只看到自己的文件清單；不存在或未授權文件不會被補進列表。", "expected": null}], "meta": {"reason": "returnToDocuments | navigate /documents", "action": "returnToDocuments", "navigateTarget": "/documents"}}
+      ],
+      "meta": {"pageName": "DocumentDetailUserPage", "featureName": null, "entryStateId": "page.DocumentDetailUserPage.user.Init"}
+    },
+    {
+      "id": "page_document_detail_reviewer",
+      "name": "/documents/:id Page (Reviewer)",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["reviewer"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑥ /documents/:id Page (Reviewer)", "order": 6},
+      "groups": [],
+      "states": [
+        {"id": "page.DocumentDetailReviewerPage.reviewer.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_document_detail_reviewer", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailReviewerPage.Init"}, "validations": [{"id": "v.s.page_DocumentDetailReviewerPage_reviewer_Init.01", "type": "semantic-check", "description": "Reviewer 進入詳情前需以文件與任務關聯檢查存取權；沒有任務關聯時不得顯示文件資料。", "expected": null}]}} ,
+        {"id": "page.DocumentDetailReviewerPage.reviewer.PendingAction", "label": "PendingAction", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_document_detail_reviewer", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailReviewerPage.PendingAction"}}},
+        {"id": "page.DocumentDetailReviewerPage.reviewer.Readonly", "label": "Readonly", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_document_detail_reviewer", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailReviewerPage.Readonly"}}},
+        {"id": "page.DocumentDetailReviewerPage.reviewer.NotFound", "label": "NotFound", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_document_detail_reviewer", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailReviewerPage.NotFound"}}},
+        {"id": "page.DocumentDetailReviewerPage.reviewer.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_document_detail_reviewer", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailReviewerPage.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.page_document_detail_reviewer.0001", "from": "page.DocumentDetailReviewerPage.reviewer.Init", "to": "page.DocumentDetailReviewerPage.reviewer.PendingAction", "event": "loadAssignedDocument [hasOwnPendingTask]", "roles": ["reviewer"], "narrative": {"summary": "載入有自己待辦的文件詳情", "taskDescription": "在 Init 觸發 loadAssignedDocument [hasOwnPendingTask]，進入 PendingAction。"}, "validations": [{"id": "v.t.page_document_detail_reviewer.0001.01", "type": "semantic-check", "description": "詳情 API 回 200 且至少存在一筆 assignee_id=目前 Reviewer、status=Pending 的 ReviewTask；畫面顯示「同意」「退回」與送審版本內容。", "expected": null}], "intent": {"category": "action", "summary": "loadAssignedDocument [hasOwnPendingTask]"}, "meta": {"diagramId": "page_document_detail_reviewer", "source": {"raw": "DocumentDetailReviewerPage.Init --> DocumentDetailReviewerPage.PendingAction : loadAssignedDocument [hasOwnPendingTask]"}}},
+        {"id": "t.page_document_detail_reviewer.0002", "from": "page.DocumentDetailReviewerPage.reviewer.Init", "to": "page.DocumentDetailReviewerPage.reviewer.Readonly", "event": "loadAssignedDocument [noOwnPendingTask]", "roles": ["reviewer"], "narrative": {"summary": "載入沒有自己待辦的文件詳情", "taskDescription": "在 Init 觸發 loadAssignedDocument [noOwnPendingTask]，進入 Readonly。"}, "validations": [{"id": "v.t.page_document_detail_reviewer.0002.01", "type": "semantic-check", "description": "詳情 API 回 200 但目前 Reviewer 沒有 Pending 任務時，畫面可閱讀文件與歷程，但不顯示「同意」「退回」CTA。", "expected": null}], "intent": {"category": "action", "summary": "loadAssignedDocument [noOwnPendingTask]"}, "meta": {"diagramId": "page_document_detail_reviewer", "source": {"raw": "DocumentDetailReviewerPage.Init --> DocumentDetailReviewerPage.Readonly : loadAssignedDocument [noOwnPendingTask]"}}},
+        {"id": "t.page_document_detail_reviewer.0003", "from": "page.DocumentDetailReviewerPage.reviewer.Init", "to": "page.DocumentDetailReviewerPage.reviewer.NotFound", "event": "loadAssignedDocumentNotFound", "roles": ["reviewer"], "narrative": {"summary": "載入 Reviewer 文件詳情未找到", "taskDescription": "在 Init 觸發 loadAssignedDocumentNotFound，進入 NotFound。"}, "validations": [{"id": "v.t.page_document_detail_reviewer.0003.01", "type": "semantic-check", "description": "若 Reviewer 與該文件沒有任何任務關聯或文件不存在，API 回 404；畫面顯示 Not Found，不洩漏文件存在性。", "expected": null}], "intent": {"category": "action", "summary": "loadAssignedDocumentNotFound"}, "meta": {"diagramId": "page_document_detail_reviewer", "source": {"raw": "DocumentDetailReviewerPage.Init --> DocumentDetailReviewerPage.NotFound : loadAssignedDocumentNotFound"}}},
+        {"id": "t.page_document_detail_reviewer.0004", "from": "page.DocumentDetailReviewerPage.reviewer.Init", "to": "page.DocumentDetailReviewerPage.reviewer.Failed", "event": "loadAssignedDocumentFailed", "roles": ["reviewer"], "narrative": {"summary": "載入 Reviewer 文件詳情失敗", "taskDescription": "在 Init 觸發 loadAssignedDocumentFailed，進入 Failed。"}, "validations": [{"id": "v.t.page_document_detail_reviewer.0004.01", "type": "semantic-check", "description": "詳情載入失敗時顯示 Error 與 Retry；不保留前一筆任務對應文件內容。", "expected": null}], "intent": {"category": "action", "summary": "loadAssignedDocumentFailed"}, "meta": {"diagramId": "page_document_detail_reviewer", "source": {"raw": "DocumentDetailReviewerPage.Init --> DocumentDetailReviewerPage.Failed : loadAssignedDocumentFailed"}}},
+        {"id": "t.page_document_detail_reviewer.0005", "from": "page.DocumentDetailReviewerPage.reviewer.Failed", "to": "page.DocumentDetailReviewerPage.reviewer.Init", "event": "retryLoad", "roles": ["reviewer"], "narrative": {"summary": "重試載入 Reviewer 文件詳情", "taskDescription": "在 Failed 觸發 retryLoad，回到 Init。"}, "validations": [{"id": "v.t.page_document_detail_reviewer.0005.01", "type": "semantic-check", "description": "Retry 重新請求指派文件；成功後應正確回到 PendingAction、Readonly 或 NotFound，不重複堆疊錯誤提示。", "expected": null}], "intent": {"category": "action", "summary": "retryLoad"}, "meta": {"diagramId": "page_document_detail_reviewer", "source": {"raw": "DocumentDetailReviewerPage.Failed --> DocumentDetailReviewerPage.Init : retryLoad"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_document_detail_reviewer", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": null}, "narrative": {"summary": "Reviewer 文件詳情頁隸屬 Entry", "taskDescription": "保留 Reviewer 文件詳情頁與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_document_detail_reviewer.invokes.feature_approve_review_task.s.page_DocumentDetailReviewerPage_reviewer_PendingAction.to.feature_ApproveReviewTaskFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.PendingAction"}, "to": {"diagramId": "feature_approve_review_task", "stateId": "feature.ApproveReviewTaskFeature.Init"}, "narrative": {"summary": "從 Reviewer 詳情進入同意流程", "taskDescription": "在 PendingAction 觸發 clickApproveTask，導向 ApproveReviewTaskFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.feature_approve_review_task.01", "type": "semantic-check", "description": "只有自己的 Pending 任務可進入同意流程；點擊後按鈕 disabled 防止同一任務重複同意。", "expected": null}], "meta": {"reason": "clickApproveTask | navigate ApproveReviewTaskFeature", "action": "clickApproveTask", "navigateTarget": "ApproveReviewTaskFeature"}},
+        {"id": "c.page_document_detail_reviewer.invokes.feature_reject_review_task.s.page_DocumentDetailReviewerPage_reviewer_PendingAction.to.feature_RejectReviewTaskFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.PendingAction"}, "to": {"diagramId": "feature_reject_review_task", "stateId": "feature.RejectReviewTaskFeature.Init"}, "narrative": {"summary": "從 Reviewer 詳情進入退回流程", "taskDescription": "在 PendingAction 觸發 clickRejectTask，導向 RejectReviewTaskFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.feature_reject_review_task.01", "type": "semantic-check", "description": "只有自己的 Pending 任務可進入退回流程；退回需要求輸入理由，且不允許處理他人任務。", "expected": null}], "meta": {"reason": "clickRejectTask | navigate RejectReviewTaskFeature", "action": "clickRejectTask", "navigateTarget": "RejectReviewTaskFeature"}},
+        {"id": "c.page_document_detail_reviewer.invokes.page_reviews.s.page_DocumentDetailReviewerPage_reviewer_PendingAction.to.page_ReviewsPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.PendingAction"}, "to": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Init"}, "narrative": {"summary": "從 Reviewer 詳情返回待辦頁", "taskDescription": "在 PendingAction 觸發 backToReviews，導向 ReviewsPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.page_reviews.01", "type": "semantic-check", "description": "返回待辦列表後只顯示目前 Reviewer 的 Pending 任務；不應出現已完成或已取消任務。", "expected": null}], "meta": {"reason": "backToReviews | navigate /reviews", "action": "backToReviews", "navigateTarget": "/reviews"}},
+        {"id": "c.page_document_detail_reviewer.invokes.page_login.s.page_DocumentDetailReviewerPage_reviewer_PendingAction.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.PendingAction"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 Reviewer 詳情登出", "taskDescription": "在 PendingAction 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.page_login.01", "type": "semantic-check", "description": "從待審詳情登出後，任何 approve/reject API 再次送出都應回 401 並導向 /login。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_reviewer.invokes.page_reviews.s.page_DocumentDetailReviewerPage_reviewer_Readonly.to.page_ReviewsPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Readonly"}, "to": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Init"}, "narrative": {"summary": "從 Reviewer 只讀詳情返回待辦頁", "taskDescription": "在 Readonly 觸發 backToReviews，導向 ReviewsPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.page_reviews.02", "type": "semantic-check", "description": "返回 /reviews 後若目前沒有 Pending 任務，列表應顯示 Empty；已處理任務不得再出現在待辦。", "expected": null}], "meta": {"reason": "backToReviews | navigate /reviews", "action": "backToReviews", "navigateTarget": "/reviews"}},
+        {"id": "c.page_document_detail_reviewer.invokes.page_login.s.page_DocumentDetailReviewerPage_reviewer_Readonly.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Readonly"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 Reviewer 只讀詳情登出", "taskDescription": "在 Readonly 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.page_login.02", "type": "semantic-check", "description": "從只讀詳情登出後，重新進入 /reviews 需重新登入，且舊文件內容不應持續可見。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_reviewer.invokes.page_reviews.s.page_DocumentDetailReviewerPage_reviewer_NotFound.to.page_ReviewsPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.NotFound"}, "to": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Init"}, "narrative": {"summary": "從 Reviewer NotFound 詳情返回待辦頁", "taskDescription": "在 NotFound 觸發 returnToReviews，導向 ReviewsPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_reviewer.invokes.page_reviews.03", "type": "semantic-check", "description": "從 Not Found 返回待辦列表時，只顯示屬於目前 Reviewer 的 Pending 任務；不存在的文件不會暴露任何 metadata。", "expected": null}], "meta": {"reason": "returnToReviews | navigate /reviews", "action": "returnToReviews", "navigateTarget": "/reviews"}}
+      ],
+      "meta": {"pageName": "DocumentDetailReviewerPage", "featureName": null, "entryStateId": "page.DocumentDetailReviewerPage.reviewer.Init"}
+    },
+    {
+      "id": "page_document_detail_admin",
+      "name": "/documents/:id Page (Admin)",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["admin"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑦ /documents/:id Page (Admin)", "order": 7},
+      "groups": [],
+      "states": [
+        {"id": "page.DocumentDetailAdminPage.admin.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_document_detail_admin", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailAdminPage.Init"}, "validations": [{"id": "v.s.page_DocumentDetailAdminPage_admin_Init.01", "type": "semantic-check", "description": "Admin 進入詳情時可讀取任意文件，但仍需以 document_id 請求資料；不存在的文件不得產生假資料畫面。", "expected": null}]}} ,
+        {"id": "page.DocumentDetailAdminPage.admin.ApprovedReady", "label": "ApprovedReady", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_document_detail_admin", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailAdminPage.ApprovedReady"}}},
+        {"id": "page.DocumentDetailAdminPage.admin.Readonly", "label": "Readonly", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_document_detail_admin", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailAdminPage.Readonly"}}},
+        {"id": "page.DocumentDetailAdminPage.admin.NotFound", "label": "NotFound", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_document_detail_admin", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailAdminPage.NotFound"}}},
+        {"id": "page.DocumentDetailAdminPage.admin.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_document_detail_admin", "synthetic": false, "source": {"scope": "root", "raw": "DocumentDetailAdminPage.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.page_document_detail_admin.0001", "from": "page.DocumentDetailAdminPage.admin.Init", "to": "page.DocumentDetailAdminPage.admin.ApprovedReady", "event": "loadDocument [status=Approved]", "roles": ["admin"], "narrative": {"summary": "載入 Approved 文件詳情成功", "taskDescription": "在 Init 觸發 loadDocument [status=Approved]，進入 ApprovedReady。"}, "validations": [{"id": "v.t.page_document_detail_admin.0001.01", "type": "semantic-check", "description": "詳情 API 回 200 且 status=Approved；畫面顯示封存入口、版本、附件、ReviewTasks、ApprovalRecords、AuditLogs，且僅此狀態可封存。", "expected": null}], "intent": {"category": "action", "summary": "loadDocument [status=Approved]"}, "meta": {"diagramId": "page_document_detail_admin", "source": {"raw": "DocumentDetailAdminPage.Init --> DocumentDetailAdminPage.ApprovedReady : loadDocument [status=Approved]"}}},
+        {"id": "t.page_document_detail_admin.0002", "from": "page.DocumentDetailAdminPage.admin.Init", "to": "page.DocumentDetailAdminPage.admin.Readonly", "event": "loadDocument [status=Draft|Submitted|In Review|Rejected|Archived]", "roles": ["admin"], "narrative": {"summary": "載入非 Approved 文件詳情成功", "taskDescription": "在 Init 觸發 loadDocument [status=Draft|Submitted|In Review|Rejected|Archived]，進入 Readonly。"}, "validations": [{"id": "v.t.page_document_detail_admin.0002.01", "type": "semantic-check", "description": "詳情 API 回 200 且 status 不為 Approved；畫面維持只讀，不顯示封存 CTA，且不可編輯歷史資料。", "expected": null}], "intent": {"category": "action", "summary": "loadDocument [status=Draft|Submitted|In Review|Rejected|Archived]"}, "meta": {"diagramId": "page_document_detail_admin", "source": {"raw": "DocumentDetailAdminPage.Init --> DocumentDetailAdminPage.Readonly : loadDocument [status=Draft|Submitted|In Review|Rejected|Archived]"}}},
+        {"id": "t.page_document_detail_admin.0003", "from": "page.DocumentDetailAdminPage.admin.Init", "to": "page.DocumentDetailAdminPage.admin.NotFound", "event": "loadDocumentNotFound", "roles": ["admin"], "narrative": {"summary": "載入 Admin 文件詳情未找到", "taskDescription": "在 Init 觸發 loadDocumentNotFound，進入 NotFound。"}, "validations": [{"id": "v.t.page_document_detail_admin.0003.01", "type": "semantic-check", "description": "document_id 不存在時 API 回 404；畫面顯示 Not Found 且不洩漏任何文件欄位或審核紀錄。", "expected": null}], "intent": {"category": "action", "summary": "loadDocumentNotFound"}, "meta": {"diagramId": "page_document_detail_admin", "source": {"raw": "DocumentDetailAdminPage.Init --> DocumentDetailAdminPage.NotFound : loadDocumentNotFound"}}},
+        {"id": "t.page_document_detail_admin.0004", "from": "page.DocumentDetailAdminPage.admin.Init", "to": "page.DocumentDetailAdminPage.admin.Failed", "event": "loadDocumentFailed", "roles": ["admin"], "narrative": {"summary": "載入 Admin 文件詳情失敗", "taskDescription": "在 Init 觸發 loadDocumentFailed，進入 Failed。"}, "validations": [{"id": "v.t.page_document_detail_admin.0004.01", "type": "semantic-check", "description": "載入失敗時顯示 Error 與 Retry；畫面不保留上一份文件資料或封存按鈕。", "expected": null}], "intent": {"category": "action", "summary": "loadDocumentFailed"}, "meta": {"diagramId": "page_document_detail_admin", "source": {"raw": "DocumentDetailAdminPage.Init --> DocumentDetailAdminPage.Failed : loadDocumentFailed"}}},
+        {"id": "t.page_document_detail_admin.0005", "from": "page.DocumentDetailAdminPage.admin.Failed", "to": "page.DocumentDetailAdminPage.admin.Init", "event": "retryLoad", "roles": ["admin"], "narrative": {"summary": "重試載入 Admin 文件詳情", "taskDescription": "在 Failed 觸發 retryLoad，回到 Init。"}, "validations": [{"id": "v.t.page_document_detail_admin.0005.01", "type": "semantic-check", "description": "Retry 重新載入同一文件；成功後顯示 ApprovedReady、Readonly 或 NotFound 的正確狀態，不重複累積錯誤訊息。", "expected": null}], "intent": {"category": "action", "summary": "retryLoad"}, "meta": {"diagramId": "page_document_detail_admin", "source": {"raw": "DocumentDetailAdminPage.Failed --> DocumentDetailAdminPage.Init : retryLoad"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_document_detail_admin", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_document_detail_admin", "stateId": null}, "narrative": {"summary": "Admin 文件詳情頁隸屬 Entry", "taskDescription": "保留 Admin 文件詳情頁與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_document_detail_admin.invokes.feature_archive_document.s.page_DocumentDetailAdminPage_admin_ApprovedReady.to.feature_ArchiveDocumentFeature_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.ApprovedReady"}, "to": {"diagramId": "feature_archive_document", "stateId": "feature.ArchiveDocumentFeature.Init"}, "narrative": {"summary": "從 Admin 詳情進入封存功能", "taskDescription": "在 ApprovedReady 觸發 clickArchiveDocument，導向 ArchiveDocumentFeature.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.feature_archive_document.01", "type": "semantic-check", "description": "封存入口只在 Approved 狀態顯示一次；點擊後進入封存流程並防止重複送出封存操作。", "expected": null}], "meta": {"reason": "clickArchiveDocument | navigate ArchiveDocumentFeature", "action": "clickArchiveDocument", "navigateTarget": "ArchiveDocumentFeature"}},
+        {"id": "c.page_document_detail_admin.invokes.page_documents_admin.s.page_DocumentDetailAdminPage_admin_ApprovedReady.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.ApprovedReady"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "從 Admin Approved 詳情返回文件列表", "taskDescription": "在 ApprovedReady 觸發 backToDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_documents_admin.01", "type": "semantic-check", "description": "返回列表後該文件顯示 Approved 狀態；列表與詳情的 status、updated_at 保持一致。", "expected": null}], "meta": {"reason": "backToDocuments | navigate /documents", "action": "backToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_document_detail_admin.invokes.page_admin_flows.s.page_DocumentDetailAdminPage_admin_ApprovedReady.to.page_AdminFlowsPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.ApprovedReady"}, "to": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Init"}, "narrative": {"summary": "從 Admin Approved 詳情前往流程模板頁", "taskDescription": "在 ApprovedReady 觸發 goToFlowTemplates，導向 AdminFlowsPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_admin_flows.01", "type": "semantic-check", "description": "從核准文件詳情切到流程模板管理時，不應丟失 Admin 角色導覽，且 /admin/flows 仍可正常載入。", "expected": null}], "meta": {"reason": "goToFlowTemplates | navigate /admin/flows", "action": "goToFlowTemplates", "navigateTarget": "/admin/flows"}},
+        {"id": "c.page_document_detail_admin.invokes.page_login.s.page_DocumentDetailAdminPage_admin_ApprovedReady.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.ApprovedReady"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 Admin Approved 詳情登出", "taskDescription": "在 ApprovedReady 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_login.01", "type": "semantic-check", "description": "Admin 登出後，/documents/:id 與 /admin/flows 的後續請求都回 401，並導向 /login。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_admin.invokes.page_documents_admin.s.page_DocumentDetailAdminPage_admin_Readonly.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Readonly"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "從 Admin 只讀詳情返回文件列表", "taskDescription": "在 Readonly 觸發 backToDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_documents_admin.02", "type": "semantic-check", "description": "從只讀詳情返回列表後，文件狀態與詳情一致，且不錯誤顯示可封存狀態。", "expected": null}], "meta": {"reason": "backToDocuments | navigate /documents", "action": "backToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_document_detail_admin.invokes.page_admin_flows.s.page_DocumentDetailAdminPage_admin_Readonly.to.page_AdminFlowsPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Readonly"}, "to": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Init"}, "narrative": {"summary": "從 Admin 只讀詳情前往流程模板頁", "taskDescription": "在 Readonly 觸發 goToFlowTemplates，導向 AdminFlowsPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_admin_flows.02", "type": "semantic-check", "description": "即使當前文件非 Approved，Admin 仍可切換到流程模板頁；不會額外顯示文件編輯入口。", "expected": null}], "meta": {"reason": "goToFlowTemplates | navigate /admin/flows", "action": "goToFlowTemplates", "navigateTarget": "/admin/flows"}},
+        {"id": "c.page_document_detail_admin.invokes.page_login.s.page_DocumentDetailAdminPage_admin_Readonly.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Readonly"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 Admin 只讀詳情登出", "taskDescription": "在 Readonly 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_login.02", "type": "semantic-check", "description": "從只讀詳情登出後，重新整理該頁應回 401 並返回 /login，不保留文件內容。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_document_detail_admin.invokes.page_documents_admin.s.page_DocumentDetailAdminPage_admin_NotFound.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.NotFound"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "從 Admin NotFound 詳情返回文件列表", "taskDescription": "在 NotFound 觸發 returnToDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.page_document_detail_admin.invokes.page_documents_admin.03", "type": "semantic-check", "description": "從 Not Found 返回文件列表後仍能看到其他存在文件；不存在的 id 不會出現在列表或快取中。", "expected": null}], "meta": {"reason": "returnToDocuments | navigate /documents", "action": "returnToDocuments", "navigateTarget": "/documents"}}
+      ],
+      "meta": {"pageName": "DocumentDetailAdminPage", "featureName": null, "entryStateId": "page.DocumentDetailAdminPage.admin.Init"}
+    },
+    {
+      "id": "page_reviews",
+      "name": "/reviews Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["reviewer"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑧ /reviews Page", "order": 8},
+      "groups": [],
+      "states": [
+        {"id": "page.ReviewsPage.reviewer.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_reviews", "synthetic": false, "source": {"scope": "root", "raw": "ReviewsPage.Init"}, "validations": [{"id": "v.s.page_ReviewsPage_reviewer_Init.01", "type": "semantic-check", "description": "進入 /reviews 需有效 Reviewer 身分；User 或 Admin 不得看到待辦清單與此頁內容。", "expected": null}]}} ,
+        {"id": "page.ReviewsPage.reviewer.Ready", "label": "Ready", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_reviews", "synthetic": false, "source": {"scope": "root", "raw": "ReviewsPage.Ready"}}},
+        {"id": "page.ReviewsPage.reviewer.Empty", "label": "Empty", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_reviews", "synthetic": false, "source": {"scope": "root", "raw": "ReviewsPage.Empty"}}},
+        {"id": "page.ReviewsPage.reviewer.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["page", "reviewer"], "meta": {"diagramId": "page_reviews", "synthetic": false, "source": {"scope": "root", "raw": "ReviewsPage.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.page_reviews.0001", "from": "page.ReviewsPage.reviewer.Init", "to": "page.ReviewsPage.reviewer.Ready", "event": "loadPendingTasks [hasTasks]", "roles": ["reviewer"], "narrative": {"summary": "載入 Reviewer 待辦成功", "taskDescription": "在 Init 觸發 loadPendingTasks [hasTasks]，進入 Ready。"}, "validations": [{"id": "v.t.page_reviews.0001.01", "type": "semantic-check", "description": "待辦 API 回 200 且只返回 assignee_id=目前 Reviewer、status=Pending 的任務；每筆任務可對應文件與 step_key。", "expected": null}], "intent": {"category": "action", "summary": "loadPendingTasks [hasTasks]"}, "meta": {"diagramId": "page_reviews", "source": {"raw": "ReviewsPage.Init --> ReviewsPage.Ready : loadPendingTasks [hasTasks]"}}},
+        {"id": "t.page_reviews.0002", "from": "page.ReviewsPage.reviewer.Init", "to": "page.ReviewsPage.reviewer.Empty", "event": "loadPendingTasks [noTasks]", "roles": ["reviewer"], "narrative": {"summary": "載入 Reviewer 待辦為空", "taskDescription": "在 Init 觸發 loadPendingTasks [noTasks]，進入 Empty。"}, "validations": [{"id": "v.t.page_reviews.0002.01", "type": "semantic-check", "description": "待辦 API 回 200 且沒有 Pending 任務；UI 顯示 Empty 狀態，不顯示過期任務資料。", "expected": null}], "intent": {"category": "action", "summary": "loadPendingTasks [noTasks]"}, "meta": {"diagramId": "page_reviews", "source": {"raw": "ReviewsPage.Init --> ReviewsPage.Empty : loadPendingTasks [noTasks]"}}},
+        {"id": "t.page_reviews.0003", "from": "page.ReviewsPage.reviewer.Init", "to": "page.ReviewsPage.reviewer.Failed", "event": "loadPendingTasksFailed", "roles": ["reviewer"], "narrative": {"summary": "載入 Reviewer 待辦失敗", "taskDescription": "在 Init 觸發 loadPendingTasksFailed，進入 Failed。"}, "validations": [{"id": "v.t.page_reviews.0003.01", "type": "semantic-check", "description": "待辦載入失敗時顯示 Error 與 Retry；畫面不得誤當作 Empty，也不得保留舊任務列。", "expected": null}], "intent": {"category": "action", "summary": "loadPendingTasksFailed"}, "meta": {"diagramId": "page_reviews", "source": {"raw": "ReviewsPage.Init --> ReviewsPage.Failed : loadPendingTasksFailed"}}},
+        {"id": "t.page_reviews.0004", "from": "page.ReviewsPage.reviewer.Failed", "to": "page.ReviewsPage.reviewer.Init", "event": "retryLoad", "roles": ["reviewer"], "narrative": {"summary": "重試載入 Reviewer 待辦", "taskDescription": "在 Failed 觸發 retryLoad，回到 Init。"}, "validations": [{"id": "v.t.page_reviews.0004.01", "type": "semantic-check", "description": "Retry 重新呼叫待辦 API；成功後任務數量與伺服器一致，並清除先前錯誤提示。", "expected": null}], "intent": {"category": "action", "summary": "retryLoad"}, "meta": {"diagramId": "page_reviews", "source": {"raw": "ReviewsPage.Failed --> ReviewsPage.Init : retryLoad"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_reviews", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_reviews", "stateId": null}, "narrative": {"summary": "Reviewer 待辦頁隸屬 Entry", "taskDescription": "保留 Reviewer 待辦頁與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_reviews.invokes.page_document_detail_reviewer.s.page_ReviewsPage_reviewer_Ready.to.page_DocumentDetailReviewerPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Ready"}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Init"}, "narrative": {"summary": "從 Reviewer 待辦頁開啟文件詳情", "taskDescription": "在 Ready 觸發 openAssignedDocument，導向 DocumentDetailReviewerPage.Init。"}, "validations": [{"id": "v.c.page_reviews.invokes.page_document_detail_reviewer.01", "type": "semantic-check", "description": "點擊任務只能開啟該 Reviewer 被指派的文件；非本人任務不會出現在列表，也不應由此頁導向。", "expected": null}], "meta": {"reason": "openAssignedDocument | navigate /documents/:id", "action": "openAssignedDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.page_reviews.invokes.page_login.s.page_ReviewsPage_reviewer_Ready.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Ready"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從 Reviewer 待辦頁登出", "taskDescription": "在 Ready 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_reviews.invokes.page_login.01", "type": "semantic-check", "description": "登出後待辦 API 回 401；再次進入 /reviews 應先被導向 /login。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_reviews.invokes.page_login.s.page_ReviewsPage_reviewer_Empty.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Empty"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從空的 Reviewer 待辦頁登出", "taskDescription": "在 Empty 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_reviews.invokes.page_login.02", "type": "semantic-check", "description": "從空待辦頁登出後回到 /login；重新進站不得直接回到 Reviewer 空頁。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}}
+      ],
+      "meta": {"pageName": "ReviewsPage", "featureName": null, "entryStateId": "page.ReviewsPage.reviewer.Init"}
+    },
+    {
+      "id": "page_admin_flows",
+      "name": "/admin/flows Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": ["admin"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑨ /admin/flows Page", "order": 9},
+      "groups": [],
+      "states": [
+        {"id": "page.AdminFlowsPage.admin.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_admin_flows", "synthetic": false, "source": {"scope": "root", "raw": "AdminFlowsPage.Init"}, "validations": [{"id": "v.s.page_AdminFlowsPage_admin_Init.01", "type": "semantic-check", "description": "進入 /admin/flows 需有效 Admin 身分；非 Admin 不得看到模板列表或管理入口。", "expected": null}]}} ,
+        {"id": "page.AdminFlowsPage.admin.Ready", "label": "Ready", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_admin_flows", "synthetic": false, "source": {"scope": "root", "raw": "AdminFlowsPage.Ready"}}},
+        {"id": "page.AdminFlowsPage.admin.Empty", "label": "Empty", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_admin_flows", "synthetic": false, "source": {"scope": "root", "raw": "AdminFlowsPage.Empty"}}},
+        {"id": "page.AdminFlowsPage.admin.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["page", "admin"], "meta": {"diagramId": "page_admin_flows", "synthetic": false, "source": {"scope": "root", "raw": "AdminFlowsPage.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.page_admin_flows.0001", "from": "page.AdminFlowsPage.admin.Init", "to": "page.AdminFlowsPage.admin.Ready", "event": "loadFlowTemplates [hasTemplates]", "roles": ["admin"], "narrative": {"summary": "載入流程模板成功", "taskDescription": "在 Init 觸發 loadFlowTemplates [hasTemplates]，進入 Ready。"}, "validations": [{"id": "v.t.page_admin_flows.0001.01", "type": "semantic-check", "description": "模板列表 API 回 200 並返回 name、is_active、updated_at；UI 正確顯示啟用與停用狀態。", "expected": null}], "intent": {"category": "action", "summary": "loadFlowTemplates [hasTemplates]"}, "meta": {"diagramId": "page_admin_flows", "source": {"raw": "AdminFlowsPage.Init --> AdminFlowsPage.Ready : loadFlowTemplates [hasTemplates]"}}},
+        {"id": "t.page_admin_flows.0002", "from": "page.AdminFlowsPage.admin.Init", "to": "page.AdminFlowsPage.admin.Empty", "event": "loadFlowTemplates [noTemplates]", "roles": ["admin"], "narrative": {"summary": "載入流程模板為空", "taskDescription": "在 Init 觸發 loadFlowTemplates [noTemplates]，進入 Empty。"}, "validations": [{"id": "v.t.page_admin_flows.0002.01", "type": "semantic-check", "description": "模板列表 API 回 200 且無資料；畫面顯示 Empty 與單一建立入口，不殘留舊模板資料。", "expected": null}], "intent": {"category": "action", "summary": "loadFlowTemplates [noTemplates]"}, "meta": {"diagramId": "page_admin_flows", "source": {"raw": "AdminFlowsPage.Init --> AdminFlowsPage.Empty : loadFlowTemplates [noTemplates]"}}},
+        {"id": "t.page_admin_flows.0003", "from": "page.AdminFlowsPage.admin.Init", "to": "page.AdminFlowsPage.admin.Failed", "event": "loadFlowTemplatesFailed", "roles": ["admin"], "narrative": {"summary": "載入流程模板失敗", "taskDescription": "在 Init 觸發 loadFlowTemplatesFailed，進入 Failed。"}, "validations": [{"id": "v.t.page_admin_flows.0003.01", "type": "semantic-check", "description": "載入模板失敗時顯示 Error 與 Retry；不應顯示部分模板或錯誤的啟用狀態。", "expected": null}], "intent": {"category": "action", "summary": "loadFlowTemplatesFailed"}, "meta": {"diagramId": "page_admin_flows", "source": {"raw": "AdminFlowsPage.Init --> AdminFlowsPage.Failed : loadFlowTemplatesFailed"}}},
+        {"id": "t.page_admin_flows.0004", "from": "page.AdminFlowsPage.admin.Failed", "to": "page.AdminFlowsPage.admin.Init", "event": "retryLoad", "roles": ["admin"], "narrative": {"summary": "重試載入流程模板", "taskDescription": "在 Failed 觸發 retryLoad，回到 Init。"}, "validations": [{"id": "v.t.page_admin_flows.0004.01", "type": "semantic-check", "description": "Retry 重新拉取模板列表；成功後 Ready/Empty 與 API 回傳一致，錯誤提示清除。", "expected": null}], "intent": {"category": "action", "summary": "retryLoad"}, "meta": {"diagramId": "page_admin_flows", "source": {"raw": "AdminFlowsPage.Failed --> AdminFlowsPage.Init : retryLoad"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_admin_flows", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_admin_flows", "stateId": null}, "narrative": {"summary": "流程模板頁隸屬 Entry", "taskDescription": "保留流程模板頁與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_admin_flows.invokes.feature_manage_flow_template.s.page_AdminFlowsPage_admin_Ready.to.feature_ManageFlowTemplateFeature_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Ready"}, "to": {"diagramId": "feature_manage_flow_template", "stateId": "feature.ManageFlowTemplateFeature.Init"}, "narrative": {"summary": "從流程模板頁進入模板管理功能", "taskDescription": "在 Ready 觸發 openTemplateEditor，導向 ManageFlowTemplateFeature.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.feature_manage_flow_template.01", "type": "semantic-check", "description": "Ready 狀態中可從單一入口進入建立或編輯模板流程；非 Admin 不得觸發此流程。", "expected": null}], "meta": {"reason": "openTemplateEditor | navigate ManageFlowTemplateFeature", "action": "openTemplateEditor", "navigateTarget": "ManageFlowTemplateFeature"}},
+        {"id": "c.page_admin_flows.invokes.page_documents_admin.s.page_AdminFlowsPage_admin_Ready.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Ready"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "從流程模板頁返回文件列表", "taskDescription": "在 Ready 觸發 goToDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.page_documents_admin.01", "type": "semantic-check", "description": "返回 /documents 後仍維持 Admin 視角，可見所有文件與「流程模板」導覽。", "expected": null}], "meta": {"reason": "goToDocuments | navigate /documents", "action": "goToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_admin_flows.invokes.page_login.s.page_AdminFlowsPage_admin_Ready.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Ready"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從流程模板頁登出", "taskDescription": "在 Ready 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.page_login.01", "type": "semantic-check", "description": "登出後 /admin/flows API 回 401；重新整理此頁會被導向 /login。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}},
+        {"id": "c.page_admin_flows.invokes.feature_manage_flow_template.s.page_AdminFlowsPage_admin_Empty.to.feature_ManageFlowTemplateFeature_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Empty"}, "to": {"diagramId": "feature_manage_flow_template", "stateId": "feature.ManageFlowTemplateFeature.Init"}, "narrative": {"summary": "從空的流程模板頁進入模板管理功能", "taskDescription": "在 Empty 觸發 openTemplateEditor，導向 ManageFlowTemplateFeature.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.feature_manage_flow_template.02", "type": "semantic-check", "description": "沒有模板時仍可建立第一個流程模板；建立入口只顯示一次，不因 Empty 狀態重複出現。", "expected": null}], "meta": {"reason": "openTemplateEditor | navigate ManageFlowTemplateFeature", "action": "openTemplateEditor", "navigateTarget": "ManageFlowTemplateFeature"}},
+        {"id": "c.page_admin_flows.invokes.page_documents_admin.s.page_AdminFlowsPage_admin_Empty.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Empty"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "從空的流程模板頁返回文件列表", "taskDescription": "在 Empty 觸發 goToDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.page_documents_admin.02", "type": "semantic-check", "description": "即使模板列表為空，仍可切回文件列表且維持 Admin 導覽與權限。", "expected": null}], "meta": {"reason": "goToDocuments | navigate /documents", "action": "goToDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.page_admin_flows.invokes.page_login.s.page_AdminFlowsPage_admin_Empty.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Empty"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從空的流程模板頁登出", "taskDescription": "在 Empty 觸發 clickLogout，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.page_admin_flows.invokes.page_login.02", "type": "semantic-check", "description": "從空模板頁登出後回 /login；再次進入 /admin/flows 需重新登入為 Admin。", "expected": null}], "meta": {"reason": "clickLogout | navigate /login", "action": "clickLogout", "navigateTarget": "/login"}}
+      ],
+      "meta": {"pageName": "AdminFlowsPage", "featureName": null, "entryStateId": "page.AdminFlowsPage.admin.Init"}
+    },
+    {
+      "id": "feature_auth_login",
+      "name": "AuthLoginFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑩ Feature: AuthLoginFeature", "order": 10},
+      "groups": [],
+      "states": [
+        {"id": "feature.AuthLoginFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.Init"}, "validations": [{"id": "v.s.feature_AuthLoginFeature_Init.01", "type": "semantic-check", "description": "進入登入功能時只處理認證流程，不預先建立文件、待辦或流程模板資料。", "expected": null}]}} ,
+        {"id": "feature.AuthLoginFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.Submitting"}}},
+        {"id": "feature.AuthLoginFeature.AuthenticatedUser", "label": "AuthenticatedUser", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.AuthenticatedUser"}}},
+        {"id": "feature.AuthLoginFeature.AuthenticatedReviewer", "label": "AuthenticatedReviewer", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.AuthenticatedReviewer"}}},
+        {"id": "feature.AuthLoginFeature.AuthenticatedAdmin", "label": "AuthenticatedAdmin", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.AuthenticatedAdmin"}}},
+        {"id": "feature.AuthLoginFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_auth_login", "synthetic": false, "source": {"scope": "root", "raw": "AuthLoginFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_auth_login.0001", "from": "feature.AuthLoginFeature.Init", "to": "feature.AuthLoginFeature.Submitting", "event": "submitLogin", "roles": [], "narrative": {"summary": "送出登入請求", "taskDescription": "在 Init 觸發 submitLogin，進入 Submitting。"}, "validations": [{"id": "v.t.feature_auth_login.0001.01", "type": "semantic-check", "description": "認證請求送出一次並帶入 Email/Password；登入按鈕 disabled，避免重複提交。", "expected": null}], "intent": {"category": "action", "summary": "submitLogin"}, "meta": {"diagramId": "feature_auth_login", "source": {"raw": "AuthLoginFeature.Init --> AuthLoginFeature.Submitting : submitLogin"}}},
+        {"id": "t.feature_auth_login.0002", "from": "feature.AuthLoginFeature.Submitting", "to": "feature.AuthLoginFeature.AuthenticatedUser", "event": "loginSucceeded [role=User]", "roles": [], "narrative": {"summary": "登入成功並取得 User 身分", "taskDescription": "在 Submitting 觸發 loginSucceeded [role=User]，進入 AuthenticatedUser。"}, "validations": [{"id": "v.t.feature_auth_login.0002.01", "type": "semantic-check", "description": "API 回 200 並帶回有效 token 與 role=User；session 被保存，且後續 User 受保護 API 可通過授權。", "expected": null}], "intent": {"category": "action", "summary": "loginSucceeded [role=User]"}, "meta": {"diagramId": "feature_auth_login", "source": {"raw": "AuthLoginFeature.Submitting --> AuthLoginFeature.AuthenticatedUser : loginSucceeded [role=User]"}}},
+        {"id": "t.feature_auth_login.0003", "from": "feature.AuthLoginFeature.Submitting", "to": "feature.AuthLoginFeature.AuthenticatedReviewer", "event": "loginSucceeded [role=Reviewer]", "roles": [], "narrative": {"summary": "登入成功並取得 Reviewer 身分", "taskDescription": "在 Submitting 觸發 loginSucceeded [role=Reviewer]，進入 AuthenticatedReviewer。"}, "validations": [{"id": "v.t.feature_auth_login.0003.01", "type": "semantic-check", "description": "API 回 200 並帶回有效 token 與 role=Reviewer；session 被保存，且 Reviewer 待辦 API 可被正常呼叫。", "expected": null}], "intent": {"category": "action", "summary": "loginSucceeded [role=Reviewer]"}, "meta": {"diagramId": "feature_auth_login", "source": {"raw": "AuthLoginFeature.Submitting --> AuthLoginFeature.AuthenticatedReviewer : loginSucceeded [role=Reviewer]"}}},
+        {"id": "t.feature_auth_login.0004", "from": "feature.AuthLoginFeature.Submitting", "to": "feature.AuthLoginFeature.AuthenticatedAdmin", "event": "loginSucceeded [role=Admin]", "roles": [], "narrative": {"summary": "登入成功並取得 Admin 身分", "taskDescription": "在 Submitting 觸發 loginSucceeded [role=Admin]，進入 AuthenticatedAdmin。"}, "validations": [{"id": "v.t.feature_auth_login.0004.01", "type": "semantic-check", "description": "API 回 200 並帶回有效 token 與 role=Admin；session 被保存，且 Admin 可存取文件列表與流程模板 API。", "expected": null}], "intent": {"category": "action", "summary": "loginSucceeded [role=Admin]"}, "meta": {"diagramId": "feature_auth_login", "source": {"raw": "AuthLoginFeature.Submitting --> AuthLoginFeature.AuthenticatedAdmin : loginSucceeded [role=Admin]"}}},
+        {"id": "t.feature_auth_login.0005", "from": "feature.AuthLoginFeature.Submitting", "to": "feature.AuthLoginFeature.Failed", "event": "loginFailed", "roles": [], "narrative": {"summary": "登入失敗", "taskDescription": "在 Submitting 觸發 loginFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_auth_login.0005.01", "type": "semantic-check", "description": "API 回 400 或 401 時不建立 session；畫面應保留在登入流程並顯示可理解的帳密錯誤訊息。", "expected": null}], "intent": {"category": "action", "summary": "loginFailed"}, "meta": {"diagramId": "feature_auth_login", "source": {"raw": "AuthLoginFeature.Submitting --> AuthLoginFeature.Failed : loginFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_auth_login", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_auth_login", "stateId": null}, "narrative": {"summary": "登入功能圖隸屬 Entry", "taskDescription": "保留登入功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_auth_login.invokes.page_documents_user.s.feature_AuthLoginFeature_AuthenticatedUser.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_auth_login", "stateId": "feature.AuthLoginFeature.AuthenticatedUser"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "User 登入成功後前往文件列表", "taskDescription": "在 AuthenticatedUser 觸發 loginDone，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.feature_auth_login.invokes.page_documents_user.01", "type": "semantic-check", "description": "導向 /documents 後 Header 僅顯示「文件」「登出」；不得顯示「待辦」或「流程模板」。", "expected": null}], "meta": {"reason": "loginDone | navigate /documents", "action": "loginDone", "navigateTarget": "/documents"}},
+        {"id": "c.feature_auth_login.invokes.page_reviews.s.feature_AuthLoginFeature_AuthenticatedReviewer.to.page_ReviewsPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "feature_auth_login", "stateId": "feature.AuthLoginFeature.AuthenticatedReviewer"}, "to": {"diagramId": "page_reviews", "stateId": "page.ReviewsPage.reviewer.Init"}, "narrative": {"summary": "Reviewer 登入成功後前往待辦頁", "taskDescription": "在 AuthenticatedReviewer 觸發 loginDone，導向 ReviewsPage.Init。"}, "validations": [{"id": "v.c.feature_auth_login.invokes.page_reviews.01", "type": "semantic-check", "description": "導向 /reviews 後 Header 僅顯示「待辦」「登出」；不得顯示「文件」或「流程模板」。", "expected": null}], "meta": {"reason": "loginDone | navigate /reviews", "action": "loginDone", "navigateTarget": "/reviews"}},
+        {"id": "c.feature_auth_login.invokes.page_documents_admin.s.feature_AuthLoginFeature_AuthenticatedAdmin.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_auth_login", "stateId": "feature.AuthLoginFeature.AuthenticatedAdmin"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "Admin 登入成功後前往文件列表", "taskDescription": "在 AuthenticatedAdmin 觸發 loginDone，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.feature_auth_login.invokes.page_documents_admin.01", "type": "semantic-check", "description": "導向 /documents 後 Header 顯示「文件」「流程模板」「登出」；Admin 可讀取全部文件。", "expected": null}], "meta": {"reason": "loginDone | navigate /documents", "action": "loginDone", "navigateTarget": "/documents"}},
+        {"id": "c.feature_auth_login.invokes.page_login.s.feature_AuthLoginFeature_Failed.to.page_LoginPage_Init", "type": "invokes", "from": {"diagramId": "feature_auth_login", "stateId": "feature.AuthLoginFeature.Failed"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "登入失敗後返回登入頁", "taskDescription": "在 Failed 觸發 loginFailedReturn，導向 LoginPage.Init。"}, "validations": [{"id": "v.c.feature_auth_login.invokes.page_login.01", "type": "semantic-check", "description": "返回 /login 後表單可再次輸入；不保留已登入 session，也不導向任何受保護頁。", "expected": null}], "meta": {"reason": "loginFailedReturn | navigate /login", "action": "loginFailedReturn", "navigateTarget": "/login"}}
+      ],
+      "meta": {"pageName": null, "featureName": "AuthLoginFeature", "entryStateId": "feature.AuthLoginFeature.Init"}
+    },
+    {
+      "id": "feature_create_document",
+      "name": "CreateDocumentFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["user", "admin"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑪ Feature: CreateDocumentFeature", "order": 11},
+      "groups": [],
+      "states": [
+        {"id": "feature.CreateDocumentFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "user", "admin"], "meta": {"diagramId": "feature_create_document", "synthetic": false, "source": {"scope": "root", "raw": "CreateDocumentFeature.Init"}, "validations": [{"id": "v.s.feature_CreateDocumentFeature_Init.01", "type": "semantic-check", "description": "進入建立文件流程時僅允許 User 或 Admin 觸發；Reviewer 不得具有此入口或 API 權限。", "expected": null}]}} ,
+        {"id": "feature.CreateDocumentFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature", "user", "admin"], "meta": {"diagramId": "feature_create_document", "synthetic": false, "source": {"scope": "root", "raw": "CreateDocumentFeature.Submitting"}}},
+        {"id": "feature.CreateDocumentFeature.CreatedForUser", "label": "CreatedForUser", "type": "normal", "groupId": null, "tags": ["feature", "user", "admin"], "meta": {"diagramId": "feature_create_document", "synthetic": false, "source": {"scope": "root", "raw": "CreateDocumentFeature.CreatedForUser"}}},
+        {"id": "feature.CreateDocumentFeature.CreatedForAdmin", "label": "CreatedForAdmin", "type": "normal", "groupId": null, "tags": ["feature", "user", "admin"], "meta": {"diagramId": "feature_create_document", "synthetic": false, "source": {"scope": "root", "raw": "CreateDocumentFeature.CreatedForAdmin"}}},
+        {"id": "feature.CreateDocumentFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "user", "admin"], "meta": {"diagramId": "feature_create_document", "synthetic": false, "source": {"scope": "root", "raw": "CreateDocumentFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_create_document.0001", "from": "feature.CreateDocumentFeature.Init", "to": "feature.CreateDocumentFeature.Submitting", "event": "submitCreateDocument", "roles": ["user", "admin"], "narrative": {"summary": "送出建立文件請求", "taskDescription": "在 Init 觸發 submitCreateDocument，進入 Submitting。"}, "validations": [{"id": "v.t.feature_create_document.0001.01", "type": "semantic-check", "description": "建立文件請求只送出一次；送出期間建立按鈕 disabled，避免產生重複 Draft 文件。", "expected": null}], "intent": {"category": "action", "summary": "submitCreateDocument"}, "meta": {"diagramId": "feature_create_document", "source": {"raw": "CreateDocumentFeature.Init --> CreateDocumentFeature.Submitting : submitCreateDocument"}}},
+        {"id": "t.feature_create_document.0002", "from": "feature.CreateDocumentFeature.Submitting", "to": "feature.CreateDocumentFeature.CreatedForUser", "event": "createSucceeded [role=User]", "roles": ["user", "admin"], "narrative": {"summary": "建立文件成功並回到 User 流程", "taskDescription": "在 Submitting 觸發 createSucceeded [role=User]，進入 CreatedForUser。"}, "validations": [{"id": "v.t.feature_create_document.0002.01", "type": "semantic-check", "description": "API 回 200 並建立 Document.status=Draft、owner_id=目前 User、current_version_id 指向新 Draft 版本；資料可被 User 詳情頁讀取。", "expected": null}], "intent": {"category": "action", "summary": "createSucceeded [role=User]"}, "meta": {"diagramId": "feature_create_document", "source": {"raw": "CreateDocumentFeature.Submitting --> CreateDocumentFeature.CreatedForUser : createSucceeded [role=User]"}}},
+        {"id": "t.feature_create_document.0003", "from": "feature.CreateDocumentFeature.Submitting", "to": "feature.CreateDocumentFeature.CreatedForAdmin", "event": "createSucceeded [role=Admin]", "roles": ["user", "admin"], "narrative": {"summary": "建立文件成功並回到 Admin 流程", "taskDescription": "在 Submitting 觸發 createSucceeded [role=Admin]，進入 CreatedForAdmin。"}, "validations": [{"id": "v.t.feature_create_document.0003.01", "type": "semantic-check", "description": "API 回 200 並建立 Document.status=Draft、owner_id=目前 Admin、current_version_id 指向新 Draft 版本；Admin 可在詳情頁查看完整初始資料。", "expected": null}], "intent": {"category": "action", "summary": "createSucceeded [role=Admin]"}, "meta": {"diagramId": "feature_create_document", "source": {"raw": "CreateDocumentFeature.Submitting --> CreateDocumentFeature.CreatedForAdmin : createSucceeded [role=Admin]"}}},
+        {"id": "t.feature_create_document.0004", "from": "feature.CreateDocumentFeature.Submitting", "to": "feature.CreateDocumentFeature.Failed", "event": "createFailed", "roles": ["user", "admin"], "narrative": {"summary": "建立文件失敗", "taskDescription": "在 Submitting 觸發 createFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_create_document.0004.01", "type": "semantic-check", "description": "建立失敗時不應留下半成品 Document 或 DocumentVersion；列表與資料庫都不增加新文件。", "expected": null}], "intent": {"category": "action", "summary": "createFailed"}, "meta": {"diagramId": "feature_create_document", "source": {"raw": "CreateDocumentFeature.Submitting --> CreateDocumentFeature.Failed : createFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_create_document", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_create_document", "stateId": null}, "narrative": {"summary": "建立文件功能圖隸屬 Entry", "taskDescription": "保留建立文件功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_create_document.invokes.page_document_detail_user.s.feature_CreateDocumentFeature_CreatedForUser.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.CreatedForUser"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "建立文件成功後前往 User 詳情頁", "taskDescription": "在 CreatedForUser 觸發 openCreatedDraft，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_create_document.invokes.page_document_detail_user.01", "type": "semantic-check", "description": "導向新文件詳情後 status=Draft；UI 顯示編輯、上傳附件、送出簽核入口，且 title/content 可後續填寫。", "expected": null}], "meta": {"reason": "openCreatedDraft | navigate /documents/:id", "action": "openCreatedDraft", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_create_document.invokes.page_document_detail_admin.s.feature_CreateDocumentFeature_CreatedForAdmin.to.page_DocumentDetailAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.CreatedForAdmin"}, "to": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Init"}, "narrative": {"summary": "建立文件成功後前往 Admin 詳情頁", "taskDescription": "在 CreatedForAdmin 觸發 openCreatedDraft，導向 DocumentDetailAdminPage.Init。"}, "validations": [{"id": "v.c.feature_create_document.invokes.page_document_detail_admin.01", "type": "semantic-check", "description": "導向新文件詳情後 status=Draft；Admin 可查看該草稿但不會看到 Reviewer 審核入口。", "expected": null}], "meta": {"reason": "openCreatedDraft | navigate /documents/:id", "action": "openCreatedDraft", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_create_document.invokes.page_documents_user.s.feature_CreateDocumentFeature_Failed.to.page_DocumentsUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Failed"}, "to": {"diagramId": "page_documents_user", "stateId": "page.DocumentsUserPage.user.Init"}, "narrative": {"summary": "建立文件失敗後返回 User 列表", "taskDescription": "在 Failed 觸發 returnToUserDocuments，導向 DocumentsUserPage.Init。"}, "validations": [{"id": "v.c.feature_create_document.invokes.page_documents_user.01", "type": "semantic-check", "description": "若失敗並返回 User 列表，列表筆數不變，且錯誤訊息可指出建立失敗原因。", "expected": null}], "meta": {"reason": "returnToUserDocuments | navigate /documents", "action": "returnToUserDocuments", "navigateTarget": "/documents"}},
+        {"id": "c.feature_create_document.invokes.page_documents_admin.s.feature_CreateDocumentFeature_Failed.to.page_DocumentsAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_create_document", "stateId": "feature.CreateDocumentFeature.Failed"}, "to": {"diagramId": "page_documents_admin", "stateId": "page.DocumentsAdminPage.admin.Init"}, "narrative": {"summary": "建立文件失敗後返回 Admin 列表", "taskDescription": "在 Failed 觸發 returnToAdminDocuments，導向 DocumentsAdminPage.Init。"}, "validations": [{"id": "v.c.feature_create_document.invokes.page_documents_admin.01", "type": "semantic-check", "description": "若失敗並返回 Admin 列表，列表中不新增新文件，且錯誤訊息可被 Admin 讀取。", "expected": null}], "meta": {"reason": "returnToAdminDocuments | navigate /documents", "action": "returnToAdminDocuments", "navigateTarget": "/documents"}}
+      ],
+      "meta": {"pageName": null, "featureName": "CreateDocumentFeature", "entryStateId": "feature.CreateDocumentFeature.Init"}
+    },
+    {
+      "id": "feature_edit_draft",
+      "name": "EditDraftFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑫ Feature: EditDraftFeature", "order": 12},
+      "groups": [],
+      "states": [
+        {"id": "feature.EditDraftFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_edit_draft", "synthetic": false, "source": {"scope": "root", "raw": "EditDraftFeature.Init"}, "validations": [{"id": "v.s.feature_EditDraftFeature_Init.01", "type": "semantic-check", "description": "只有 owner 的 Draft 文件可進入編輯流程；Submitted、In Review、Approved、Archived 文件不得進入。", "expected": null}]}} ,
+        {"id": "feature.EditDraftFeature.Editing", "label": "Editing", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_edit_draft", "synthetic": false, "source": {"scope": "root", "raw": "EditDraftFeature.Editing"}}},
+        {"id": "feature.EditDraftFeature.Saving", "label": "Saving", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_edit_draft", "synthetic": false, "source": {"scope": "root", "raw": "EditDraftFeature.Saving"}}},
+        {"id": "feature.EditDraftFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_edit_draft", "synthetic": false, "source": {"scope": "root", "raw": "EditDraftFeature.Completed"}}},
+        {"id": "feature.EditDraftFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_edit_draft", "synthetic": false, "source": {"scope": "root", "raw": "EditDraftFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_edit_draft.0001", "from": "feature.EditDraftFeature.Init", "to": "feature.EditDraftFeature.Editing", "event": "openDraftEditor", "roles": ["user"], "narrative": {"summary": "開啟草稿編輯器", "taskDescription": "在 Init 觸發 openDraftEditor，進入 Editing。"}, "validations": [{"id": "v.t.feature_edit_draft.0001.01", "type": "semantic-check", "description": "編輯器載入目前 Draft 的 title 與 content；畫面不應顯示只讀版本的鎖定標記。", "expected": null}], "intent": {"category": "action", "summary": "openDraftEditor"}, "meta": {"diagramId": "feature_edit_draft", "source": {"raw": "EditDraftFeature.Init --> EditDraftFeature.Editing : openDraftEditor"}}},
+        {"id": "t.feature_edit_draft.0002", "from": "feature.EditDraftFeature.Editing", "to": "feature.EditDraftFeature.Saving", "event": "submitDraftChanges", "roles": ["user"], "narrative": {"summary": "送出草稿修改", "taskDescription": "在 Editing 觸發 submitDraftChanges，進入 Saving。"}, "validations": [{"id": "v.t.feature_edit_draft.0002.01", "type": "semantic-check", "description": "保存請求送出時按鈕 disabled；請求只包含 Draft 可編輯欄位 title、content。", "expected": null}], "intent": {"category": "action", "summary": "submitDraftChanges"}, "meta": {"diagramId": "feature_edit_draft", "source": {"raw": "EditDraftFeature.Editing --> EditDraftFeature.Saving : submitDraftChanges"}}},
+        {"id": "t.feature_edit_draft.0003", "from": "feature.EditDraftFeature.Saving", "to": "feature.EditDraftFeature.Completed", "event": "saveDraftSucceeded", "roles": ["user"], "narrative": {"summary": "保存草稿成功", "taskDescription": "在 Saving 觸發 saveDraftSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_edit_draft.0003.01", "type": "semantic-check", "description": "API 回 200；Document 仍為 Draft，title/content 更新，updated_at 改變，current_version_id 仍指向目前 Draft 版本。", "expected": null}], "intent": {"category": "action", "summary": "saveDraftSucceeded"}, "meta": {"diagramId": "feature_edit_draft", "source": {"raw": "EditDraftFeature.Saving --> EditDraftFeature.Completed : saveDraftSucceeded"}}},
+        {"id": "t.feature_edit_draft.0004", "from": "feature.EditDraftFeature.Saving", "to": "feature.EditDraftFeature.Failed", "event": "saveDraftFailed", "roles": ["user"], "narrative": {"summary": "保存草稿失敗", "taskDescription": "在 Saving 觸發 saveDraftFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_edit_draft.0004.01", "type": "semantic-check", "description": "保存失敗時畫面顯示明確錯誤；資料庫中的 title/content 不變，且不建立新的鎖定版本。", "expected": null}], "intent": {"category": "action", "summary": "saveDraftFailed"}, "meta": {"diagramId": "feature_edit_draft", "source": {"raw": "EditDraftFeature.Saving --> EditDraftFeature.Failed : saveDraftFailed"}}},
+        {"id": "t.feature_edit_draft.0005", "from": "feature.EditDraftFeature.Failed", "to": "feature.EditDraftFeature.Editing", "event": "retryEdit", "roles": ["user"], "narrative": {"summary": "重試編輯草稿", "taskDescription": "在 Failed 觸發 retryEdit，回到 Editing。"}, "validations": [{"id": "v.t.feature_edit_draft.0005.01", "type": "semantic-check", "description": "重試後可再次提交修改；錯誤提示被清除且編輯欄位保留目前輸入內容。", "expected": null}], "intent": {"category": "action", "summary": "retryEdit"}, "meta": {"diagramId": "feature_edit_draft", "source": {"raw": "EditDraftFeature.Failed --> EditDraftFeature.Editing : retryEdit"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_edit_draft", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_edit_draft", "stateId": null}, "narrative": {"summary": "編輯草稿功能圖隸屬 Entry", "taskDescription": "保留編輯草稿功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_edit_draft.invokes.page_document_detail_user.s.feature_EditDraftFeature_Completed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_edit_draft", "stateId": "feature.EditDraftFeature.Completed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "保存草稿成功後返回 User 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_edit_draft.invokes.page_document_detail_user.01", "type": "semantic-check", "description": "返回詳情後可看到更新後的 title/content 與新的 updated_at；文件仍維持 Draft 並保留 Draft CTA。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "EditDraftFeature", "entryStateId": "feature.EditDraftFeature.Init"}
+    },
+    {
+      "id": "feature_upload_attachment",
+      "name": "UploadAttachmentFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑬ Feature: UploadAttachmentFeature", "order": 13},
+      "groups": [],
+      "states": [
+        {"id": "feature.UploadAttachmentFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_upload_attachment", "synthetic": false, "source": {"scope": "root", "raw": "UploadAttachmentFeature.Init"}, "validations": [{"id": "v.s.feature_UploadAttachmentFeature_Init.01", "type": "semantic-check", "description": "只有 Draft 文件可進入附件上傳流程；非 Draft 狀態不得顯示或允許上傳入口。", "expected": null}]}} ,
+        {"id": "feature.UploadAttachmentFeature.Uploading", "label": "Uploading", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_upload_attachment", "synthetic": false, "source": {"scope": "root", "raw": "UploadAttachmentFeature.Uploading"}}},
+        {"id": "feature.UploadAttachmentFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_upload_attachment", "synthetic": false, "source": {"scope": "root", "raw": "UploadAttachmentFeature.Completed"}}},
+        {"id": "feature.UploadAttachmentFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_upload_attachment", "synthetic": false, "source": {"scope": "root", "raw": "UploadAttachmentFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_upload_attachment.0001", "from": "feature.UploadAttachmentFeature.Init", "to": "feature.UploadAttachmentFeature.Uploading", "event": "submitAttachmentUpload", "roles": ["user"], "narrative": {"summary": "送出附件上傳", "taskDescription": "在 Init 觸發 submitAttachmentUpload，進入 Uploading。"}, "validations": [{"id": "v.t.feature_upload_attachment.0001.01", "type": "semantic-check", "description": "上傳請求帶入檔名、content_type、size_bytes 與目前 current_version_id；上傳按鈕 disabled 以防重送。", "expected": null}], "intent": {"category": "action", "summary": "submitAttachmentUpload"}, "meta": {"diagramId": "feature_upload_attachment", "source": {"raw": "UploadAttachmentFeature.Init --> UploadAttachmentFeature.Uploading : submitAttachmentUpload"}}},
+        {"id": "t.feature_upload_attachment.0002", "from": "feature.UploadAttachmentFeature.Uploading", "to": "feature.UploadAttachmentFeature.Completed", "event": "uploadSucceeded", "roles": ["user"], "narrative": {"summary": "附件上傳成功", "taskDescription": "在 Uploading 觸發 uploadSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_upload_attachment.0002.01", "type": "semantic-check", "description": "API 回 200 並新增新的 Attachment record，document_version_id 綁定 current_version_id；既有附件 id 與內容不被覆寫。", "expected": null}], "intent": {"category": "action", "summary": "uploadSucceeded"}, "meta": {"diagramId": "feature_upload_attachment", "source": {"raw": "UploadAttachmentFeature.Uploading --> UploadAttachmentFeature.Completed : uploadSucceeded"}}},
+        {"id": "t.feature_upload_attachment.0003", "from": "feature.UploadAttachmentFeature.Uploading", "to": "feature.UploadAttachmentFeature.Failed", "event": "uploadFailed", "roles": ["user"], "narrative": {"summary": "附件上傳失敗", "taskDescription": "在 Uploading 觸發 uploadFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_upload_attachment.0003.01", "type": "semantic-check", "description": "上傳失敗時不新增 Attachment record；畫面顯示具體錯誤，附件清單維持原狀。", "expected": null}], "intent": {"category": "action", "summary": "uploadFailed"}, "meta": {"diagramId": "feature_upload_attachment", "source": {"raw": "UploadAttachmentFeature.Uploading --> UploadAttachmentFeature.Failed : uploadFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_upload_attachment", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_upload_attachment", "stateId": null}, "narrative": {"summary": "上傳附件功能圖隸屬 Entry", "taskDescription": "保留上傳附件功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_upload_attachment.invokes.page_document_detail_user.s.feature_UploadAttachmentFeature_Failed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_upload_attachment", "stateId": "feature.UploadAttachmentFeature.Failed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "附件上傳失敗後返回 User 詳情頁", "taskDescription": "在 Failed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_upload_attachment.invokes.page_document_detail_user.01", "type": "semantic-check", "description": "返回詳情後文件仍為 Draft，附件清單不含失敗上傳檔案，且仍可再次嘗試上傳。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_upload_attachment.invokes.page_document_detail_user.s.feature_UploadAttachmentFeature_Completed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_upload_attachment", "stateId": "feature.UploadAttachmentFeature.Completed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "附件上傳成功後返回 User 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_upload_attachment.invokes.page_document_detail_user.02", "type": "semantic-check", "description": "返回詳情後附件清單立即包含新附件，且附件對應的 document_version_id 等於目前 current_version_id。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "UploadAttachmentFeature", "entryStateId": "feature.UploadAttachmentFeature.Init"}
+    },
+    {
+      "id": "feature_submit_document",
+      "name": "SubmitDocumentFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑭ Feature: SubmitDocumentFeature", "order": 14},
+      "groups": [],
+      "states": [
+        {"id": "feature.SubmitDocumentFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_submit_document", "synthetic": false, "source": {"scope": "root", "raw": "SubmitDocumentFeature.Init"}, "validations": [{"id": "v.s.feature_SubmitDocumentFeature_Init.01", "type": "semantic-check", "description": "只有 owner 的 Draft 文件可進入送審流程；Reviewer 與非 owner 不得觸發此功能。", "expected": null}]}} ,
+        {"id": "feature.SubmitDocumentFeature.Validating", "label": "Validating", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_submit_document", "synthetic": false, "source": {"scope": "root", "raw": "SubmitDocumentFeature.Validating"}}},
+        {"id": "feature.SubmitDocumentFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_submit_document", "synthetic": false, "source": {"scope": "root", "raw": "SubmitDocumentFeature.Submitting"}}},
+        {"id": "feature.SubmitDocumentFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_submit_document", "synthetic": false, "source": {"scope": "root", "raw": "SubmitDocumentFeature.Completed"}}},
+        {"id": "feature.SubmitDocumentFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_submit_document", "synthetic": false, "source": {"scope": "root", "raw": "SubmitDocumentFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_submit_document.0001", "from": "feature.SubmitDocumentFeature.Init", "to": "feature.SubmitDocumentFeature.Validating", "event": "validateSubmission", "roles": ["user"], "narrative": {"summary": "開始驗證送審條件", "taskDescription": "在 Init 觸發 validateSubmission，進入 Validating。"}, "validations": [{"id": "v.t.feature_submit_document.0001.01", "type": "semantic-check", "description": "送審前檢查 title、content 非空，且已選定 is_active=true 的流程模板、至少 1 個 step、每個 step 都有 assignee；不符合則不得進入送出。", "expected": null}], "intent": {"category": "action", "summary": "validateSubmission"}, "meta": {"diagramId": "feature_submit_document", "source": {"raw": "SubmitDocumentFeature.Init --> SubmitDocumentFeature.Validating : validateSubmission"}}},
+        {"id": "t.feature_submit_document.0002", "from": "feature.SubmitDocumentFeature.Validating", "to": "feature.SubmitDocumentFeature.Submitting", "event": "createLockedVersionAndTasks", "roles": ["user"], "narrative": {"summary": "驗證通過後建立送審版本與任務", "taskDescription": "在 Validating 觸發 createLockedVersionAndTasks，進入 Submitting。"}, "validations": [{"id": "v.t.feature_submit_document.0002.01", "type": "semantic-check", "description": "驗證通過後開始同一筆送審交易；系統需建立 version_no 遞增的鎖定版本並準備建立首批 ReviewTask。", "expected": null}], "intent": {"category": "action", "summary": "createLockedVersionAndTasks"}, "meta": {"diagramId": "feature_submit_document", "source": {"raw": "SubmitDocumentFeature.Validating --> SubmitDocumentFeature.Submitting : createLockedVersionAndTasks"}}},
+        {"id": "t.feature_submit_document.0003", "from": "feature.SubmitDocumentFeature.Validating", "to": "feature.SubmitDocumentFeature.Failed", "event": "validationFailed", "roles": ["user"], "narrative": {"summary": "送審前驗證失敗", "taskDescription": "在 Validating 觸發 validationFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_submit_document.0003.01", "type": "semantic-check", "description": "驗證失敗時 API 回 400 並指出缺少欄位、未啟用模板或 assignee 不完整；文件維持 Draft，沒有新版本與任務。", "expected": null}], "intent": {"category": "action", "summary": "validationFailed"}, "meta": {"diagramId": "feature_submit_document", "source": {"raw": "SubmitDocumentFeature.Validating --> SubmitDocumentFeature.Failed : validationFailed"}}},
+        {"id": "t.feature_submit_document.0004", "from": "feature.SubmitDocumentFeature.Submitting", "to": "feature.SubmitDocumentFeature.Completed", "event": "submitSucceeded", "roles": ["user"], "narrative": {"summary": "送審成功", "taskDescription": "在 Submitting 觸發 submitSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_submit_document.0004.01", "type": "semantic-check", "description": "送審成功後 Document 進入 In Review，current_version_id 指向送審鎖定版本，AuditLog 至少寫入 Submit、CreateReviewTasks、EnterInReview，且首批 Pending 任務已建立。", "expected": null}], "intent": {"category": "action", "summary": "submitSucceeded"}, "meta": {"diagramId": "feature_submit_document", "source": {"raw": "SubmitDocumentFeature.Submitting --> SubmitDocumentFeature.Completed : submitSucceeded"}}},
+        {"id": "t.feature_submit_document.0005", "from": "feature.SubmitDocumentFeature.Submitting", "to": "feature.SubmitDocumentFeature.Failed", "event": "submitFailed", "roles": ["user"], "narrative": {"summary": "送審失敗", "taskDescription": "在 Submitting 觸發 submitFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_submit_document.0005.01", "type": "semantic-check", "description": "送審失敗時不得留下部分建立的 ReviewTask 或不一致狀態；Document 必須維持 Draft，current_version_id 不改到半成品版本。", "expected": null}], "intent": {"category": "action", "summary": "submitFailed"}, "meta": {"diagramId": "feature_submit_document", "source": {"raw": "SubmitDocumentFeature.Submitting --> SubmitDocumentFeature.Failed : submitFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_submit_document", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_submit_document", "stateId": null}, "narrative": {"summary": "送審功能圖隸屬 Entry", "taskDescription": "保留送審功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_submit_document.invokes.page_document_detail_user.s.feature_SubmitDocumentFeature_Failed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_submit_document", "stateId": "feature.SubmitDocumentFeature.Failed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "送審失敗後返回 User 詳情頁", "taskDescription": "在 Failed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_submit_document.invokes.page_document_detail_user.01", "type": "semantic-check", "description": "返回詳情後仍顯示 Draft CTA，錯誤訊息可指出送審失敗原因，且沒有多餘 Pending 任務。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_submit_document.invokes.page_document_detail_user.s.feature_SubmitDocumentFeature_Completed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_submit_document", "stateId": "feature.SubmitDocumentFeature.Completed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "送審成功後返回 User 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_submit_document.invokes.page_document_detail_user.02", "type": "semantic-check", "description": "返回詳情後顯示 In Review 或只讀狀態；編輯、上傳附件、送出簽核入口消失，審核任務與鎖定版本可被查看。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "SubmitDocumentFeature", "entryStateId": "feature.SubmitDocumentFeature.Init"}
+    },
+    {
+      "id": "feature_reopen_rejected_document",
+      "name": "ReopenRejectedDocumentFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["user"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑮ Feature: ReopenRejectedDocumentFeature", "order": 15},
+      "groups": [],
+      "states": [
+        {"id": "feature.ReopenRejectedDocumentFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_reopen_rejected_document", "synthetic": false, "source": {"scope": "root", "raw": "ReopenRejectedDocumentFeature.Init"}, "validations": [{"id": "v.s.feature_ReopenRejectedDocumentFeature_Init.01", "type": "semantic-check", "description": "只有 owner 對 status=Rejected 的文件可進入此流程；其他狀態不得顯示或允許「退回後修改」。", "expected": null}]}} ,
+        {"id": "feature.ReopenRejectedDocumentFeature.CreatingDraft", "label": "CreatingDraft", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_reopen_rejected_document", "synthetic": false, "source": {"scope": "root", "raw": "ReopenRejectedDocumentFeature.CreatingDraft"}}},
+        {"id": "feature.ReopenRejectedDocumentFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_reopen_rejected_document", "synthetic": false, "source": {"scope": "root", "raw": "ReopenRejectedDocumentFeature.Completed"}}},
+        {"id": "feature.ReopenRejectedDocumentFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "user"], "meta": {"diagramId": "feature_reopen_rejected_document", "synthetic": false, "source": {"scope": "root", "raw": "ReopenRejectedDocumentFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_reopen_rejected_document.0001", "from": "feature.ReopenRejectedDocumentFeature.Init", "to": "feature.ReopenRejectedDocumentFeature.CreatingDraft", "event": "createNewDraftVersion", "roles": ["user"], "narrative": {"summary": "建立新的 Draft 版本", "taskDescription": "在 Init 觸發 createNewDraftVersion，進入 CreatingDraft。"}, "validations": [{"id": "v.t.feature_reopen_rejected_document.0001.01", "type": "semantic-check", "description": "重新開啟時建立新的 Draft DocumentVersion，version_no 遞增，內容以被退回版本為起點；舊送審版本維持不可變。", "expected": null}], "intent": {"category": "action", "summary": "createNewDraftVersion"}, "meta": {"diagramId": "feature_reopen_rejected_document", "source": {"raw": "ReopenRejectedDocumentFeature.Init --> ReopenRejectedDocumentFeature.CreatingDraft : createNewDraftVersion"}}},
+        {"id": "t.feature_reopen_rejected_document.0002", "from": "feature.ReopenRejectedDocumentFeature.CreatingDraft", "to": "feature.ReopenRejectedDocumentFeature.Completed", "event": "reopenSucceeded", "roles": ["user"], "narrative": {"summary": "重開 Rejected 文件成功", "taskDescription": "在 CreatingDraft 觸發 reopenSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_reopen_rejected_document.0002.01", "type": "semantic-check", "description": "API 回 200；Document.status 變為 Draft，current_version_id 指向新 Draft 版本，AuditLog 寫入 ReopenAsDraft。", "expected": null}], "intent": {"category": "action", "summary": "reopenSucceeded"}, "meta": {"diagramId": "feature_reopen_rejected_document", "source": {"raw": "ReopenRejectedDocumentFeature.CreatingDraft --> ReopenRejectedDocumentFeature.Completed : reopenSucceeded"}}},
+        {"id": "t.feature_reopen_rejected_document.0003", "from": "feature.ReopenRejectedDocumentFeature.CreatingDraft", "to": "feature.ReopenRejectedDocumentFeature.Failed", "event": "reopenFailed", "roles": ["user"], "narrative": {"summary": "重開 Rejected 文件失敗", "taskDescription": "在 CreatingDraft 觸發 reopenFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_reopen_rejected_document.0003.01", "type": "semantic-check", "description": "重開失敗時 Document 仍維持 Rejected；不建立新版本，也不更動既有附件與退回紀錄。", "expected": null}], "intent": {"category": "action", "summary": "reopenFailed"}, "meta": {"diagramId": "feature_reopen_rejected_document", "source": {"raw": "ReopenRejectedDocumentFeature.CreatingDraft --> ReopenRejectedDocumentFeature.Failed : reopenFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_reopen_rejected_document", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_reopen_rejected_document", "stateId": null}, "narrative": {"summary": "重開退回文件功能圖隸屬 Entry", "taskDescription": "保留重開退回文件功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_reopen_rejected_document.invokes.page_document_detail_user.s.feature_ReopenRejectedDocumentFeature_Failed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_reopen_rejected_document", "stateId": "feature.ReopenRejectedDocumentFeature.Failed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "重開 Draft 失敗後返回 User 詳情頁", "taskDescription": "在 Failed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_reopen_rejected_document.invokes.page_document_detail_user.01", "type": "semantic-check", "description": "返回詳情後狀態仍是 Rejected，且頁面仍只顯示「退回後修改」入口與既有退回資訊。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_reopen_rejected_document.invokes.page_document_detail_user.s.feature_ReopenRejectedDocumentFeature_Completed.to.page_DocumentDetailUserPage_user_Init", "type": "invokes", "from": {"diagramId": "feature_reopen_rejected_document", "stateId": "feature.ReopenRejectedDocumentFeature.Completed"}, "to": {"diagramId": "page_document_detail_user", "stateId": "page.DocumentDetailUserPage.user.Init"}, "narrative": {"summary": "重開 Draft 成功後返回 User 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailUserPage.Init。"}, "validations": [{"id": "v.c.feature_reopen_rejected_document.invokes.page_document_detail_user.02", "type": "semantic-check", "description": "返回詳情後狀態已是 Draft，current_version_id 指向新 Draft 版本，使用者可重新編輯與上傳新附件。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ReopenRejectedDocumentFeature", "entryStateId": "feature.ReopenRejectedDocumentFeature.Init"}
+    },
+    {
+      "id": "feature_approve_review_task",
+      "name": "ApproveReviewTaskFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["reviewer"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑯ Feature: ApproveReviewTaskFeature", "order": 16},
+      "groups": [],
+      "states": [
+        {"id": "feature.ApproveReviewTaskFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_approve_review_task", "synthetic": false, "source": {"scope": "root", "raw": "ApproveReviewTaskFeature.Init"}, "validations": [{"id": "v.s.feature_ApproveReviewTaskFeature_Init.01", "type": "semantic-check", "description": "只有 assignee_id=目前 Reviewer 且 status=Pending 的 ReviewTask 可進入同意流程；其他任務不得進入。", "expected": null}]}} ,
+        {"id": "feature.ApproveReviewTaskFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_approve_review_task", "synthetic": false, "source": {"scope": "root", "raw": "ApproveReviewTaskFeature.Submitting"}}},
+        {"id": "feature.ApproveReviewTaskFeature.StepAdvanced", "label": "StepAdvanced", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_approve_review_task", "synthetic": false, "source": {"scope": "root", "raw": "ApproveReviewTaskFeature.StepAdvanced"}}},
+        {"id": "feature.ApproveReviewTaskFeature.DocumentApproved", "label": "DocumentApproved", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_approve_review_task", "synthetic": false, "source": {"scope": "root", "raw": "ApproveReviewTaskFeature.DocumentApproved"}}},
+        {"id": "feature.ApproveReviewTaskFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_approve_review_task", "synthetic": false, "source": {"scope": "root", "raw": "ApproveReviewTaskFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_approve_review_task.0001", "from": "feature.ApproveReviewTaskFeature.Init", "to": "feature.ApproveReviewTaskFeature.Submitting", "event": "submitApproval", "roles": ["reviewer"], "narrative": {"summary": "送出同意審核任務", "taskDescription": "在 Init 觸發 submitApproval，進入 Submitting。"}, "validations": [{"id": "v.t.feature_approve_review_task.0001.01", "type": "semantic-check", "description": "同意送出時按鈕 disabled；系統以交易或條件式更新確保同一筆 Pending 任務只能被處理一次。", "expected": null}], "intent": {"category": "action", "summary": "submitApproval"}, "meta": {"diagramId": "feature_approve_review_task", "source": {"raw": "ApproveReviewTaskFeature.Init --> ApproveReviewTaskFeature.Submitting : submitApproval"}}},
+        {"id": "t.feature_approve_review_task.0002", "from": "feature.ApproveReviewTaskFeature.Submitting", "to": "feature.ApproveReviewTaskFeature.StepAdvanced", "event": "approveSucceeded [moreStepsOrApproversRemain]", "roles": ["reviewer"], "narrative": {"summary": "同意審核後流程繼續", "taskDescription": "在 Submitting 觸發 approveSucceeded [moreStepsOrApproversRemain]，進入 StepAdvanced。"}, "validations": [{"id": "v.t.feature_approve_review_task.0002.01", "type": "semantic-check", "description": "API 回 200；目前 ReviewTask.status 變為 Approved 並寫入 acted_at 與 ApprovalRecord(action=Approved)，文件仍維持 In Review，且若流程需要會啟用下一步或保留其他 Pending 任務。", "expected": null}], "intent": {"category": "action", "summary": "approveSucceeded [moreStepsOrApproversRemain]"}, "meta": {"diagramId": "feature_approve_review_task", "source": {"raw": "ApproveReviewTaskFeature.Submitting --> ApproveReviewTaskFeature.StepAdvanced : approveSucceeded [moreStepsOrApproversRemain]"}}},
+        {"id": "t.feature_approve_review_task.0003", "from": "feature.ApproveReviewTaskFeature.Submitting", "to": "feature.ApproveReviewTaskFeature.DocumentApproved", "event": "approveSucceeded [finalApprovalReached]", "roles": ["reviewer"], "narrative": {"summary": "最後一筆必要同意完成", "taskDescription": "在 Submitting 觸發 approveSucceeded [finalApprovalReached]，進入 DocumentApproved。"}, "validations": [{"id": "v.t.feature_approve_review_task.0003.01", "type": "semantic-check", "description": "API 回 200；最後必要同意完成後 Document.status 變為 Approved，AuditLog 寫入 ApproveTask 與 EnterApproved，列表與詳情狀態同步更新。", "expected": null}], "intent": {"category": "action", "summary": "approveSucceeded [finalApprovalReached]"}, "meta": {"diagramId": "feature_approve_review_task", "source": {"raw": "ApproveReviewTaskFeature.Submitting --> ApproveReviewTaskFeature.DocumentApproved : approveSucceeded [finalApprovalReached]"}}},
+        {"id": "t.feature_approve_review_task.0004", "from": "feature.ApproveReviewTaskFeature.Submitting", "to": "feature.ApproveReviewTaskFeature.Failed", "event": "approveFailed", "roles": ["reviewer"], "narrative": {"summary": "同意審核失敗", "taskDescription": "在 Submitting 觸發 approveFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_approve_review_task.0004.01", "type": "semantic-check", "description": "若任務已被他人處理或非本人任務，API 回 409 或 403；不得重複建立 ApprovalRecord，也不得錯誤改變文件狀態。", "expected": null}], "intent": {"category": "action", "summary": "approveFailed"}, "meta": {"diagramId": "feature_approve_review_task", "source": {"raw": "ApproveReviewTaskFeature.Submitting --> ApproveReviewTaskFeature.Failed : approveFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_approve_review_task", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_approve_review_task", "stateId": null}, "narrative": {"summary": "同意審核任務功能圖隸屬 Entry", "taskDescription": "保留同意審核任務功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_approve_review_task.invokes.page_document_detail_reviewer.s.feature_ApproveReviewTaskFeature_StepAdvanced.to.page_DocumentDetailReviewerPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "feature_approve_review_task", "stateId": "feature.ApproveReviewTaskFeature.StepAdvanced"}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Init"}, "narrative": {"summary": "同意後流程繼續並返回 Reviewer 詳情頁", "taskDescription": "在 StepAdvanced 觸發 returnToDocument，導向 DocumentDetailReviewerPage.Init。"}, "validations": [{"id": "v.c.feature_approve_review_task.invokes.page_document_detail_reviewer.01", "type": "semantic-check", "description": "返回詳情後目前任務不再是 Pending；若仍有其他步驟或他人待辦，文件顯示 In Review 與更新後任務狀態。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_approve_review_task.invokes.page_document_detail_reviewer.s.feature_ApproveReviewTaskFeature_DocumentApproved.to.page_DocumentDetailReviewerPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "feature_approve_review_task", "stateId": "feature.ApproveReviewTaskFeature.DocumentApproved"}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Init"}, "narrative": {"summary": "最後同意完成後返回 Reviewer 詳情頁", "taskDescription": "在 DocumentApproved 觸發 returnToDocument，導向 DocumentDetailReviewerPage.Init。"}, "validations": [{"id": "v.c.feature_approve_review_task.invokes.page_document_detail_reviewer.02", "type": "semantic-check", "description": "返回詳情後文件顯示 Approved，Reviewer 不再看到同意或退回入口，審核紀錄包含最後一次 Approved。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_approve_review_task.invokes.page_document_detail_reviewer.s.feature_ApproveReviewTaskFeature_Failed.to.page_DocumentDetailReviewerPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "feature_approve_review_task", "stateId": "feature.ApproveReviewTaskFeature.Failed"}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Init"}, "narrative": {"summary": "同意失敗後返回 Reviewer 詳情頁", "taskDescription": "在 Failed 觸發 returnToDocument，導向 DocumentDetailReviewerPage.Init。"}, "validations": [{"id": "v.c.feature_approve_review_task.invokes.page_document_detail_reviewer.03", "type": "semantic-check", "description": "返回詳情後若任務仍是 Pending 才能再次操作；若已非 Pending，畫面不得再顯示可重複提交的按鈕。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ApproveReviewTaskFeature", "entryStateId": "feature.ApproveReviewTaskFeature.Init"}
+    },
+    {
+      "id": "feature_reject_review_task",
+      "name": "RejectReviewTaskFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["reviewer"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑰ Feature: RejectReviewTaskFeature", "order": 17},
+      "groups": [],
+      "states": [
+        {"id": "feature.RejectReviewTaskFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_reject_review_task", "synthetic": false, "source": {"scope": "root", "raw": "RejectReviewTaskFeature.Init"}, "validations": [{"id": "v.s.feature_RejectReviewTaskFeature_Init.01", "type": "semantic-check", "description": "只有目前 Reviewer 自己的 Pending 任務可以進入退回流程；不屬於自己的任務不得打開退回表單。", "expected": null}]}} ,
+        {"id": "feature.RejectReviewTaskFeature.CollectingReason", "label": "CollectingReason", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_reject_review_task", "synthetic": false, "source": {"scope": "root", "raw": "RejectReviewTaskFeature.CollectingReason"}}},
+        {"id": "feature.RejectReviewTaskFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_reject_review_task", "synthetic": false, "source": {"scope": "root", "raw": "RejectReviewTaskFeature.Submitting"}}},
+        {"id": "feature.RejectReviewTaskFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_reject_review_task", "synthetic": false, "source": {"scope": "root", "raw": "RejectReviewTaskFeature.Completed"}}},
+        {"id": "feature.RejectReviewTaskFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "reviewer"], "meta": {"diagramId": "feature_reject_review_task", "synthetic": false, "source": {"scope": "root", "raw": "RejectReviewTaskFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_reject_review_task.0001", "from": "feature.RejectReviewTaskFeature.Init", "to": "feature.RejectReviewTaskFeature.CollectingReason", "event": "openRejectForm", "roles": ["reviewer"], "narrative": {"summary": "開啟退回理由表單", "taskDescription": "在 Init 觸發 openRejectForm，進入 CollectingReason。"}, "validations": [{"id": "v.t.feature_reject_review_task.0001.01", "type": "semantic-check", "description": "打開退回表單時 UI 顯示必填理由欄位；空白理由不得被視為可送出狀態。", "expected": null}], "intent": {"category": "action", "summary": "openRejectForm"}, "meta": {"diagramId": "feature_reject_review_task", "source": {"raw": "RejectReviewTaskFeature.Init --> RejectReviewTaskFeature.CollectingReason : openRejectForm"}}},
+        {"id": "t.feature_reject_review_task.0002", "from": "feature.RejectReviewTaskFeature.CollectingReason", "to": "feature.RejectReviewTaskFeature.Submitting", "event": "submitRejectReason", "roles": ["reviewer"], "narrative": {"summary": "送出退回理由", "taskDescription": "在 CollectingReason 觸發 submitRejectReason，進入 Submitting。"}, "validations": [{"id": "v.t.feature_reject_review_task.0002.01", "type": "semantic-check", "description": "送出退回理由時按鈕 disabled，理由內容會被安全顯示與儲存，避免 XSS 注入。", "expected": null}], "intent": {"category": "action", "summary": "submitRejectReason"}, "meta": {"diagramId": "feature_reject_review_task", "source": {"raw": "RejectReviewTaskFeature.CollectingReason --> RejectReviewTaskFeature.Submitting : submitRejectReason"}}},
+        {"id": "t.feature_reject_review_task.0003", "from": "feature.RejectReviewTaskFeature.Submitting", "to": "feature.RejectReviewTaskFeature.Completed", "event": "rejectSucceeded", "roles": ["reviewer"], "narrative": {"summary": "退回審核任務成功", "taskDescription": "在 Submitting 觸發 rejectSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_reject_review_task.0003.01", "type": "semantic-check", "description": "API 回 200；目前 ReviewTask.status=Rejected、acted_at 已寫入，新增 ApprovalRecord(action=Rejected, reason)，Document.status 變為 Rejected，其他 Pending 任務全部改為 Cancelled。", "expected": null}], "intent": {"category": "action", "summary": "rejectSucceeded"}, "meta": {"diagramId": "feature_reject_review_task", "source": {"raw": "RejectReviewTaskFeature.Submitting --> RejectReviewTaskFeature.Completed : rejectSucceeded"}}},
+        {"id": "t.feature_reject_review_task.0004", "from": "feature.RejectReviewTaskFeature.Submitting", "to": "feature.RejectReviewTaskFeature.Failed", "event": "rejectFailed", "roles": ["reviewer"], "narrative": {"summary": "退回審核任務失敗", "taskDescription": "在 Submitting 觸發 rejectFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_reject_review_task.0004.01", "type": "semantic-check", "description": "若理由缺失、任務已被處理或權限不足，API 回 400、409 或 403；不得新增 ApprovalRecord，也不得改變 Document.status。", "expected": null}], "intent": {"category": "action", "summary": "rejectFailed"}, "meta": {"diagramId": "feature_reject_review_task", "source": {"raw": "RejectReviewTaskFeature.Submitting --> RejectReviewTaskFeature.Failed : rejectFailed"}}},
+        {"id": "t.feature_reject_review_task.0005", "from": "feature.RejectReviewTaskFeature.Failed", "to": "feature.RejectReviewTaskFeature.CollectingReason", "event": "retryReject", "roles": ["reviewer"], "narrative": {"summary": "重試退回審核任務", "taskDescription": "在 Failed 觸發 retryReject，回到 CollectingReason。"}, "validations": [{"id": "v.t.feature_reject_review_task.0005.01", "type": "semantic-check", "description": "返回理由表單後原輸入可保留供修正；只有在補齊合法理由後才可再次送出。", "expected": null}], "intent": {"category": "action", "summary": "retryReject"}, "meta": {"diagramId": "feature_reject_review_task", "source": {"raw": "RejectReviewTaskFeature.Failed --> RejectReviewTaskFeature.CollectingReason : retryReject"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_reject_review_task", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_reject_review_task", "stateId": null}, "narrative": {"summary": "退回審核任務功能圖隸屬 Entry", "taskDescription": "保留退回審核任務功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_reject_review_task.invokes.page_document_detail_reviewer.s.feature_RejectReviewTaskFeature_Completed.to.page_DocumentDetailReviewerPage_reviewer_Init", "type": "invokes", "from": {"diagramId": "feature_reject_review_task", "stateId": "feature.RejectReviewTaskFeature.Completed"}, "to": {"diagramId": "page_document_detail_reviewer", "stateId": "page.DocumentDetailReviewerPage.reviewer.Init"}, "narrative": {"summary": "退回成功後返回 Reviewer 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailReviewerPage.Init。"}, "validations": [{"id": "v.c.feature_reject_review_task.invokes.page_document_detail_reviewer.01", "type": "semantic-check", "description": "返回詳情後文件顯示 Rejected，Reviewer 不再看到待處理按鈕，並可看到退回理由與其他任務已取消。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "RejectReviewTaskFeature", "entryStateId": "feature.RejectReviewTaskFeature.Init"}
+    },
+    {
+      "id": "feature_manage_flow_template",
+      "name": "ManageFlowTemplateFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["admin"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑱ Feature: ManageFlowTemplateFeature", "order": 18},
+      "groups": [],
+      "states": [
+        {"id": "feature.ManageFlowTemplateFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.Init"}, "validations": [{"id": "v.s.feature_ManageFlowTemplateFeature_Init.01", "type": "semantic-check", "description": "只有 Admin 可以進入流程模板管理功能；User 與 Reviewer 不得看到建立、編輯或停用入口。", "expected": null}]}} ,
+        {"id": "feature.ManageFlowTemplateFeature.EditingTemplate", "label": "EditingTemplate", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.EditingTemplate"}}},
+        {"id": "feature.ManageFlowTemplateFeature.SavingTemplate", "label": "SavingTemplate", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.SavingTemplate"}}},
+        {"id": "feature.ManageFlowTemplateFeature.DeactivatingTemplate", "label": "DeactivatingTemplate", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.DeactivatingTemplate"}}},
+        {"id": "feature.ManageFlowTemplateFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.Completed"}}},
+        {"id": "feature.ManageFlowTemplateFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_manage_flow_template", "synthetic": false, "source": {"scope": "root", "raw": "ManageFlowTemplateFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_manage_flow_template.0001", "from": "feature.ManageFlowTemplateFeature.Init", "to": "feature.ManageFlowTemplateFeature.EditingTemplate", "event": "openCreateOrEditTemplate", "roles": ["admin"], "narrative": {"summary": "開啟模板編輯器", "taskDescription": "在 Init 觸發 openCreateOrEditTemplate，進入 EditingTemplate。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0001.01", "type": "semantic-check", "description": "模板編輯器顯示 name、is_active、step_key、order_index、mode 與 assignee 規則欄位，供 Admin 建立或修改模板。", "expected": null}], "intent": {"category": "action", "summary": "openCreateOrEditTemplate"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.Init --> ManageFlowTemplateFeature.EditingTemplate : openCreateOrEditTemplate"}}},
+        {"id": "t.feature_manage_flow_template.0002", "from": "feature.ManageFlowTemplateFeature.EditingTemplate", "to": "feature.ManageFlowTemplateFeature.SavingTemplate", "event": "submitTemplateChanges", "roles": ["admin"], "narrative": {"summary": "送出模板變更", "taskDescription": "在 EditingTemplate 觸發 submitTemplateChanges，進入 SavingTemplate。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0002.01", "type": "semantic-check", "description": "儲存模板請求送出時按鈕 disabled；每個 step 都需有 step_key、order_index、mode，且 assignee 規則完整。", "expected": null}], "intent": {"category": "action", "summary": "submitTemplateChanges"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.EditingTemplate --> ManageFlowTemplateFeature.SavingTemplate : submitTemplateChanges"}}},
+        {"id": "t.feature_manage_flow_template.0003", "from": "feature.ManageFlowTemplateFeature.EditingTemplate", "to": "feature.ManageFlowTemplateFeature.DeactivatingTemplate", "event": "deactivateTemplate", "roles": ["admin"], "narrative": {"summary": "停用流程模板", "taskDescription": "在 EditingTemplate 觸發 deactivateTemplate，進入 DeactivatingTemplate。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0003.01", "type": "semantic-check", "description": "停用流程模板請求只允許 Admin 送出；操作的是既有模板的 is_active 狀態，不是刪除模板。", "expected": null}], "intent": {"category": "action", "summary": "deactivateTemplate"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.EditingTemplate --> ManageFlowTemplateFeature.DeactivatingTemplate : deactivateTemplate"}}},
+        {"id": "t.feature_manage_flow_template.0004", "from": "feature.ManageFlowTemplateFeature.SavingTemplate", "to": "feature.ManageFlowTemplateFeature.Completed", "event": "saveTemplateSucceeded", "roles": ["admin"], "narrative": {"summary": "保存模板成功", "taskDescription": "在 SavingTemplate 觸發 saveTemplateSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0004.01", "type": "semantic-check", "description": "API 回 200；模板 name、steps、mode、assignee 規則與 updated_at 被持久化，且後續送審只能選擇 is_active=true 的模板。", "expected": null}], "intent": {"category": "action", "summary": "saveTemplateSucceeded"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.SavingTemplate --> ManageFlowTemplateFeature.Completed : saveTemplateSucceeded"}}},
+        {"id": "t.feature_manage_flow_template.0005", "from": "feature.ManageFlowTemplateFeature.SavingTemplate", "to": "feature.ManageFlowTemplateFeature.Failed", "event": "saveTemplateFailed", "roles": ["admin"], "narrative": {"summary": "保存模板失敗", "taskDescription": "在 SavingTemplate 觸發 saveTemplateFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0005.01", "type": "semantic-check", "description": "儲存失敗時不應留下部分更新的 steps 或 assignee；畫面顯示錯誤並保持可修正狀態。", "expected": null}], "intent": {"category": "action", "summary": "saveTemplateFailed"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.SavingTemplate --> ManageFlowTemplateFeature.Failed : saveTemplateFailed"}}},
+        {"id": "t.feature_manage_flow_template.0006", "from": "feature.ManageFlowTemplateFeature.DeactivatingTemplate", "to": "feature.ManageFlowTemplateFeature.Completed", "event": "deactivateTemplateSucceeded", "roles": ["admin"], "narrative": {"summary": "停用模板成功", "taskDescription": "在 DeactivatingTemplate 觸發 deactivateTemplateSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_manage_flow_template.0006.01", "type": "semantic-check", "description": "API 回 200；模板仍存在但 is_active=false，之後送審前置條件不得再選用此模板。", "expected": null}], "intent": {"category": "action", "summary": "deactivateTemplateSucceeded"}, "meta": {"diagramId": "feature_manage_flow_template", "source": {"raw": "ManageFlowTemplateFeature.DeactivatingTemplate --> ManageFlowTemplateFeature.Completed : deactivateTemplateSucceeded"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_manage_flow_template", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_manage_flow_template", "stateId": null}, "narrative": {"summary": "模板管理功能圖隸屬 Entry", "taskDescription": "保留模板管理功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_manage_flow_template.invokes.page_admin_flows.s.feature_ManageFlowTemplateFeature_Completed.to.page_AdminFlowsPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_manage_flow_template", "stateId": "feature.ManageFlowTemplateFeature.Completed"}, "to": {"diagramId": "page_admin_flows", "stateId": "page.AdminFlowsPage.admin.Init"}, "narrative": {"summary": "模板操作完成後返回流程模板頁", "taskDescription": "在 Completed 觸發 returnToFlowTemplates，導向 AdminFlowsPage.Init。"}, "validations": [{"id": "v.c.feature_manage_flow_template.invokes.page_admin_flows.01", "type": "semantic-check", "description": "返回模板列表後，name、is_active、updated_at 與剛完成操作的結果一致，且列表不會遺失其他模板資料。", "expected": null}], "meta": {"reason": "returnToFlowTemplates | navigate /admin/flows", "action": "returnToFlowTemplates", "navigateTarget": "/admin/flows"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ManageFlowTemplateFeature", "entryStateId": "feature.ManageFlowTemplateFeature.Init"}
+    },
+    {
+      "id": "feature_archive_document",
+      "name": "ArchiveDocumentFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": ["admin"],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑲ Feature: ArchiveDocumentFeature", "order": 19},
+      "groups": [],
+      "states": [
+        {"id": "feature.ArchiveDocumentFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_archive_document", "synthetic": false, "source": {"scope": "root", "raw": "ArchiveDocumentFeature.Init"}, "validations": [{"id": "v.s.feature_ArchiveDocumentFeature_Init.01", "type": "semantic-check", "description": "只有 Admin 且文件 status=Approved 時可進入封存流程；其他角色或其他狀態不得觸發。", "expected": null}]}} ,
+        {"id": "feature.ArchiveDocumentFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_archive_document", "synthetic": false, "source": {"scope": "root", "raw": "ArchiveDocumentFeature.Submitting"}}},
+        {"id": "feature.ArchiveDocumentFeature.Completed", "label": "Completed", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_archive_document", "synthetic": false, "source": {"scope": "root", "raw": "ArchiveDocumentFeature.Completed"}}},
+        {"id": "feature.ArchiveDocumentFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature", "admin"], "meta": {"diagramId": "feature_archive_document", "synthetic": false, "source": {"scope": "root", "raw": "ArchiveDocumentFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_archive_document.0001", "from": "feature.ArchiveDocumentFeature.Init", "to": "feature.ArchiveDocumentFeature.Submitting", "event": "submitArchive", "roles": ["admin"], "narrative": {"summary": "送出文件封存請求", "taskDescription": "在 Init 觸發 submitArchive，進入 Submitting。"}, "validations": [{"id": "v.t.feature_archive_document.0001.01", "type": "semantic-check", "description": "封存請求只送出一次；按鈕 disabled，避免重複提交 Approved -> Archived 轉換。", "expected": null}], "intent": {"category": "action", "summary": "submitArchive"}, "meta": {"diagramId": "feature_archive_document", "source": {"raw": "ArchiveDocumentFeature.Init --> ArchiveDocumentFeature.Submitting : submitArchive"}}},
+        {"id": "t.feature_archive_document.0002", "from": "feature.ArchiveDocumentFeature.Submitting", "to": "feature.ArchiveDocumentFeature.Completed", "event": "archiveSucceeded", "roles": ["admin"], "narrative": {"summary": "封存文件成功", "taskDescription": "在 Submitting 觸發 archiveSucceeded，進入 Completed。"}, "validations": [{"id": "v.t.feature_archive_document.0002.01", "type": "semantic-check", "description": "API 回 200；Document.status 變為 Archived，AuditLog 新增 ArchiveDocument，文件與版本資料維持 append-only 不可刪改。", "expected": null}], "intent": {"category": "action", "summary": "archiveSucceeded"}, "meta": {"diagramId": "feature_archive_document", "source": {"raw": "ArchiveDocumentFeature.Submitting --> ArchiveDocumentFeature.Completed : archiveSucceeded"}}},
+        {"id": "t.feature_archive_document.0003", "from": "feature.ArchiveDocumentFeature.Submitting", "to": "feature.ArchiveDocumentFeature.Failed", "event": "archiveFailed", "roles": ["admin"], "narrative": {"summary": "封存文件失敗", "taskDescription": "在 Submitting 觸發 archiveFailed，進入 Failed。"}, "validations": [{"id": "v.t.feature_archive_document.0003.01", "type": "semantic-check", "description": "若文件已非 Approved 或請求失敗，API 回 400 或 5xx；Document.status 維持原值，且不新增 ArchiveDocument 稽核事件。", "expected": null}], "intent": {"category": "action", "summary": "archiveFailed"}, "meta": {"diagramId": "feature_archive_document", "source": {"raw": "ArchiveDocumentFeature.Submitting --> ArchiveDocumentFeature.Failed : archiveFailed"}}}
+      ],
+      "connectors": [
+        {"id": "c.page_entry.contains.feature_archive_document", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_archive_document", "stateId": null}, "narrative": {"summary": "封存文件功能圖隸屬 Entry", "taskDescription": "保留封存文件功能圖與 Entry 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.feature_archive_document.invokes.page_document_detail_admin.s.feature_ArchiveDocumentFeature_Failed.to.page_DocumentDetailAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_archive_document", "stateId": "feature.ArchiveDocumentFeature.Failed"}, "to": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Init"}, "narrative": {"summary": "封存失敗後返回 Admin 詳情頁", "taskDescription": "在 Failed 觸發 returnToDocument，導向 DocumentDetailAdminPage.Init。"}, "validations": [{"id": "v.c.feature_archive_document.invokes.page_document_detail_admin.01", "type": "semantic-check", "description": "返回詳情後若封存失敗，文件仍維持原狀態並保留或隱藏封存按鈕與實際狀態一致。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}},
+        {"id": "c.feature_archive_document.invokes.page_document_detail_admin.s.feature_ArchiveDocumentFeature_Completed.to.page_DocumentDetailAdminPage_admin_Init", "type": "invokes", "from": {"diagramId": "feature_archive_document", "stateId": "feature.ArchiveDocumentFeature.Completed"}, "to": {"diagramId": "page_document_detail_admin", "stateId": "page.DocumentDetailAdminPage.admin.Init"}, "narrative": {"summary": "封存成功後返回 Admin 詳情頁", "taskDescription": "在 Completed 觸發 returnToDocument，導向 DocumentDetailAdminPage.Init。"}, "validations": [{"id": "v.c.feature_archive_document.invokes.page_document_detail_admin.02", "type": "semantic-check", "description": "返回詳情後文件顯示 Archived 且為只讀；封存入口消失，列表與詳情的 status、updated_at 一致。", "expected": null}], "meta": {"reason": "returnToDocument | navigate /documents/:id", "action": "returnToDocument", "navigateTarget": "/documents/:id"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ArchiveDocumentFeature", "entryStateId": "feature.ArchiveDocumentFeature.Init"}
+    }
+  ],
+  "hierarchy": {
+    "roots": ["page_entry"],
+    "childrenByDiagramId": {
+      "page_entry": [
+        "page_login",
+        "page_documents_user",
+        "page_documents_admin",
+        "page_document_detail_user",
+        "page_document_detail_reviewer",
+        "page_document_detail_admin",
+        "page_reviews",
+        "page_admin_flows",
+        "feature_auth_login",
+        "feature_create_document",
+        "feature_edit_draft",
+        "feature_upload_attachment",
+        "feature_submit_document",
+        "feature_reopen_rejected_document",
+        "feature_approve_review_task",
+        "feature_reject_review_task",
+        "feature_manage_flow_template",
+        "feature_archive_document"
+      ]
+    }
+  },
+  "meta": {
+    "warnings": []
+  }
+}

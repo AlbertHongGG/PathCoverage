@@ -1,0 +1,2083 @@
+{
+  "system": "LogicDrivenDynamicSurveyFormSystem",
+  "version": "1.0",
+  "generatedAt": "2026-03-17T00:00:00.000Z",
+  "inputs": {
+    "specPath": "StateTranstionDiagram/spec.md",
+    "transitionPath": "StateTranstionDiagram/transition.md"
+  },
+  "spec": {
+    "raw": null,
+    "summary": {
+      "productName": "問卷／表單系統（動態邏輯）",
+      "goals": [
+        "建立一套可讓管理者建立具備動態邏輯的問卷／表單系統，讓受訪者依據回答內容看到不同的題目流程。",
+        "同一份問卷可多次對外發佈以收集回覆。",
+        "支援 Single Choice、Multiple Choice、Text、Number、Rating、Matrix 等多種題型。",
+        "動態邏輯引擎需在前後端一致，對同一份 draft answers 計算出相同的 Visible Questions。",
+        "資料需可稽核且不可竄改，並以 publish_hash 與 response_hash 支援一致性與稽核。"
+      ],
+      "roles": [
+        {
+          "id": "guest",
+          "label": "Guest"
+        },
+        {
+          "id": "user",
+          "label": "User"
+        },
+        {
+          "id": "admin",
+          "label": "Admin"
+        }
+      ]
+    }
+  },
+  "diagrams": [
+    {
+      "id": "page_entry",
+      "name": "Entry",
+      "level": "page",
+      "parentDiagramId": null,
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "① Entry State Machine",
+        "order": 1
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.Entry.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_entry",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "Entry.Init"
+            }
+          }
+        }
+      ],
+      "transitions": [],
+      "connectors": [
+        {"id": "c.page_entry.contains.page_login", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_login", "stateId": null}, "narrative": {"summary": "Entry 包含 Login Page。", "taskDescription": "建立 Entry 與 Login Page 的父子關係，表示登入頁屬於系統入口下的 page diagram。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.page_surveys", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_surveys", "stateId": null}, "narrative": {"summary": "Entry 包含 Surveys Page。", "taskDescription": "建立 Entry 與 Surveys Page 的父子關係，表示我的問卷列表頁屬於系統入口下的 page diagram。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.page_survey_edit", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_survey_edit", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Edit Page。", "taskDescription": "建立 Entry 與 Survey Edit Page 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.page_survey_preview", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_survey_preview", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Preview Page。", "taskDescription": "建立 Entry 與 Survey Preview Page 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.page_survey_respond", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_survey_respond", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Respond Page。", "taskDescription": "建立 Entry 與 Survey Respond Page 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.page_survey_results", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "page_survey_results", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Results Page。", "taskDescription": "建立 Entry 與 Survey Results Page 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_login_submission", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_login_submission", "stateId": null}, "narrative": {"summary": "Entry 包含 Login Submission feature。", "taskDescription": "建立 Entry 與 Login Submission feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_survey_creation", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_survey_creation", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Creation feature。", "taskDescription": "建立 Entry 與 Survey Creation feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_survey_structure_editing", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_survey_structure_editing", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Structure Editing feature。", "taskDescription": "建立 Entry 與 Survey Structure Editing feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_rule_validation", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_rule_validation", "stateId": null}, "narrative": {"summary": "Entry 包含 Rule Validation feature。", "taskDescription": "建立 Entry 與 Rule Validation feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_preview_simulation", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_preview_simulation", "stateId": null}, "narrative": {"summary": "Entry 包含 Preview Simulation feature。", "taskDescription": "建立 Entry 與 Preview Simulation feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_response_draft_session", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_response_draft_session", "stateId": null}, "narrative": {"summary": "Entry 包含 Response Draft Session feature。", "taskDescription": "建立 Entry 與 Response Draft Session feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_response_submit", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_response_submit", "stateId": null}, "narrative": {"summary": "Entry 包含 Response Submit feature。", "taskDescription": "建立 Entry 與 Response Submit feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_survey_publish_and_close", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_survey_publish_and_close", "stateId": null}, "narrative": {"summary": "Entry 包含 Survey Publish And Close feature。", "taskDescription": "建立 Entry 與 Survey Publish And Close feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_results_analytics", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_results_analytics", "stateId": null}, "narrative": {"summary": "Entry 包含 Results Analytics feature。", "taskDescription": "建立 Entry 與 Results Analytics feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.contains.feature_export_responses", "type": "contains", "from": {"diagramId": "page_entry", "stateId": null}, "to": {"diagramId": "feature_export_responses", "stateId": null}, "narrative": {"summary": "Entry 包含 Export Responses feature。", "taskDescription": "建立 Entry 與 Export Responses feature 的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_entry.invokes.page_survey_respond.a.open_survey_link", "type": "invokes", "from": {"diagramId": "page_entry", "stateId": "page.Entry.Init"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "從入口開啟公開問卷填答頁。", "taskDescription": "在 Entry.Init 觸發 openSurveyLink 後，導向 /s/:slug 並進入 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.page_entry.open_survey_link.01", "type": "url-equals", "description": "應切換到 /s/:slug 並開始載入指定 slug 的 Survey。", "expected": "/s/:slug"}], "meta": {"reason": "openSurveyLink | navigate /s/:slug", "action": "openSurveyLink", "navigateTarget": "/s/:slug"}},
+        {"id": "c.page_entry.invokes.page_login.a.choose_login", "type": "invokes", "from": {"diagramId": "page_entry", "stateId": "page.Entry.Init"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "從入口導向登入頁。", "taskDescription": "在 Entry.Init 觸發 chooseLogin 後，導向 /login 並進入 LoginPage.Init。"}, "validations": [{"id": "v.c.page_entry.choose_login.01", "type": "url-equals", "description": "應切換到 /login，且頁面只保留單一主要登入入口。", "expected": "/login"}], "meta": {"reason": "chooseLogin | navigate /login", "action": "chooseLogin", "navigateTarget": "/login"}},
+        {"id": "c.page_entry.invokes.page_login.a.access_survey_workspace", "type": "invokes", "from": {"diagramId": "page_entry", "stateId": "page.Entry.Init"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "未登入進入後台時先被導向登入頁。", "taskDescription": "在 Entry.Init 觸發 accessSurveyWorkspace 後，導向 /login 並要求完成登入後才能回到後台。"}, "validations": [{"id": "v.c.page_entry.access_workspace.01", "type": "url-equals", "description": "未登入進入後台流程時應被導向 /login。", "expected": "/login"}], "meta": {"reason": "accessSurveyWorkspace | navigate /login", "action": "accessSurveyWorkspace", "navigateTarget": "/login"}}
+      ],
+      "meta": {
+        "pageName": "Entry",
+        "featureName": null,
+        "entryStateId": "page.Entry.Init"
+      }
+    },
+    {
+      "id": "page_login",
+      "name": "Login Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "② Login Page State Machine",
+        "order": 2
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.LoginPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LoginPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.LoginPage.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LoginPage.Ready"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_login.0001",
+          "from": "page.LoginPage.Init",
+          "to": "page.LoginPage.Ready",
+          "event": "showLoginForm",
+          "roles": [],
+          "narrative": {
+            "summary": "登入頁顯示可互動的登入表單。",
+            "taskDescription": "觸發 showLoginForm 後，將頁面狀態從 Init 推進到 Ready，讓登入表單可操作並保留 return_to 資訊。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_login.0001.01",
+              "type": "semantic-check",
+              "description": "登入表單已可互動，且頁面保留 return_to 的回跳資訊。",
+              "expected": "Login form ready"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showLoginForm"
+          },
+          "meta": {
+            "diagramId": "page_login",
+            "source": {
+              "raw": "LoginPage.Init --> LoginPage.Ready : showLoginForm"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_login.invokes.feature_login_submission.a.submit_login", "type": "invokes", "from": {"diagramId": "page_login", "stateId": "page.LoginPage.Ready"}, "to": {"diagramId": "feature_login_submission", "stateId": "feature.LoginSubmissionFeature.Init"}, "narrative": {"summary": "登入頁送出登入表單後進入登入功能流程。", "taskDescription": "在 LoginPage.Ready 觸發 submitLogin 後，導向 LoginSubmissionFeature.Init。"}, "validations": [{"id": "v.c.page_login.submit_login.01", "type": "semantic-check", "description": "登入後後續只能導向 return_to 或 /surveys。", "expected": "LoginSubmissionFeature"}], "meta": {"reason": "submitLogin | navigate LoginSubmissionFeature", "action": "submitLogin", "navigateTarget": "LoginSubmissionFeature"}}
+      ],
+      "meta": {
+        "pageName": "LoginPage",
+        "featureName": null,
+        "entryStateId": "page.LoginPage.Init"
+      }
+    },
+    {
+      "id": "page_surveys",
+      "name": "Surveys Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "③ Surveys Page State Machine",
+        "order": 3
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveysPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_surveys",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveysPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveysPage.Loading",
+          "label": "Loading",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_surveys",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveysPage.Loading"
+            }
+          }
+        },
+        {
+          "id": "page.SurveysPage.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_surveys",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveysPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.SurveysPage.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_surveys",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveysPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.SurveysPage.Error",
+          "label": "Error",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_surveys",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveysPage.Error"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_surveys.0001",
+          "from": "page.SurveysPage.Init",
+          "to": "page.SurveysPage.Loading",
+          "event": "loadOwnedSurveys",
+          "roles": [],
+          "narrative": {
+            "summary": "我的問卷頁開始載入擁有者問卷清單。",
+            "taskDescription": "觸發 loadOwnedSurveys 後進入 Loading，向後端請求目前登入使用者擁有的 Survey 清單。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_surveys.0001.01",
+              "type": "semantic-check",
+              "description": "畫面顯示 Loading，且清單在載入完成前不可互動。",
+              "expected": "Surveys loading"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadOwnedSurveys"
+          },
+          "meta": {
+            "diagramId": "page_surveys",
+            "source": {
+              "raw": "SurveysPage.Init --> SurveysPage.Loading : loadOwnedSurveys"
+            }
+          }
+        },
+        {
+          "id": "t.page_surveys.0002",
+          "from": "page.SurveysPage.Loading",
+          "to": "page.SurveysPage.Ready",
+          "event": "surveysLoaded",
+          "roles": [],
+          "narrative": {
+            "summary": "問卷列表成功載入並進入可操作狀態。",
+            "taskDescription": "在 surveysLoaded 成功後，將頁面切換到 Ready，呈現目前 owner 的問卷清單與狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_surveys.0002.01",
+              "type": "network-success",
+              "description": "清單 API 成功回應，且只顯示目前使用者擁有的問卷。",
+              "expected": "HTTP 200"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "surveysLoaded"
+          },
+          "meta": {
+            "diagramId": "page_surveys",
+            "source": {
+              "raw": "SurveysPage.Loading --> SurveysPage.Ready : surveysLoaded"
+            }
+          }
+        },
+        {
+          "id": "t.page_surveys.0003",
+          "from": "page.SurveysPage.Loading",
+          "to": "page.SurveysPage.Empty",
+          "event": "noOwnedSurveys",
+          "roles": [],
+          "narrative": {
+            "summary": "沒有任何問卷時顯示空狀態。",
+            "taskDescription": "在 noOwnedSurveys 條件成立時切換到 Empty，顯示建立新問卷 CTA 並避免洩漏其他人的資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_surveys.0003.01",
+              "type": "semantic-check",
+              "description": "空狀態只顯示建立新問卷入口，不顯示他人問卷資料。",
+              "expected": "Owned surveys empty"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "noOwnedSurveys"
+          },
+          "meta": {
+            "diagramId": "page_surveys",
+            "source": {
+              "raw": "SurveysPage.Loading --> SurveysPage.Empty : noOwnedSurveys"
+            }
+          }
+        },
+        {
+          "id": "t.page_surveys.0004",
+          "from": "page.SurveysPage.Loading",
+          "to": "page.SurveysPage.Error",
+          "event": "loadFailed",
+          "roles": [],
+          "narrative": {
+            "summary": "問卷列表載入失敗時切換到錯誤狀態。",
+            "taskDescription": "在 loadFailed 發生時進入 Error，顯示清楚的錯誤訊息與重試入口。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_surveys.0004.01",
+              "type": "network-failed",
+              "description": "載入失敗時應顯示 Error 狀態，且不得把失敗結果偽裝成成功資料。",
+              "expected": "Load failed"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadFailed"
+          },
+          "meta": {
+            "diagramId": "page_surveys",
+            "source": {
+              "raw": "SurveysPage.Loading --> SurveysPage.Error : loadFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_surveys.0005",
+          "from": "page.SurveysPage.Error",
+          "to": "page.SurveysPage.Init",
+          "event": "retryLoad | navigate /surveys",
+          "roles": [],
+          "narrative": {
+            "summary": "問卷列表在錯誤後重新發起載入。",
+            "taskDescription": "觸發 retryLoad 後回到 Init，重新進入 /surveys 的初始化流程並再次請求資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_surveys.0005.01",
+              "type": "url-equals",
+              "description": "重試後仍停留在 /surveys 並重新初始化列表。",
+              "expected": "/surveys"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad | navigate /surveys"
+          },
+          "meta": {
+            "diagramId": "page_surveys",
+            "source": {
+              "raw": "SurveysPage.Error --> SurveysPage.Init : retryLoad | navigate /surveys"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_surveys.invokes.feature_survey_creation.a.click_create_survey_ready", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Ready"}, "to": {"diagramId": "feature_survey_creation", "stateId": "feature.SurveyCreationFeature.Init"}, "narrative": {"summary": "從已載入列表進入建立問卷功能。", "taskDescription": "在 SurveysPage.Ready 觸發 clickCreateSurvey 後，進入 SurveyCreationFeature.Init。"}, "validations": [{"id": "v.c.page_surveys.create_ready.01", "type": "semantic-check", "description": "建立草稿時應避免重複建立同一份草稿。", "expected": "SurveyCreationFeature"}], "meta": {"reason": "clickCreateSurvey | navigate SurveyCreationFeature", "action": "clickCreateSurvey", "navigateTarget": "SurveyCreationFeature"}},
+        {"id": "c.page_surveys.invokes.page_survey_edit.a.open_survey_edit", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Ready"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "從列表打開指定問卷的編輯頁。", "taskDescription": "在 SurveysPage.Ready 觸發 openSurveyEdit 後，導向 /surveys/:id/edit 並進入 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.page_surveys.open_edit.01", "type": "url-equals", "description": "目標問卷必須屬於目前使用者，否則應為 403。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "openSurveyEdit | navigate /surveys/:id/edit", "action": "openSurveyEdit", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.page_surveys.invokes.page_survey_preview.a.open_survey_preview", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Ready"}, "to": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Init"}, "narrative": {"summary": "從列表進入問卷預覽頁。", "taskDescription": "在 SurveysPage.Ready 觸發 openSurveyPreview 後，導向 /surveys/:id/preview 並進入 SurveyPreviewPage.Init。"}, "validations": [{"id": "v.c.page_surveys.open_preview.01", "type": "url-equals", "description": "預覽頁只應模擬 Draft 結構，不建立 Response。", "expected": "/surveys/:id/preview"}], "meta": {"reason": "openSurveyPreview | navigate /surveys/:id/preview", "action": "openSurveyPreview", "navigateTarget": "/surveys/:id/preview"}},
+        {"id": "c.page_surveys.invokes.page_survey_results.a.open_survey_results", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Ready"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "從列表進入問卷結果頁。", "taskDescription": "在 SurveysPage.Ready 觸發 openSurveyResults 後，導向 /surveys/:id/results 並進入 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.page_surveys.open_results.01", "type": "url-equals", "description": "結果頁只應顯示同一份 Survey 的結果資料。", "expected": "/surveys/:id/results"}], "meta": {"reason": "openSurveyResults | navigate /surveys/:id/results", "action": "openSurveyResults", "navigateTarget": "/surveys/:id/results"}},
+        {"id": "c.page_surveys.invokes.feature_survey_publish_and_close.a.close_published_survey", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Ready"}, "to": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Init"}, "narrative": {"summary": "從列表觸發關閉已發佈問卷流程。", "taskDescription": "在 SurveysPage.Ready 觸發 closePublishedSurvey 後，進入 SurveyPublishCloseFeature.Init。"}, "validations": [{"id": "v.c.page_surveys.close_published.01", "type": "semantic-check", "description": "只有 Published Survey 可合法關閉。", "expected": "SurveyPublishCloseFeature"}], "meta": {"reason": "closePublishedSurvey | navigate SurveyPublishCloseFeature", "action": "closePublishedSurvey", "navigateTarget": "SurveyPublishCloseFeature"}},
+        {"id": "c.page_surveys.invokes.feature_survey_creation.a.click_create_survey_empty", "type": "invokes", "from": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Empty"}, "to": {"diagramId": "feature_survey_creation", "stateId": "feature.SurveyCreationFeature.Init"}, "narrative": {"summary": "從空狀態進入建立問卷功能。", "taskDescription": "在 SurveysPage.Empty 觸發 clickCreateSurvey 後，進入 SurveyCreationFeature.Init。"}, "validations": [{"id": "v.c.page_surveys.create_empty.01", "type": "semantic-check", "description": "建立成功後應能回到可見新 Draft 的列表。", "expected": "SurveyCreationFeature"}], "meta": {"reason": "clickCreateSurvey | navigate SurveyCreationFeature", "action": "clickCreateSurvey", "navigateTarget": "SurveyCreationFeature"}}
+      ],
+      "meta": {
+        "pageName": "SurveysPage",
+        "featureName": null,
+        "entryStateId": "page.SurveysPage.Init"
+      }
+    },
+    {
+      "id": "page_survey_edit",
+      "name": "Survey Edit Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "④ Survey Edit Page State Machine",
+        "order": 4
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyEditPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyEditPage.Loading",
+          "label": "Loading",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.Loading"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyEditPage.ReadyEditable",
+          "label": "ReadyEditable",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.ReadyEditable"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyEditPage.ReadyLocked",
+          "label": "ReadyLocked",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.ReadyLocked"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyEditPage.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyEditPage.Error",
+          "label": "Error",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyEditPage.Error"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_edit.0001",
+          "from": "page.SurveyEditPage.Init",
+          "to": "page.SurveyEditPage.Loading",
+          "event": "loadSurveyDefinition",
+          "roles": [],
+          "narrative": {
+            "summary": "編輯頁開始載入問卷定義。",
+            "taskDescription": "觸發 loadSurveyDefinition 後進入 Loading，以載入 Survey 基本資訊、Questions、Options、RuleGroups 與 LogicRules。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0001.01",
+              "type": "semantic-check",
+              "description": "載入期間編輯區不可操作，且頁面顯示 Loading。",
+              "expected": "Definition loading"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadSurveyDefinition"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Init --> SurveyEditPage.Loading : loadSurveyDefinition"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_edit.0002",
+          "from": "page.SurveyEditPage.Loading",
+          "to": "page.SurveyEditPage.ReadyEditable",
+          "event": "draftLoaded",
+          "roles": [],
+          "narrative": {
+            "summary": "Draft 問卷成功載入並可編輯。",
+            "taskDescription": "當 draftLoaded 完成時切換到 ReadyEditable，開放編輯 title、description、is_anonymous、題目、選項與規則。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0002.01",
+              "type": "network-success",
+              "description": "Draft 載入成功後，結構編輯 UI 可互動。",
+              "expected": "HTTP 200"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "draftLoaded"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Loading --> SurveyEditPage.ReadyEditable : draftLoaded"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_edit.0003",
+          "from": "page.SurveyEditPage.Loading",
+          "to": "page.SurveyEditPage.ReadyLocked",
+          "event": "publishedOrClosedLoaded",
+          "roles": [],
+          "narrative": {
+            "summary": "已發佈或已關閉問卷載入後進入鎖定狀態。",
+            "taskDescription": "在 publishedOrClosedLoaded 成功後切換到 ReadyLocked，只允許白名單欄位更新並鎖定結構編輯。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0003.01",
+              "type": "network-success",
+              "description": "Published 或 Closed 問卷載入成功後，結構性欄位必須被禁用。",
+              "expected": "HTTP 200"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "publishedOrClosedLoaded"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Loading --> SurveyEditPage.ReadyLocked : publishedOrClosedLoaded"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_edit.0004",
+          "from": "page.SurveyEditPage.Loading",
+          "to": "page.SurveyEditPage.Empty",
+          "event": "surveyUnavailable",
+          "roles": [],
+          "narrative": {
+            "summary": "問卷不存在或不可存取時顯示空結果。",
+            "taskDescription": "在 surveyUnavailable 條件下切換到 Empty，避免顯示任何可編輯的結構內容。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0004.01",
+              "type": "semantic-check",
+              "description": "不可用狀態下不得洩漏問卷結構或編輯內容。",
+              "expected": "Survey unavailable"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "surveyUnavailable"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Loading --> SurveyEditPage.Empty : surveyUnavailable"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_edit.0005",
+          "from": "page.SurveyEditPage.Loading",
+          "to": "page.SurveyEditPage.Error",
+          "event": "loadFailed",
+          "roles": [],
+          "narrative": {
+            "summary": "編輯頁載入問卷定義失敗。",
+            "taskDescription": "當 loadFailed 發生時進入 Error，提示使用者可重新載入同一份問卷。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0005.01",
+              "type": "network-failed",
+              "description": "載入失敗時不得呈現不完整的問卷定義。",
+              "expected": "Load failed"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadFailed"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Loading --> SurveyEditPage.Error : loadFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_edit.0006",
+          "from": "page.SurveyEditPage.Error",
+          "to": "page.SurveyEditPage.Init",
+          "event": "retryLoad | navigate /surveys/:id/edit",
+          "roles": [],
+          "narrative": {
+            "summary": "編輯頁在錯誤後重新載入同一份問卷。",
+            "taskDescription": "觸發 retryLoad 後回到 Init，再次進入 /surveys/:id/edit 的問卷載入流程。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_edit.0006.01",
+              "type": "url-equals",
+              "description": "重試後仍在同一編輯頁路由重新初始化。",
+              "expected": "/surveys/:id/edit"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad | navigate /surveys/:id/edit"
+          },
+          "meta": {
+            "diagramId": "page_survey_edit",
+            "source": {
+              "raw": "SurveyEditPage.Error --> SurveyEditPage.Init : retryLoad | navigate /surveys/:id/edit"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_edit.invokes.feature_survey_structure_editing.a.edit_survey_structure", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyEditable"}, "to": {"diagramId": "feature_survey_structure_editing", "stateId": "feature.SurveyStructureEditingFeature.Init"}, "narrative": {"summary": "從 Draft 編輯頁進入結構編輯功能。", "taskDescription": "在 SurveyEditPage.ReadyEditable 觸發 editSurveyStructure 後，進入 SurveyStructureEditingFeature.Init。"}, "validations": [{"id": "v.c.page_survey_edit.structure.01", "type": "semantic-check", "description": "只有 Draft 問卷可進入結構編輯。", "expected": "SurveyStructureEditingFeature"}], "meta": {"reason": "editSurveyStructure | navigate SurveyStructureEditingFeature", "action": "editSurveyStructure", "navigateTarget": "SurveyStructureEditingFeature"}},
+        {"id": "c.page_survey_edit.invokes.feature_rule_validation.a.validate_draft_rules", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyEditable"}, "to": {"diagramId": "feature_rule_validation", "stateId": "feature.RuleValidationFeature.Init"}, "narrative": {"summary": "從 Draft 編輯頁進入規則驗證功能。", "taskDescription": "在 SurveyEditPage.ReadyEditable 觸發 validateDraftRules 後，進入 RuleValidationFeature.Init。"}, "validations": [{"id": "v.c.page_survey_edit.validate_rules.01", "type": "semantic-check", "description": "驗證只應針對目前 Draft 結構。", "expected": "RuleValidationFeature"}], "meta": {"reason": "validateDraftRules | navigate RuleValidationFeature", "action": "validateDraftRules", "navigateTarget": "RuleValidationFeature"}},
+        {"id": "c.page_survey_edit.invokes.page_survey_preview.a.open_preview_editable", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyEditable"}, "to": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Init"}, "narrative": {"summary": "從 Draft 編輯頁進入預覽頁。", "taskDescription": "在 SurveyEditPage.ReadyEditable 觸發 openPreview 後，導向 /surveys/:id/preview 並進入 SurveyPreviewPage.Init。"}, "validations": [{"id": "v.c.page_survey_edit.preview_editable.01", "type": "url-equals", "description": "預覽只應模擬已保存的 Draft 結構。", "expected": "/surveys/:id/preview"}], "meta": {"reason": "openPreview | navigate /surveys/:id/preview", "action": "openPreview", "navigateTarget": "/surveys/:id/preview"}},
+        {"id": "c.page_survey_edit.invokes.feature_survey_publish_and_close.a.publish_survey", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyEditable"}, "to": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Init"}, "narrative": {"summary": "從編輯頁觸發發佈流程。", "taskDescription": "在 SurveyEditPage.ReadyEditable 觸發 publishSurvey 後，進入 SurveyPublishCloseFeature.Init。"}, "validations": [{"id": "v.c.page_survey_edit.publish.01", "type": "semantic-check", "description": "Draft 需先通過結構與規則驗證才能發佈。", "expected": "SurveyPublishCloseFeature"}], "meta": {"reason": "publishSurvey | navigate SurveyPublishCloseFeature", "action": "publishSurvey", "navigateTarget": "SurveyPublishCloseFeature"}},
+        {"id": "c.page_survey_edit.invokes.page_surveys.a.back_to_survey_list_editable", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyEditable"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "從 Draft 編輯頁返回列表。", "taskDescription": "在 SurveyEditPage.ReadyEditable 觸發 backToSurveyList 後，導向 /surveys 並重新進入列表初始化。"}, "validations": [{"id": "v.c.page_survey_edit.back_editable.01", "type": "url-equals", "description": "返回列表後只應顯示目前 owner 的問卷。", "expected": "/surveys"}], "meta": {"reason": "backToSurveyList | navigate /surveys", "action": "backToSurveyList", "navigateTarget": "/surveys"}},
+        {"id": "c.page_survey_edit.invokes.page_survey_preview.a.open_preview_locked", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyLocked"}, "to": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Init"}, "narrative": {"summary": "從鎖定編輯頁進入預覽頁。", "taskDescription": "在 SurveyEditPage.ReadyLocked 觸發 openPreview 後，導向 /surveys/:id/preview 並進入 SurveyPreviewPage.Init。"}, "validations": [{"id": "v.c.page_survey_edit.preview_locked.01", "type": "url-equals", "description": "鎖定問卷預覽只供檢視邏輯流程。", "expected": "/surveys/:id/preview"}], "meta": {"reason": "openPreview | navigate /surveys/:id/preview", "action": "openPreview", "navigateTarget": "/surveys/:id/preview"}},
+        {"id": "c.page_survey_edit.invokes.page_survey_results.a.open_results_locked", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyLocked"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "從鎖定編輯頁進入結果頁。", "taskDescription": "在 SurveyEditPage.ReadyLocked 觸發 openResults 後，導向 /surveys/:id/results 並進入 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.page_survey_edit.results_locked.01", "type": "url-equals", "description": "結果頁只應對應同一份 Survey。", "expected": "/surveys/:id/results"}], "meta": {"reason": "openResults | navigate /surveys/:id/results", "action": "openResults", "navigateTarget": "/surveys/:id/results"}},
+        {"id": "c.page_survey_edit.invokes.feature_survey_publish_and_close.a.close_survey_locked", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyLocked"}, "to": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Init"}, "narrative": {"summary": "從鎖定編輯頁觸發關閉流程。", "taskDescription": "在 SurveyEditPage.ReadyLocked 觸發 closeSurvey 後，進入 SurveyPublishCloseFeature.Init。"}, "validations": [{"id": "v.c.page_survey_edit.close_locked.01", "type": "semantic-check", "description": "只允許對 Published 問卷執行合法關閉。", "expected": "SurveyPublishCloseFeature"}], "meta": {"reason": "closeSurvey | navigate SurveyPublishCloseFeature", "action": "closeSurvey", "navigateTarget": "SurveyPublishCloseFeature"}},
+        {"id": "c.page_survey_edit.invokes.page_surveys.a.back_to_survey_list_locked", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.ReadyLocked"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "從鎖定編輯頁返回列表。", "taskDescription": "在 SurveyEditPage.ReadyLocked 觸發 backToSurveyList 後，導向 /surveys 並重新載入列表。"}, "validations": [{"id": "v.c.page_survey_edit.back_locked.01", "type": "url-equals", "description": "返回列表後狀態需維持 Published 或 Closed。", "expected": "/surveys"}], "meta": {"reason": "backToSurveyList | navigate /surveys", "action": "backToSurveyList", "navigateTarget": "/surveys"}},
+        {"id": "c.page_survey_edit.invokes.page_surveys.a.return_to_survey_list_empty", "type": "invokes", "from": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Empty"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "從不可用編輯頁返回列表。", "taskDescription": "在 SurveyEditPage.Empty 觸發 returnToSurveyList 後，導向 /surveys 並重新載入列表。"}, "validations": [{"id": "v.c.page_survey_edit.return_empty.01", "type": "url-equals", "description": "返回列表後仍只顯示目前使用者可管理的問卷。", "expected": "/surveys"}], "meta": {"reason": "returnToSurveyList | navigate /surveys", "action": "returnToSurveyList", "navigateTarget": "/surveys"}}
+      ],
+      "meta": {
+        "pageName": "SurveyEditPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyEditPage.Init"
+      }
+    },
+    {
+      "id": "page_survey_preview",
+      "name": "Survey Preview Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑤ Survey Preview Page State Machine",
+        "order": 5
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyPreviewPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyPreviewPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyPreviewPage.Loading",
+          "label": "Loading",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyPreviewPage.Loading"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyPreviewPage.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyPreviewPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyPreviewPage.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyPreviewPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyPreviewPage.Error",
+          "label": "Error",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyPreviewPage.Error"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_preview.0001",
+          "from": "page.SurveyPreviewPage.Init",
+          "to": "page.SurveyPreviewPage.Loading",
+          "event": "loadPreviewDefinition",
+          "roles": [],
+          "narrative": {
+            "summary": "預覽頁開始載入問卷預覽結構。",
+            "taskDescription": "觸發 loadPreviewDefinition 後切換到 Loading，準備載入可供模擬的 Survey 結構。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_preview.0001.01",
+              "type": "semantic-check",
+              "description": "預覽資料載入期間題目流程不可操作。",
+              "expected": "Preview loading"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadPreviewDefinition"
+          },
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "source": {
+              "raw": "SurveyPreviewPage.Init --> SurveyPreviewPage.Loading : loadPreviewDefinition"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_preview.0002",
+          "from": "page.SurveyPreviewPage.Loading",
+          "to": "page.SurveyPreviewPage.Ready",
+          "event": "previewLoaded",
+          "roles": [],
+          "narrative": {
+            "summary": "預覽頁成功載入並可開始模擬。",
+            "taskDescription": "在 previewLoaded 後切換到 Ready，提供開始預覽的入口且不建立正式回覆資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_preview.0002.01",
+              "type": "network-success",
+              "description": "成功取得可預覽結構後，不應建立 Response 或 response_hash。",
+              "expected": "HTTP 200"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "previewLoaded"
+          },
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "source": {
+              "raw": "SurveyPreviewPage.Loading --> SurveyPreviewPage.Ready : previewLoaded"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_preview.0003",
+          "from": "page.SurveyPreviewPage.Loading",
+          "to": "page.SurveyPreviewPage.Empty",
+          "event": "noQuestions",
+          "roles": [],
+          "narrative": {
+            "summary": "沒有題目時顯示預覽空狀態。",
+            "taskDescription": "在 noQuestions 條件成立時切換到 Empty，提醒 owner 回編輯頁補上題目。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_preview.0003.01",
+              "type": "semantic-check",
+              "description": "無題目時不提供開始預覽入口。",
+              "expected": "No questions"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "noQuestions"
+          },
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "source": {
+              "raw": "SurveyPreviewPage.Loading --> SurveyPreviewPage.Empty : noQuestions"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_preview.0004",
+          "from": "page.SurveyPreviewPage.Loading",
+          "to": "page.SurveyPreviewPage.Error",
+          "event": "loadFailed",
+          "roles": [],
+          "narrative": {
+            "summary": "預覽資料載入失敗。",
+            "taskDescription": "當 loadFailed 發生時切換到 Error，保證舊的模擬資料不會被誤認為目前狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_preview.0004.01",
+              "type": "network-failed",
+              "description": "載入失敗時應顯示重試入口，且不得顯示過期預覽內容。",
+              "expected": "Load failed"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadFailed"
+          },
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "source": {
+              "raw": "SurveyPreviewPage.Loading --> SurveyPreviewPage.Error : loadFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_preview.0005",
+          "from": "page.SurveyPreviewPage.Error",
+          "to": "page.SurveyPreviewPage.Init",
+          "event": "retryLoad | navigate /surveys/:id/preview",
+          "roles": [],
+          "narrative": {
+            "summary": "預覽頁在錯誤後重新初始化。",
+            "taskDescription": "觸發 retryLoad 後回到 Init，再次進入 /surveys/:id/preview 的載入流程。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_preview.0005.01",
+              "type": "url-equals",
+              "description": "重試後仍在同一預覽頁路由。",
+              "expected": "/surveys/:id/preview"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad | navigate /surveys/:id/preview"
+          },
+          "meta": {
+            "diagramId": "page_survey_preview",
+            "source": {
+              "raw": "SurveyPreviewPage.Error --> SurveyPreviewPage.Init : retryLoad | navigate /surveys/:id/preview"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_preview.invokes.feature_preview_simulation.a.start_preview", "type": "invokes", "from": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Ready"}, "to": {"diagramId": "feature_preview_simulation", "stateId": "feature.PreviewSimulationFeature.Init"}, "narrative": {"summary": "從預覽頁開始模擬流程。", "taskDescription": "在 SurveyPreviewPage.Ready 觸發 startPreview 後，進入 PreviewSimulationFeature.Init。"}, "validations": [{"id": "v.c.page_survey_preview.start_preview.01", "type": "semantic-check", "description": "預覽模擬只使用前端邏輯與本地草稿。", "expected": "PreviewSimulationFeature"}], "meta": {"reason": "startPreview | navigate PreviewSimulationFeature", "action": "startPreview", "navigateTarget": "PreviewSimulationFeature"}},
+        {"id": "c.page_survey_preview.invokes.page_survey_edit.a.back_to_edit_ready", "type": "invokes", "from": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Ready"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "從預覽頁返回編輯頁。", "taskDescription": "在 SurveyPreviewPage.Ready 觸發 backToEdit 後，導向 /surveys/:id/edit 並進入 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.page_survey_preview.back_ready.01", "type": "url-equals", "description": "返回後應回到同一份 Survey 的編輯頁。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "backToEdit | navigate /surveys/:id/edit", "action": "backToEdit", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.page_survey_preview.invokes.page_survey_edit.a.back_to_edit_empty", "type": "invokes", "from": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Empty"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "從空狀態預覽頁返回編輯頁。", "taskDescription": "在 SurveyPreviewPage.Empty 觸發 backToEdit 後，導向 /surveys/:id/edit 並進入 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.page_survey_preview.back_empty.01", "type": "url-equals", "description": "返回編輯頁後 owner 可補上題目結構。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "backToEdit | navigate /surveys/:id/edit", "action": "backToEdit", "navigateTarget": "/surveys/:id/edit"}}
+      ],
+      "meta": {
+        "pageName": "SurveyPreviewPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyPreviewPage.Init"
+      }
+    },
+    {
+      "id": "page_survey_respond",
+      "name": "Survey Respond Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "base",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {
+          "guest": "page_survey_respond_guest",
+          "user": "page_survey_respond_user"
+        },
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑥ Survey Respond Page State Machine",
+        "order": 6
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyRespondPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.Loading",
+          "label": "Loading",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Loading"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.Unavailable",
+          "label": "Unavailable",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Unavailable"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.Error",
+          "label": "Error",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Error"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.Completion",
+          "label": "Completion",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "synthetic": true,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Completion"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_respond.0001",
+          "from": "page.SurveyRespondPage.Init",
+          "to": "page.SurveyRespondPage.Loading",
+          "event": "loadPublishedSurvey",
+          "roles": [],
+          "narrative": {
+            "summary": "填答頁開始載入可填寫的問卷結構。",
+            "taskDescription": "觸發 loadPublishedSurvey 後進入 Loading，驗證 slug 對應問卷是否為 Published 且可填答。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond.0001.01",
+              "type": "semantic-check",
+              "description": "載入期間應顯示 Loading，且只允許 Published 問卷繼續填答。",
+              "expected": "Published survey loading"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadPublishedSurvey"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "source": {
+              "raw": "SurveyRespondPage.Init --> SurveyRespondPage.Loading : loadPublishedSurvey"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_respond.0002",
+          "from": "page.SurveyRespondPage.Loading",
+          "to": "page.SurveyRespondPage.Unavailable",
+          "event": "surveyUnavailable",
+          "roles": [],
+          "narrative": {
+            "summary": "問卷不可填寫時顯示不可用狀態。",
+            "taskDescription": "當 surveyUnavailable 成立時切換到 Unavailable，避免提供任何提交入口並遵守 404 不洩漏規則。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond.0002.01",
+              "type": "semantic-check",
+              "description": "slug 不存在或 Survey 為 Draft/Closed 時不得顯示可提交 UI。",
+              "expected": "Survey unavailable"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "surveyUnavailable"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "source": {
+              "raw": "SurveyRespondPage.Loading --> SurveyRespondPage.Unavailable : surveyUnavailable"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_respond.0003",
+          "from": "page.SurveyRespondPage.Loading",
+          "to": "page.SurveyRespondPage.Error",
+          "event": "loadFailed",
+          "roles": [],
+          "narrative": {
+            "summary": "填答頁載入失敗時顯示錯誤狀態。",
+            "taskDescription": "在 loadFailed 發生時切換到 Error，保留既有草稿答案並提供重試入口。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond.0003.01",
+              "type": "network-failed",
+              "description": "載入失敗時應保留草稿答案且顯示重試入口。",
+              "expected": "Load failed"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadFailed"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "source": {
+              "raw": "SurveyRespondPage.Loading --> SurveyRespondPage.Error : loadFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_respond.0004",
+          "from": "page.SurveyRespondPage.Error",
+          "to": "page.SurveyRespondPage.Init",
+          "event": "retryLoad | navigate /s/:slug",
+          "roles": [],
+          "narrative": {
+            "summary": "填答頁在錯誤後重新載入同一問卷。",
+            "taskDescription": "觸發 retryLoad 後回到 Init，重新進入 /s/:slug 的載入流程並重新判定可填狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond.0004.01",
+              "type": "url-equals",
+              "description": "重試後路由需維持在同一個 /s/:slug。",
+              "expected": "/s/:slug"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad | navigate /s/:slug"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond",
+            "source": {
+              "raw": "SurveyRespondPage.Error --> SurveyRespondPage.Init : retryLoad | navigate /s/:slug"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_respond.contains.page_survey_respond_guest", "type": "contains", "from": {"diagramId": "page_survey_respond", "stateId": null}, "to": {"diagramId": "page_survey_respond_guest", "stateId": null}, "narrative": {"summary": "Survey Respond Page 包含 Guest delta。", "taskDescription": "建立 Survey Respond Page 與 Guest 角色差異圖的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_survey_respond.contains.page_survey_respond_user", "type": "contains", "from": {"diagramId": "page_survey_respond", "stateId": null}, "to": {"diagramId": "page_survey_respond_user", "stateId": null}, "narrative": {"summary": "Survey Respond Page 包含 User delta。", "taskDescription": "建立 Survey Respond Page 與 User 角色差異圖的父子關係。"}, "validations": [], "meta": {"reason": "derived from parentDiagramId"}},
+        {"id": "c.page_survey_respond.invokes.page_survey_respond_guest.a.ready_for_guest_response", "type": "invokes", "from": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Loading"}, "to": {"diagramId": "page_survey_respond_guest", "stateId": "page.SurveyRespondPage.guest.Init"}, "narrative": {"summary": "問卷可供 Guest 填答時切換到 Guest 視角。", "taskDescription": "在 SurveyRespondPage.Loading 觸發 readyForGuestResponse 後，進入 SurveyRespondPage.guest.Init。"}, "validations": [{"id": "v.c.page_survey_respond.guest.01", "type": "semantic-check", "description": "Guest 填答時 Header 不應出現 /surveys* 導覽。", "expected": "SurveyRespondPage.Guest"}], "meta": {"reason": "readyForGuestResponse | navigate SurveyRespondPage.Guest", "action": "readyForGuestResponse", "navigateTarget": "SurveyRespondPage.Guest"}},
+        {"id": "c.page_survey_respond.invokes.page_survey_respond_user.a.ready_for_user_response", "type": "invokes", "from": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Loading"}, "to": {"diagramId": "page_survey_respond_user", "stateId": "page.SurveyRespondPage.user.Init"}, "narrative": {"summary": "已登入使用者可填答時切換到 User 視角。", "taskDescription": "在 SurveyRespondPage.Loading 觸發 readyForUserResponse 後，進入 SurveyRespondPage.user.Init。"}, "validations": [{"id": "v.c.page_survey_respond.user.01", "type": "semantic-check", "description": "已登入使用者後續記名提交時 respondent_id 應對應目前 User.id。", "expected": "SurveyRespondPage.User"}], "meta": {"reason": "readyForUserResponse | navigate SurveyRespondPage.User", "action": "readyForUserResponse", "navigateTarget": "SurveyRespondPage.User"}}
+      ],
+      "meta": {
+        "pageName": "SurveyRespondPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyRespondPage.Init"
+      }
+    },
+    {
+      "id": "page_survey_results",
+      "name": "Survey Results Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑦ Survey Results Page State Machine",
+        "order": 7
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyResultsPage.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_results",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyResultsPage.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyResultsPage.Loading",
+          "label": "Loading",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_results",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyResultsPage.Loading"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyResultsPage.Ready",
+          "label": "Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_results",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyResultsPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyResultsPage.Empty",
+          "label": "Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_results",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyResultsPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyResultsPage.Error",
+          "label": "Error",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_survey_results",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyResultsPage.Error"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_results.0001",
+          "from": "page.SurveyResultsPage.Init",
+          "to": "page.SurveyResultsPage.Loading",
+          "event": "loadResultsOverview",
+          "roles": [],
+          "narrative": {
+            "summary": "結果頁開始載入回收與統計資料。",
+            "taskDescription": "觸發 loadResultsOverview 後進入 Loading，載入目前 Survey 的回覆數與彙總統計。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_results.0001.01",
+              "type": "semantic-check",
+              "description": "載入期間結果元件暫不可互動。",
+              "expected": "Results loading"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadResultsOverview"
+          },
+          "meta": {
+            "diagramId": "page_survey_results",
+            "source": {
+              "raw": "SurveyResultsPage.Init --> SurveyResultsPage.Loading : loadResultsOverview"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_results.0002",
+          "from": "page.SurveyResultsPage.Loading",
+          "to": "page.SurveyResultsPage.Ready",
+          "event": "resultsLoaded",
+          "roles": [],
+          "narrative": {
+            "summary": "結果頁成功載入統計資料。",
+            "taskDescription": "在 resultsLoaded 後切換到 Ready，呈現與 Response/Answer 一致的統計結果。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_results.0002.01",
+              "type": "network-success",
+              "description": "統計資料載入成功後，畫面應顯示正確的回覆數與各題統計。",
+              "expected": "HTTP 200"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "resultsLoaded"
+          },
+          "meta": {
+            "diagramId": "page_survey_results",
+            "source": {
+              "raw": "SurveyResultsPage.Loading --> SurveyResultsPage.Ready : resultsLoaded"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_results.0003",
+          "from": "page.SurveyResultsPage.Loading",
+          "to": "page.SurveyResultsPage.Empty",
+          "event": "noResponses",
+          "roles": [],
+          "narrative": {
+            "summary": "尚無回覆時顯示結果空狀態。",
+            "taskDescription": "在 noResponses 條件成立時切換到 Empty，明確表示目前沒有任何回覆統計可顯示。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_results.0003.01",
+              "type": "semantic-check",
+              "description": "無回覆時不得顯示虛假的統計數值。",
+              "expected": "No responses"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "noResponses"
+          },
+          "meta": {
+            "diagramId": "page_survey_results",
+            "source": {
+              "raw": "SurveyResultsPage.Loading --> SurveyResultsPage.Empty : noResponses"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_results.0004",
+          "from": "page.SurveyResultsPage.Loading",
+          "to": "page.SurveyResultsPage.Error",
+          "event": "loadFailed",
+          "roles": [],
+          "narrative": {
+            "summary": "結果頁載入失敗時顯示錯誤狀態。",
+            "taskDescription": "當 loadFailed 發生時切換到 Error，避免把舊統計資料當成最新結果。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_results.0004.01",
+              "type": "network-failed",
+              "description": "載入失敗時應顯示可重試的 Error 狀態。",
+              "expected": "Load failed"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadFailed"
+          },
+          "meta": {
+            "diagramId": "page_survey_results",
+            "source": {
+              "raw": "SurveyResultsPage.Loading --> SurveyResultsPage.Error : loadFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_survey_results.0005",
+          "from": "page.SurveyResultsPage.Error",
+          "to": "page.SurveyResultsPage.Init",
+          "event": "retryLoad | navigate /surveys/:id/results",
+          "roles": [],
+          "narrative": {
+            "summary": "結果頁在錯誤後重新初始化。",
+            "taskDescription": "觸發 retryLoad 後回到 Init，重新進入 /surveys/:id/results 的資料載入流程。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_results.0005.01",
+              "type": "url-equals",
+              "description": "重試後仍留在同一 Survey 的結果頁。",
+              "expected": "/surveys/:id/results"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad | navigate /surveys/:id/results"
+          },
+          "meta": {
+            "diagramId": "page_survey_results",
+            "source": {
+              "raw": "SurveyResultsPage.Error --> SurveyResultsPage.Init : retryLoad | navigate /surveys/:id/results"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_results.invokes.feature_results_analytics.a.refresh_analytics", "type": "invokes", "from": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Ready"}, "to": {"diagramId": "feature_results_analytics", "stateId": "feature.ResultsAnalyticsFeature.Init"}, "narrative": {"summary": "從結果頁刷新分析功能。", "taskDescription": "在 SurveyResultsPage.Ready 觸發 refreshAnalytics 後，進入 ResultsAnalyticsFeature.Init。"}, "validations": [{"id": "v.c.page_survey_results.analytics.01", "type": "semantic-check", "description": "分析功能只應處理目前 Survey 的結果資料。", "expected": "ResultsAnalyticsFeature"}], "meta": {"reason": "refreshAnalytics | navigate ResultsAnalyticsFeature", "action": "refreshAnalytics", "navigateTarget": "ResultsAnalyticsFeature"}},
+        {"id": "c.page_survey_results.invokes.feature_export_responses.a.export_responses", "type": "invokes", "from": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Ready"}, "to": {"diagramId": "feature_export_responses", "stateId": "feature.ExportResponsesFeature.Init"}, "narrative": {"summary": "從結果頁進入回覆匯出功能。", "taskDescription": "在 SurveyResultsPage.Ready 觸發 exportResponses 後，進入 ExportResponsesFeature.Init。"}, "validations": [{"id": "v.c.page_survey_results.export.01", "type": "semantic-check", "description": "匯出資料必須來自目前 Survey 的 Response 與 Answer。", "expected": "ExportResponsesFeature"}], "meta": {"reason": "exportResponses | navigate ExportResponsesFeature", "action": "exportResponses", "navigateTarget": "ExportResponsesFeature"}},
+        {"id": "c.page_survey_results.invokes.page_surveys.a.back_to_survey_list_ready", "type": "invokes", "from": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Ready"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "從結果頁返回問卷列表。", "taskDescription": "在 SurveyResultsPage.Ready 觸發 backToSurveyList 後，導向 /surveys 並重新進入列表初始化。"}, "validations": [{"id": "v.c.page_survey_results.back_ready.01", "type": "url-equals", "description": "返回後列表與結果頁的 Survey 狀態應保持一致。", "expected": "/surveys"}], "meta": {"reason": "backToSurveyList | navigate /surveys", "action": "backToSurveyList", "navigateTarget": "/surveys"}},
+        {"id": "c.page_survey_results.invokes.page_surveys.a.back_to_survey_list_empty", "type": "invokes", "from": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Empty"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "從無回覆結果頁返回問卷列表。", "taskDescription": "在 SurveyResultsPage.Empty 觸發 backToSurveyList 後，導向 /surveys 並重新進入列表初始化。"}, "validations": [{"id": "v.c.page_survey_results.back_empty.01", "type": "url-equals", "description": "返回後 Survey 狀態與可用操作維持不變。", "expected": "/surveys"}], "meta": {"reason": "backToSurveyList | navigate /surveys", "action": "backToSurveyList", "navigateTarget": "/surveys"}}
+      ],
+      "meta": {
+        "pageName": "SurveyResultsPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyResultsPage.Init"
+      }
+    },
+    {
+      "id": "page_survey_respond_guest",
+      "name": "Survey Respond Page (Guest)",
+      "level": "page",
+      "parentDiagramId": "page_survey_respond",
+      "roles": [
+        "guest"
+      ],
+      "variant": {
+        "kind": "delta",
+        "baseDiagramId": "page_survey_respond",
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": [
+          "guest"
+        ]
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑧ Survey Respond Page.Guest State Machine",
+        "order": 8
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyRespondPage.guest.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond_guest",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Guest.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.guest.Answering",
+          "label": "Answering",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond_guest",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.Guest.Answering"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_respond_guest.0001",
+          "from": "page.SurveyRespondPage.guest.Init",
+          "to": "page.SurveyRespondPage.guest.Answering",
+          "event": "showVisibleQuestions",
+          "roles": [
+            "guest"
+          ],
+          "narrative": {
+            "summary": "Guest 填答流程顯示目前可見題目。",
+            "taskDescription": "觸發 showVisibleQuestions 後進入 Answering，僅顯示依 draft answers 與 Logic Engine 計算出的可見題目。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond_guest.0001.01",
+              "type": "semantic-check",
+              "description": "Guest 填答時只對可見題目套用 required 驗證，且提供上一題與下一題操作。",
+              "expected": "Visible guest questions"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showVisibleQuestions"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond_guest",
+            "source": {
+              "raw": "SurveyRespondPage.Guest.Init --> SurveyRespondPage.Guest.Answering : showVisibleQuestions"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_respond_guest.invokes.feature_response_draft_session.a.change_answer_or_move_question_guest", "type": "invokes", "from": {"diagramId": "page_survey_respond_guest", "stateId": "page.SurveyRespondPage.guest.Answering"}, "to": {"diagramId": "feature_response_draft_session", "stateId": "feature.ResponseDraftSessionFeature.Init"}, "narrative": {"summary": "Guest 修改答案時進入草稿處理功能。", "taskDescription": "在 SurveyRespondPage.guest.Answering 觸發 changeAnswerOrMoveQuestion 後，進入 ResponseDraftSessionFeature.Init。"}, "validations": [{"id": "v.c.page_survey_respond_guest.draft.01", "type": "semantic-check", "description": "前端需即時重算 Visible Questions 並清除 hidden 題目答案。", "expected": "ResponseDraftSessionFeature"}], "meta": {"reason": "changeAnswerOrMoveQuestion | navigate ResponseDraftSessionFeature", "action": "changeAnswerOrMoveQuestion", "navigateTarget": "ResponseDraftSessionFeature"}},
+        {"id": "c.page_survey_respond_guest.invokes.feature_response_submit.a.submit_guest_response", "type": "invokes", "from": {"diagramId": "page_survey_respond_guest", "stateId": "page.SurveyRespondPage.guest.Answering"}, "to": {"diagramId": "feature_response_submit", "stateId": "feature.ResponseSubmitFeature.Init"}, "narrative": {"summary": "Guest 送出填答時進入正式提交功能。", "taskDescription": "在 SurveyRespondPage.guest.Answering 觸發 submitGuestResponse 後，進入 ResponseSubmitFeature.Init。"}, "validations": [{"id": "v.c.page_survey_respond_guest.submit.01", "type": "semantic-check", "description": "Guest 只有在 Survey.is_anonymous=true 時才可成功提交。", "expected": "ResponseSubmitFeature"}], "meta": {"reason": "submitGuestResponse | navigate ResponseSubmitFeature", "action": "submitGuestResponse", "navigateTarget": "ResponseSubmitFeature"}},
+        {"id": "c.page_survey_respond_guest.invokes.page_survey_respond.a.reload_survey_page_guest", "type": "invokes", "from": {"diagramId": "page_survey_respond_guest", "stateId": "page.SurveyRespondPage.guest.Answering"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "Guest 重新載入填答頁時回到 base page 初始化。", "taskDescription": "在 SurveyRespondPage.guest.Answering 觸發 reloadSurveyPage 後，導向 /s/:slug 並回到 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.page_survey_respond_guest.reload.01", "type": "url-equals", "description": "重新載入後仍應以同一個 slug 重新計算可見題目。", "expected": "/s/:slug"}], "meta": {"reason": "reloadSurveyPage | navigate /s/:slug", "action": "reloadSurveyPage", "navigateTarget": "/s/:slug"}}
+      ],
+      "meta": {
+        "pageName": "SurveyRespondPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyRespondPage.guest.Init"
+      }
+    },
+    {
+      "id": "page_survey_respond_user",
+      "name": "Survey Respond Page (User)",
+      "level": "page",
+      "parentDiagramId": "page_survey_respond",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "delta",
+        "baseDiagramId": "page_survey_respond",
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": [
+          "user"
+        ]
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑨ Survey Respond Page.User State Machine",
+        "order": 9
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.SurveyRespondPage.user.Init",
+          "label": "Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond_user",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.User.Init"
+            }
+          }
+        },
+        {
+          "id": "page.SurveyRespondPage.user.Answering",
+          "label": "Answering",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_survey_respond_user",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "SurveyRespondPage.User.Answering"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_survey_respond_user.0001",
+          "from": "page.SurveyRespondPage.user.Init",
+          "to": "page.SurveyRespondPage.user.Answering",
+          "event": "showVisibleQuestions",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "已登入使用者填答流程顯示目前可見題目。",
+            "taskDescription": "觸發 showVisibleQuestions 後進入 Answering，依相同的 Logic Engine 顯示目前可見題目並允許修正答案。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_survey_respond_user.0001.01",
+              "type": "semantic-check",
+              "description": "User 填答時 required 僅對可見題目生效，且可回上一題修正答案。",
+              "expected": "Visible user questions"
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showVisibleQuestions"
+          },
+          "meta": {
+            "diagramId": "page_survey_respond_user",
+            "source": {
+              "raw": "SurveyRespondPage.User.Init --> SurveyRespondPage.User.Answering : showVisibleQuestions"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {"id": "c.page_survey_respond_user.invokes.feature_response_draft_session.a.change_answer_or_move_question_user", "type": "invokes", "from": {"diagramId": "page_survey_respond_user", "stateId": "page.SurveyRespondPage.user.Answering"}, "to": {"diagramId": "feature_response_draft_session", "stateId": "feature.ResponseDraftSessionFeature.Init"}, "narrative": {"summary": "User 修改答案時進入草稿處理功能。", "taskDescription": "在 SurveyRespondPage.user.Answering 觸發 changeAnswerOrMoveQuestion 後，進入 ResponseDraftSessionFeature.Init。"}, "validations": [{"id": "v.c.page_survey_respond_user.draft.01", "type": "semantic-check", "description": "若題目由 visible 變 hidden，其草稿答案必須立即清除。", "expected": "ResponseDraftSessionFeature"}], "meta": {"reason": "changeAnswerOrMoveQuestion | navigate ResponseDraftSessionFeature", "action": "changeAnswerOrMoveQuestion", "navigateTarget": "ResponseDraftSessionFeature"}},
+        {"id": "c.page_survey_respond_user.invokes.feature_response_submit.a.submit_user_response", "type": "invokes", "from": {"diagramId": "page_survey_respond_user", "stateId": "page.SurveyRespondPage.user.Answering"}, "to": {"diagramId": "feature_response_submit", "stateId": "feature.ResponseSubmitFeature.Init"}, "narrative": {"summary": "User 送出填答時進入正式提交功能。", "taskDescription": "在 SurveyRespondPage.user.Answering 觸發 submitUserResponse 後，進入 ResponseSubmitFeature.Init。"}, "validations": [{"id": "v.c.page_survey_respond_user.submit.01", "type": "semantic-check", "description": "後端需以 publish_hash 對應結構重算可見題目並驗證 required 與 schema。", "expected": "ResponseSubmitFeature"}], "meta": {"reason": "submitUserResponse | navigate ResponseSubmitFeature", "action": "submitUserResponse", "navigateTarget": "ResponseSubmitFeature"}},
+        {"id": "c.page_survey_respond_user.invokes.page_survey_respond.a.reload_survey_page_user", "type": "invokes", "from": {"diagramId": "page_survey_respond_user", "stateId": "page.SurveyRespondPage.user.Answering"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "User 重新載入填答頁時回到 base page 初始化。", "taskDescription": "在 SurveyRespondPage.user.Answering 觸發 reloadSurveyPage 後，導向 /s/:slug 並回到 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.page_survey_respond_user.reload.01", "type": "url-equals", "description": "重新載入後若有草稿保留機制，應維持同一份 draft answers。", "expected": "/s/:slug"}], "meta": {"reason": "reloadSurveyPage | navigate /s/:slug", "action": "reloadSurveyPage", "navigateTarget": "/s/:slug"}}
+      ],
+      "meta": {
+        "pageName": "SurveyRespondPage",
+        "featureName": null,
+        "entryStateId": "page.SurveyRespondPage.user.Init"
+      }
+    },
+    {
+      "id": "feature_login_submission",
+      "name": "Feature: Login Submission",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑩ Feature: Login Submission",
+        "order": 10
+      },
+      "groups": [],
+      "states": [
+        {"id": "feature.LoginSubmissionFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.Init"}}},
+        {"id": "feature.LoginSubmissionFeature.Submitting", "label": "Submitting", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.Submitting"}}},
+        {"id": "feature.LoginSubmissionFeature.SucceededWorkspace", "label": "SucceededWorkspace", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.SucceededWorkspace"}}},
+        {"id": "feature.LoginSubmissionFeature.SucceededReturnToSurvey", "label": "SucceededReturnToSurvey", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.SucceededReturnToSurvey"}}},
+        {"id": "feature.LoginSubmissionFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.Failed"}}},
+        {"id": "feature.LoginSubmissionFeature.Canceled", "label": "Canceled", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_login_submission", "synthetic": false, "source": {"scope": "root", "raw": "LoginSubmissionFeature.Canceled"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_login_submission.0001", "from": "feature.LoginSubmissionFeature.Init", "to": "feature.LoginSubmissionFeature.Submitting", "event": "submitCredentials", "roles": [], "narrative": {"summary": "登入功能開始送出認證資訊。", "taskDescription": "觸發 submitCredentials 後進入 Submitting，送出使用者認證資料與可能存在的 return_to。"}, "validations": [{"id": "v.t.feature_login_submission.0001.01", "type": "semantic-check", "description": "送出期間按鈕應 disabled，避免重複提交。", "expected": "Submitting credentials"}], "intent": {"category": "action", "summary": "submitCredentials"}, "meta": {"diagramId": "feature_login_submission", "source": {"raw": "LoginSubmissionFeature.Init --> LoginSubmissionFeature.Submitting : submitCredentials"}}},
+        {"id": "t.feature_login_submission.0002", "from": "feature.LoginSubmissionFeature.Submitting", "to": "feature.LoginSubmissionFeature.SucceededWorkspace", "event": "credentialsAcceptedForWorkspace", "roles": [], "narrative": {"summary": "登入成功並準備前往後台工作區。", "taskDescription": "當 credentialsAcceptedForWorkspace 成立時進入 SucceededWorkspace，建立 Session 並準備導向 /surveys。"}, "validations": [{"id": "v.t.feature_login_submission.0002.01", "type": "network-success", "description": "登入成功後應建立 Session，且沒有 survey return_to。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "credentialsAcceptedForWorkspace"}, "meta": {"diagramId": "feature_login_submission", "source": {"raw": "LoginSubmissionFeature.Submitting --> LoginSubmissionFeature.SucceededWorkspace : credentialsAcceptedForWorkspace"}}},
+        {"id": "t.feature_login_submission.0003", "from": "feature.LoginSubmissionFeature.Submitting", "to": "feature.LoginSubmissionFeature.SucceededReturnToSurvey", "event": "credentialsAcceptedForSurveyReturn", "roles": [], "narrative": {"summary": "登入成功並準備回到原本的填答問卷。", "taskDescription": "當 credentialsAcceptedForSurveyReturn 成立時進入 SucceededReturnToSurvey，建立 Session 並保留草稿答案供回到同一份問卷。"}, "validations": [{"id": "v.t.feature_login_submission.0003.01", "type": "network-success", "description": "登入成功且需保留來自 /s/:slug 的 return_to 與草稿答案。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "credentialsAcceptedForSurveyReturn"}, "meta": {"diagramId": "feature_login_submission", "source": {"raw": "LoginSubmissionFeature.Submitting --> LoginSubmissionFeature.SucceededReturnToSurvey : credentialsAcceptedForSurveyReturn"}}},
+        {"id": "t.feature_login_submission.0004", "from": "feature.LoginSubmissionFeature.Submitting", "to": "feature.LoginSubmissionFeature.Failed", "event": "credentialsRejected", "roles": [], "narrative": {"summary": "登入失敗並停留在失敗狀態。", "taskDescription": "當 credentialsRejected 發生時進入 Failed，顯示登入失敗訊息且不得建立 Session。"}, "validations": [{"id": "v.t.feature_login_submission.0004.01", "type": "network-failed", "description": "登入失敗時不得切換到後台導覽。", "expected": "HTTP 401"}], "intent": {"category": "action", "summary": "credentialsRejected"}, "meta": {"diagramId": "feature_login_submission", "source": {"raw": "LoginSubmissionFeature.Submitting --> LoginSubmissionFeature.Failed : credentialsRejected"}}},
+        {"id": "t.feature_login_submission.0005", "from": "feature.LoginSubmissionFeature.Submitting", "to": "feature.LoginSubmissionFeature.Canceled", "event": "cancelLogin", "roles": [], "narrative": {"summary": "登入流程被取消。", "taskDescription": "觸發 cancelLogin 後進入 Canceled，結束本次登入流程且不建立 Session。"}, "validations": [{"id": "v.t.feature_login_submission.0005.01", "type": "semantic-check", "description": "取消登入後不得誤導向成功頁面。", "expected": "Login canceled"}], "intent": {"category": "action", "summary": "cancelLogin"}, "meta": {"diagramId": "feature_login_submission", "source": {"raw": "LoginSubmissionFeature.Submitting --> LoginSubmissionFeature.Canceled : cancelLogin"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_login_submission.invokes.page_surveys.a.finish_login", "type": "invokes", "from": {"diagramId": "feature_login_submission", "stateId": "feature.LoginSubmissionFeature.SucceededWorkspace"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "登入成功後進入後台問卷列表。", "taskDescription": "在 LoginSubmissionFeature.SucceededWorkspace 觸發 finishLogin 後，導向 /surveys 並進入 SurveysPage.Init。"}, "validations": [{"id": "v.c.feature_login_submission.finish_login.01", "type": "url-equals", "description": "登入成功後 Header 應顯示我的問卷與登出。", "expected": "/surveys"}], "meta": {"reason": "finishLogin | navigate /surveys", "action": "finishLogin", "navigateTarget": "/surveys"}},
+        {"id": "c.feature_login_submission.invokes.page_survey_respond.a.finish_login_return", "type": "invokes", "from": {"diagramId": "feature_login_submission", "stateId": "feature.LoginSubmissionFeature.SucceededReturnToSurvey"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "登入成功後回到原本的填答問卷。", "taskDescription": "在 LoginSubmissionFeature.SucceededReturnToSurvey 觸發 finishLoginReturn 後，導向 /s/:slug 並回到 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.feature_login_submission.finish_return.01", "type": "url-equals", "description": "回到同一問卷後應保留先前草稿答案。", "expected": "/s/:slug"}], "meta": {"reason": "finishLoginReturn | navigate /s/:slug", "action": "finishLoginReturn", "navigateTarget": "/s/:slug"}},
+        {"id": "c.feature_login_submission.invokes.page_login.a.retry_login", "type": "invokes", "from": {"diagramId": "feature_login_submission", "stateId": "feature.LoginSubmissionFeature.Failed"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "登入失敗後回到登入頁。", "taskDescription": "在 LoginSubmissionFeature.Failed 觸發 retryLogin 後，導向 /login 並回到 LoginPage.Init。"}, "validations": [{"id": "v.c.feature_login_submission.retry_login.01", "type": "url-equals", "description": "返回登入頁後仍應只有單一主要登入 CTA。", "expected": "/login"}], "meta": {"reason": "retryLogin | navigate /login", "action": "retryLogin", "navigateTarget": "/login"}},
+        {"id": "c.feature_login_submission.invokes.page_login.a.back_to_login", "type": "invokes", "from": {"diagramId": "feature_login_submission", "stateId": "feature.LoginSubmissionFeature.Canceled"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "取消登入後返回登入頁。", "taskDescription": "在 LoginSubmissionFeature.Canceled 觸發 backToLogin 後，導向 /login 並回到 LoginPage.Init。"}, "validations": [{"id": "v.c.feature_login_submission.back_login.01", "type": "url-equals", "description": "取消後系統仍維持 Guest 身分。", "expected": "/login"}], "meta": {"reason": "backToLogin | navigate /login", "action": "backToLogin", "navigateTarget": "/login"}}
+      ],
+      "meta": {"pageName": null, "featureName": "LoginSubmissionFeature", "entryStateId": "feature.LoginSubmissionFeature.Init"}
+    },
+    {
+      "id": "feature_survey_creation",
+      "name": "Feature: Survey Creation",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑪ Feature: Survey Creation", "order": 11},
+      "groups": [],
+      "states": [
+        {"id": "feature.SurveyCreationFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_creation", "synthetic": false, "source": {"scope": "root", "raw": "SurveyCreationFeature.Init"}}},
+        {"id": "feature.SurveyCreationFeature.Creating", "label": "Creating", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_creation", "synthetic": false, "source": {"scope": "root", "raw": "SurveyCreationFeature.Creating"}}},
+        {"id": "feature.SurveyCreationFeature.Created", "label": "Created", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_creation", "synthetic": false, "source": {"scope": "root", "raw": "SurveyCreationFeature.Created"}}},
+        {"id": "feature.SurveyCreationFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_creation", "synthetic": false, "source": {"scope": "root", "raw": "SurveyCreationFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_survey_creation.0001", "from": "feature.SurveyCreationFeature.Init", "to": "feature.SurveyCreationFeature.Creating", "event": "createDraftSurvey", "roles": [], "narrative": {"summary": "開始建立 Draft 問卷。", "taskDescription": "觸發 createDraftSurvey 後進入 Creating，送出建立新 Survey 草稿的請求。"}, "validations": [{"id": "v.t.feature_survey_creation.0001.01", "type": "semantic-check", "description": "建立期間應禁止重複送出相同的建立請求。", "expected": "Creating draft survey"}], "intent": {"category": "action", "summary": "createDraftSurvey"}, "meta": {"diagramId": "feature_survey_creation", "source": {"raw": "SurveyCreationFeature.Init --> SurveyCreationFeature.Creating : createDraftSurvey"}}},
+        {"id": "t.feature_survey_creation.0002", "from": "feature.SurveyCreationFeature.Creating", "to": "feature.SurveyCreationFeature.Created", "event": "draftCreated", "roles": [], "narrative": {"summary": "Draft 問卷建立成功。", "taskDescription": "當 draftCreated 完成時進入 Created，保留 owner_user_id、固定 slug 與 Draft 狀態，且尚未產生 publish_hash。"}, "validations": [{"id": "v.t.feature_survey_creation.0002.01", "type": "network-success", "description": "建立成功後新 Survey 應為 Draft，且尚未有 publish_hash。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "draftCreated"}, "meta": {"diagramId": "feature_survey_creation", "source": {"raw": "SurveyCreationFeature.Creating --> SurveyCreationFeature.Created : draftCreated"}}},
+        {"id": "t.feature_survey_creation.0003", "from": "feature.SurveyCreationFeature.Creating", "to": "feature.SurveyCreationFeature.Failed", "event": "draftCreateRejected", "roles": [], "narrative": {"summary": "建立 Draft 問卷失敗。", "taskDescription": "當 draftCreateRejected 發生時進入 Failed，顯示錯誤並確保列表不會出現半完成資料。"}, "validations": [{"id": "v.t.feature_survey_creation.0003.01", "type": "network-failed", "description": "建立失敗時不得留下半完成的 Survey 資料。", "expected": "Create rejected"}], "intent": {"category": "action", "summary": "draftCreateRejected"}, "meta": {"diagramId": "feature_survey_creation", "source": {"raw": "SurveyCreationFeature.Creating --> SurveyCreationFeature.Failed : draftCreateRejected"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_survey_creation.invokes.page_survey_edit.a.open_created_survey", "type": "invokes", "from": {"diagramId": "feature_survey_creation", "stateId": "feature.SurveyCreationFeature.Created"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "建立成功後打開新問卷的編輯頁。", "taskDescription": "在 SurveyCreationFeature.Created 觸發 openCreatedSurvey 後，導向 /surveys/:id/edit 並進入 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_survey_creation.open_created.01", "type": "url-equals", "description": "新問卷應屬於目前 owner 並可立即編輯。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "openCreatedSurvey | navigate /surveys/:id/edit", "action": "openCreatedSurvey", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.feature_survey_creation.invokes.page_surveys.a.back_to_survey_list_failed", "type": "invokes", "from": {"diagramId": "feature_survey_creation", "stateId": "feature.SurveyCreationFeature.Failed"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "建立失敗後返回問卷列表。", "taskDescription": "在 SurveyCreationFeature.Failed 觸發 backToSurveyList 後，導向 /surveys 並回到 SurveysPage.Init。"}, "validations": [{"id": "v.c.feature_survey_creation.back_failed.01", "type": "url-equals", "description": "失敗後列表數量不應增加。", "expected": "/surveys"}], "meta": {"reason": "backToSurveyList | navigate /surveys", "action": "backToSurveyList", "navigateTarget": "/surveys"}}
+      ],
+      "meta": {"pageName": null, "featureName": "SurveyCreationFeature", "entryStateId": "feature.SurveyCreationFeature.Init"}
+    },
+    {
+      "id": "feature_survey_structure_editing",
+      "name": "Feature: Survey Structure Editing",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑫ Feature: Survey Structure Editing", "order": 12},
+      "groups": [],
+      "states": [
+        {"id": "feature.SurveyStructureEditingFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_structure_editing", "synthetic": false, "source": {"scope": "root", "raw": "SurveyStructureEditingFeature.Init"}}},
+        {"id": "feature.SurveyStructureEditingFeature.Editing", "label": "Editing", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_structure_editing", "synthetic": false, "source": {"scope": "root", "raw": "SurveyStructureEditingFeature.Editing"}}},
+        {"id": "feature.SurveyStructureEditingFeature.Saving", "label": "Saving", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_structure_editing", "synthetic": false, "source": {"scope": "root", "raw": "SurveyStructureEditingFeature.Saving"}}},
+        {"id": "feature.SurveyStructureEditingFeature.Saved", "label": "Saved", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_structure_editing", "synthetic": false, "source": {"scope": "root", "raw": "SurveyStructureEditingFeature.Saved"}}},
+        {"id": "feature.SurveyStructureEditingFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_structure_editing", "synthetic": false, "source": {"scope": "root", "raw": "SurveyStructureEditingFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_survey_structure_editing.0001", "from": "feature.SurveyStructureEditingFeature.Init", "to": "feature.SurveyStructureEditingFeature.Editing", "event": "openStructureEditor", "roles": [], "narrative": {"summary": "結構編輯器被打開。", "taskDescription": "觸發 openStructureEditor 後進入 Editing，允許在 Draft 問卷上調整 Questions、Options、RuleGroups 與 LogicRules。"}, "validations": [{"id": "v.t.feature_survey_structure_editing.0001.01", "type": "semantic-check", "description": "Published 與 Closed 問卷不得透過此功能修改結構。", "expected": "Draft structure editor"}], "intent": {"category": "action", "summary": "openStructureEditor"}, "meta": {"diagramId": "feature_survey_structure_editing", "source": {"raw": "SurveyStructureEditingFeature.Init --> SurveyStructureEditingFeature.Editing : openStructureEditor"}}},
+        {"id": "t.feature_survey_structure_editing.0002", "from": "feature.SurveyStructureEditingFeature.Editing", "to": "feature.SurveyStructureEditingFeature.Saving", "event": "saveStructureChanges", "roles": [], "narrative": {"summary": "Draft 結構變更開始保存。", "taskDescription": "觸發 saveStructureChanges 後進入 Saving，後端需驗證 forward-only、cycle detection、Option.value 唯一性與資料完整性。"}, "validations": [{"id": "v.t.feature_survey_structure_editing.0002.01", "type": "semantic-check", "description": "保存草稿時需執行所有結構與規則驗證。", "expected": "Validate draft structure"}], "intent": {"category": "action", "summary": "saveStructureChanges"}, "meta": {"diagramId": "feature_survey_structure_editing", "source": {"raw": "SurveyStructureEditingFeature.Editing --> SurveyStructureEditingFeature.Saving : saveStructureChanges"}}},
+        {"id": "t.feature_survey_structure_editing.0003", "from": "feature.SurveyStructureEditingFeature.Saving", "to": "feature.SurveyStructureEditingFeature.Saved", "event": "structureSaved", "roles": [], "narrative": {"summary": "問卷結構保存成功。", "taskDescription": "當 structureSaved 完成時進入 Saved，確保 Draft 仍維持可編輯且不產生 publish_hash。"}, "validations": [{"id": "v.t.feature_survey_structure_editing.0003.01", "type": "network-success", "description": "保存成功後 dirty 狀態應被清除，Survey 仍為 Draft。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "structureSaved"}, "meta": {"diagramId": "feature_survey_structure_editing", "source": {"raw": "SurveyStructureEditingFeature.Saving --> SurveyStructureEditingFeature.Saved : structureSaved"}}},
+        {"id": "t.feature_survey_structure_editing.0004", "from": "feature.SurveyStructureEditingFeature.Saving", "to": "feature.SurveyStructureEditingFeature.Failed", "event": "structureSaveRejected", "roles": [], "narrative": {"summary": "問卷結構保存失敗。", "taskDescription": "當 structureSaveRejected 發生時進入 Failed，提供可定位的驗證錯誤讓 owner 修正後再次提交。"}, "validations": [{"id": "v.t.feature_survey_structure_editing.0004.01", "type": "network-failed", "description": "保存失敗時不得寫入不合法結構。", "expected": "Save rejected"}], "intent": {"category": "action", "summary": "structureSaveRejected"}, "meta": {"diagramId": "feature_survey_structure_editing", "source": {"raw": "SurveyStructureEditingFeature.Saving --> SurveyStructureEditingFeature.Failed : structureSaveRejected"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_survey_structure_editing.invokes.page_survey_edit.a.return_to_edit_page_saved", "type": "invokes", "from": {"diagramId": "feature_survey_structure_editing", "stateId": "feature.SurveyStructureEditingFeature.Saved"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "結構保存成功後返回編輯頁。", "taskDescription": "在 SurveyStructureEditingFeature.Saved 觸發 returnToEditPage 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_survey_structure_editing.saved.01", "type": "url-equals", "description": "返回後應呈現剛保存的 Draft 結構。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnToEditPage | navigate /surveys/:id/edit", "action": "returnToEditPage", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.feature_survey_structure_editing.invokes.page_survey_edit.a.return_to_edit_page_failed", "type": "invokes", "from": {"diagramId": "feature_survey_structure_editing", "stateId": "feature.SurveyStructureEditingFeature.Failed"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "結構保存失敗後返回編輯頁。", "taskDescription": "在 SurveyStructureEditingFeature.Failed 觸發 returnToEditPage 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_survey_structure_editing.failed.01", "type": "url-equals", "description": "返回後應保留錯誤訊息供使用者修正。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnToEditPage | navigate /surveys/:id/edit", "action": "returnToEditPage", "navigateTarget": "/surveys/:id/edit"}}
+      ],
+      "meta": {"pageName": null, "featureName": "SurveyStructureEditingFeature", "entryStateId": "feature.SurveyStructureEditingFeature.Init"}
+    },
+    {
+      "id": "feature_rule_validation",
+      "name": "Feature: Rule Validation",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑬ Feature: Rule Validation", "order": 13},
+      "groups": [],
+      "states": [
+        {"id": "feature.RuleValidationFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_rule_validation", "synthetic": false, "source": {"scope": "root", "raw": "RuleValidationFeature.Init"}}},
+        {"id": "feature.RuleValidationFeature.Validating", "label": "Validating", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_rule_validation", "synthetic": false, "source": {"scope": "root", "raw": "RuleValidationFeature.Validating"}}},
+        {"id": "feature.RuleValidationFeature.Passed", "label": "Passed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_rule_validation", "synthetic": false, "source": {"scope": "root", "raw": "RuleValidationFeature.Passed"}}},
+        {"id": "feature.RuleValidationFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_rule_validation", "synthetic": false, "source": {"scope": "root", "raw": "RuleValidationFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_rule_validation.0001", "from": "feature.RuleValidationFeature.Init", "to": "feature.RuleValidationFeature.Validating", "event": "validateDraftRules", "roles": [], "narrative": {"summary": "規則驗證流程開始。", "taskDescription": "觸發 validateDraftRules 後進入 Validating，檢查 forward-only、cycle detection 與 show/hide 合併所需的完整性。"}, "validations": [{"id": "v.t.feature_rule_validation.0001.01", "type": "semantic-check", "description": "驗證只針對目前 Draft 規則，不處理已發佈回覆資料。", "expected": "Validating draft rules"}], "intent": {"category": "action", "summary": "validateDraftRules"}, "meta": {"diagramId": "feature_rule_validation", "source": {"raw": "RuleValidationFeature.Init --> RuleValidationFeature.Validating : validateDraftRules"}}},
+        {"id": "t.feature_rule_validation.0002", "from": "feature.RuleValidationFeature.Validating", "to": "feature.RuleValidationFeature.Passed", "event": "rulesAccepted", "roles": [], "narrative": {"summary": "Draft 規則結構驗證通過。", "taskDescription": "當 rulesAccepted 成立時進入 Passed，代表 Draft 已可被保存與發佈，但尚未建立 publish_hash。"}, "validations": [{"id": "v.t.feature_rule_validation.0002.01", "type": "semantic-check", "description": "驗證通過不代表已發佈，也不建立 Response。", "expected": "Rules accepted"}], "intent": {"category": "action", "summary": "rulesAccepted"}, "meta": {"diagramId": "feature_rule_validation", "source": {"raw": "RuleValidationFeature.Validating --> RuleValidationFeature.Passed : rulesAccepted"}}},
+        {"id": "t.feature_rule_validation.0003", "from": "feature.RuleValidationFeature.Validating", "to": "feature.RuleValidationFeature.Failed", "event": "rulesRejected", "roles": [], "narrative": {"summary": "Draft 規則驗證失敗。", "taskDescription": "當 rulesRejected 發生時進入 Failed，回報順序違規、循環依賴或資料缺漏等問題。"}, "validations": [{"id": "v.t.feature_rule_validation.0003.01", "type": "semantic-check", "description": "驗證失敗時不得把 Draft 視為可發佈。", "expected": "Rules rejected"}], "intent": {"category": "action", "summary": "rulesRejected"}, "meta": {"diagramId": "feature_rule_validation", "source": {"raw": "RuleValidationFeature.Validating --> RuleValidationFeature.Failed : rulesRejected"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_rule_validation.invokes.page_survey_edit.a.return_validated_draft", "type": "invokes", "from": {"diagramId": "feature_rule_validation", "stateId": "feature.RuleValidationFeature.Passed"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "規則驗證通過後返回編輯頁。", "taskDescription": "在 RuleValidationFeature.Passed 觸發 returnValidatedDraft 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_rule_validation.passed.01", "type": "url-equals", "description": "返回後 Draft 內容應可繼續保存或發佈。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnValidatedDraft | navigate /surveys/:id/edit", "action": "returnValidatedDraft", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.feature_rule_validation.invokes.page_survey_edit.a.return_validation_issues", "type": "invokes", "from": {"diagramId": "feature_rule_validation", "stateId": "feature.RuleValidationFeature.Failed"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "規則驗證失敗後返回編輯頁。", "taskDescription": "在 RuleValidationFeature.Failed 觸發 returnValidationIssues 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_rule_validation.failed.01", "type": "url-equals", "description": "返回後應顯示可修正的驗證問題。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnValidationIssues | navigate /surveys/:id/edit", "action": "returnValidationIssues", "navigateTarget": "/surveys/:id/edit"}}
+      ],
+      "meta": {"pageName": null, "featureName": "RuleValidationFeature", "entryStateId": "feature.RuleValidationFeature.Init"}
+    },
+    {
+      "id": "feature_preview_simulation",
+      "name": "Feature: Preview Simulation",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑭ Feature: Preview Simulation", "order": 14},
+      "groups": [],
+      "states": [
+        {"id": "feature.PreviewSimulationFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_preview_simulation", "synthetic": false, "source": {"scope": "root", "raw": "PreviewSimulationFeature.Init"}}},
+        {"id": "feature.PreviewSimulationFeature.Simulating", "label": "Simulating", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_preview_simulation", "synthetic": false, "source": {"scope": "root", "raw": "PreviewSimulationFeature.Simulating"}}},
+        {"id": "feature.PreviewSimulationFeature.Resetting", "label": "Resetting", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_preview_simulation", "synthetic": false, "source": {"scope": "root", "raw": "PreviewSimulationFeature.Resetting"}}},
+        {"id": "feature.PreviewSimulationFeature.Done", "label": "Done", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_preview_simulation", "synthetic": false, "source": {"scope": "root", "raw": "PreviewSimulationFeature.Done"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_preview_simulation.0001", "from": "feature.PreviewSimulationFeature.Init", "to": "feature.PreviewSimulationFeature.Simulating", "event": "startSimulation", "roles": [], "narrative": {"summary": "預覽模擬開始執行。", "taskDescription": "觸發 startSimulation 後進入 Simulating，根據目前 draft answers 與規則計算第一批可見題目。"}, "validations": [{"id": "v.t.feature_preview_simulation.0001.01", "type": "semantic-check", "description": "預覽模擬只建立本地 draft answers，不建立正式 Response。", "expected": "Start preview simulation"}], "intent": {"category": "action", "summary": "startSimulation"}, "meta": {"diagramId": "feature_preview_simulation", "source": {"raw": "PreviewSimulationFeature.Init --> PreviewSimulationFeature.Simulating : startSimulation"}}},
+        {"id": "t.feature_preview_simulation.0002", "from": "feature.PreviewSimulationFeature.Simulating", "to": "feature.PreviewSimulationFeature.Simulating", "event": "recomputeVisibleQuestions", "roles": [], "narrative": {"summary": "預覽模擬重新計算可見題目。", "taskDescription": "在 Simulating 期間觸發 recomputeVisibleQuestions，立即更新可見題目集合並清除變成 hidden 的答案。"}, "validations": [{"id": "v.t.feature_preview_simulation.0002.01", "type": "semantic-check", "description": "重算後 hidden 題目的草稿答案必須同步清除。", "expected": "Visible questions recomputed"}], "intent": {"category": "action", "summary": "recomputeVisibleQuestions"}, "meta": {"diagramId": "feature_preview_simulation", "source": {"raw": "PreviewSimulationFeature.Simulating --> PreviewSimulationFeature.Simulating : recomputeVisibleQuestions"}}},
+        {"id": "t.feature_preview_simulation.0003", "from": "feature.PreviewSimulationFeature.Simulating", "to": "feature.PreviewSimulationFeature.Resetting", "event": "resetDraftAnswers", "roles": [], "narrative": {"summary": "預覽模擬重設草稿答案。", "taskDescription": "觸發 resetDraftAnswers 後進入 Resetting，清空模擬使用的本地草稿答案而不影響問卷結構。"}, "validations": [{"id": "v.t.feature_preview_simulation.0003.01", "type": "semantic-check", "description": "重設不應改動已保存的 Draft 結構。", "expected": "Reset preview drafts"}], "intent": {"category": "action", "summary": "resetDraftAnswers"}, "meta": {"diagramId": "feature_preview_simulation", "source": {"raw": "PreviewSimulationFeature.Simulating --> PreviewSimulationFeature.Resetting : resetDraftAnswers"}}},
+        {"id": "t.feature_preview_simulation.0004", "from": "feature.PreviewSimulationFeature.Resetting", "to": "feature.PreviewSimulationFeature.Simulating", "event": "simulationReset", "roles": [], "narrative": {"summary": "預覽模擬完成重設並回到模擬狀態。", "taskDescription": "當 simulationReset 完成時回到 Simulating，以初始的可見題目集合重新開始模擬。"}, "validations": [{"id": "v.t.feature_preview_simulation.0004.01", "type": "semantic-check", "description": "重設後先前輸入不應殘留在畫面上。", "expected": "Simulation reset"}], "intent": {"category": "action", "summary": "simulationReset"}, "meta": {"diagramId": "feature_preview_simulation", "source": {"raw": "PreviewSimulationFeature.Resetting --> PreviewSimulationFeature.Simulating : simulationReset"}}},
+        {"id": "t.feature_preview_simulation.0005", "from": "feature.PreviewSimulationFeature.Simulating", "to": "feature.PreviewSimulationFeature.Done", "event": "leavePreview", "roles": [], "narrative": {"summary": "預覽模擬流程結束。", "taskDescription": "觸發 leavePreview 後進入 Done，結束本地模擬流程且不留下正式提交副作用。"}, "validations": [{"id": "v.t.feature_preview_simulation.0005.01", "type": "semantic-check", "description": "離開預覽時不得產生 Response、Answer 或 response_hash。", "expected": "Leave preview"}], "intent": {"category": "action", "summary": "leavePreview"}, "meta": {"diagramId": "feature_preview_simulation", "source": {"raw": "PreviewSimulationFeature.Simulating --> PreviewSimulationFeature.Done : leavePreview"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_preview_simulation.invokes.page_survey_preview.a.return_to_preview_page", "type": "invokes", "from": {"diagramId": "feature_preview_simulation", "stateId": "feature.PreviewSimulationFeature.Done"}, "to": {"diagramId": "page_survey_preview", "stateId": "page.SurveyPreviewPage.Init"}, "narrative": {"summary": "離開預覽模擬後回到預覽頁。", "taskDescription": "在 PreviewSimulationFeature.Done 觸發 returnToPreviewPage 後，導向 /surveys/:id/preview 並回到 SurveyPreviewPage.Init。"}, "validations": [{"id": "v.c.feature_preview_simulation.return.01", "type": "url-equals", "description": "返回後應仍在同一份 Survey 的預覽頁。", "expected": "/surveys/:id/preview"}], "meta": {"reason": "returnToPreviewPage | navigate /surveys/:id/preview", "action": "returnToPreviewPage", "navigateTarget": "/surveys/:id/preview"}}
+      ],
+      "meta": {"pageName": null, "featureName": "PreviewSimulationFeature", "entryStateId": "feature.PreviewSimulationFeature.Init"}
+    },
+    {
+      "id": "feature_response_draft_session",
+      "name": "Feature: Response Draft Session",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑮ Feature: Response Draft Session", "order": 15},
+      "groups": [],
+      "states": [
+        {"id": "feature.ResponseDraftSessionFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_draft_session", "synthetic": false, "source": {"scope": "root", "raw": "ResponseDraftSessionFeature.Init"}}},
+        {"id": "feature.ResponseDraftSessionFeature.Evaluating", "label": "Evaluating", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_draft_session", "synthetic": false, "source": {"scope": "root", "raw": "ResponseDraftSessionFeature.Evaluating"}}},
+        {"id": "feature.ResponseDraftSessionFeature.ClearingHiddenAnswers", "label": "ClearingHiddenAnswers", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_draft_session", "synthetic": false, "source": {"scope": "root", "raw": "ResponseDraftSessionFeature.ClearingHiddenAnswers"}}},
+        {"id": "feature.ResponseDraftSessionFeature.Returning", "label": "Returning", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_draft_session", "synthetic": false, "source": {"scope": "root", "raw": "ResponseDraftSessionFeature.Returning"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_response_draft_session.0001", "from": "feature.ResponseDraftSessionFeature.Init", "to": "feature.ResponseDraftSessionFeature.Evaluating", "event": "applyDraftChange", "roles": [], "narrative": {"summary": "填答草稿變更開始套用。", "taskDescription": "觸發 applyDraftChange 後進入 Evaluating，使用相同的 Logic Engine 重新計算可見題目集合。"}, "validations": [{"id": "v.t.feature_response_draft_session.0001.01", "type": "semantic-check", "description": "草稿處理只操作本地 draft answers，不寫入正式回覆。", "expected": "Apply draft change"}], "intent": {"category": "action", "summary": "applyDraftChange"}, "meta": {"diagramId": "feature_response_draft_session", "source": {"raw": "ResponseDraftSessionFeature.Init --> ResponseDraftSessionFeature.Evaluating : applyDraftChange"}}},
+        {"id": "t.feature_response_draft_session.0002", "from": "feature.ResponseDraftSessionFeature.Evaluating", "to": "feature.ResponseDraftSessionFeature.ClearingHiddenAnswers", "event": "hideQuestionsAfterRecompute", "roles": [], "narrative": {"summary": "重算後清除變成 hidden 的草稿答案。", "taskDescription": "當 hideQuestionsAfterRecompute 發生時進入 ClearingHiddenAnswers，確保 hidden 題目答案不再顯示且不得送出。"}, "validations": [{"id": "v.t.feature_response_draft_session.0002.01", "type": "semantic-check", "description": "變成 hidden 的題目答案必須立即清除或標記為不送出。", "expected": "Clear hidden answers"}], "intent": {"category": "action", "summary": "hideQuestionsAfterRecompute"}, "meta": {"diagramId": "feature_response_draft_session", "source": {"raw": "ResponseDraftSessionFeature.Evaluating --> ResponseDraftSessionFeature.ClearingHiddenAnswers : hideQuestionsAfterRecompute"}}},
+        {"id": "t.feature_response_draft_session.0003", "from": "feature.ResponseDraftSessionFeature.Evaluating", "to": "feature.ResponseDraftSessionFeature.Returning", "event": "draftStillVisible", "roles": [], "narrative": {"summary": "草稿仍有效時直接回到填答流程。", "taskDescription": "當 draftStillVisible 成立時進入 Returning，維持目前可見題目並允許繼續答題。"}, "validations": [{"id": "v.t.feature_response_draft_session.0003.01", "type": "semantic-check", "description": "重算後仍可見的題目應保持目前填答流程。", "expected": "Draft still visible"}], "intent": {"category": "action", "summary": "draftStillVisible"}, "meta": {"diagramId": "feature_response_draft_session", "source": {"raw": "ResponseDraftSessionFeature.Evaluating --> ResponseDraftSessionFeature.Returning : draftStillVisible"}}},
+        {"id": "t.feature_response_draft_session.0004", "from": "feature.ResponseDraftSessionFeature.ClearingHiddenAnswers", "to": "feature.ResponseDraftSessionFeature.Returning", "event": "hiddenAnswersCleared", "roles": [], "narrative": {"summary": "清除 hidden 答案後返回填答流程。", "taskDescription": "當 hiddenAnswersCleared 完成時進入 Returning，使用最新草稿答案重新呈現可見題目。"}, "validations": [{"id": "v.t.feature_response_draft_session.0004.01", "type": "semantic-check", "description": "返回填答頁後提交 payload 不得包含已隱藏題目的答案。", "expected": "Hidden answers cleared"}], "intent": {"category": "action", "summary": "hiddenAnswersCleared"}, "meta": {"diagramId": "feature_response_draft_session", "source": {"raw": "ResponseDraftSessionFeature.ClearingHiddenAnswers --> ResponseDraftSessionFeature.Returning : hiddenAnswersCleared"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_response_draft_session.invokes.page_survey_respond.a.return_to_respond_page", "type": "invokes", "from": {"diagramId": "feature_response_draft_session", "stateId": "feature.ResponseDraftSessionFeature.Returning"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "草稿處理完成後返回填答頁。", "taskDescription": "在 ResponseDraftSessionFeature.Returning 觸發 returnToRespondPage 後，導向 /s/:slug 並回到 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.feature_response_draft_session.return.01", "type": "url-equals", "description": "回到同一份問卷時應依最新 draft answers 重新呈現題目。", "expected": "/s/:slug"}], "meta": {"reason": "returnToRespondPage | navigate /s/:slug", "action": "returnToRespondPage", "navigateTarget": "/s/:slug"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ResponseDraftSessionFeature", "entryStateId": "feature.ResponseDraftSessionFeature.Init"}
+    },
+    {
+      "id": "feature_response_submit",
+      "name": "Feature: Response Submit",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑯ Feature: Response Submit", "order": 16},
+      "groups": [],
+      "states": [
+        {"id": "feature.ResponseSubmitFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.Init"}}},
+        {"id": "feature.ResponseSubmitFeature.Recomputing", "label": "Recomputing", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.Recomputing"}}},
+        {"id": "feature.ResponseSubmitFeature.Validating", "label": "Validating", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.Validating"}}},
+        {"id": "feature.ResponseSubmitFeature.RequiringAuth", "label": "RequiringAuth", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.RequiringAuth"}}},
+        {"id": "feature.ResponseSubmitFeature.ComputingHashes", "label": "ComputingHashes", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.ComputingHashes"}}},
+        {"id": "feature.ResponseSubmitFeature.Rejected", "label": "Rejected", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.Rejected"}}},
+        {"id": "feature.ResponseSubmitFeature.WritingImmutableResponse", "label": "WritingImmutableResponse", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.WritingImmutableResponse"}}},
+        {"id": "feature.ResponseSubmitFeature.Written", "label": "Written", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_response_submit", "synthetic": false, "source": {"scope": "root", "raw": "ResponseSubmitFeature.Written"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_response_submit.0001", "from": "feature.ResponseSubmitFeature.Init", "to": "feature.ResponseSubmitFeature.Recomputing", "event": "submitResponse", "roles": [], "narrative": {"summary": "正式提交流程開始。", "taskDescription": "觸發 submitResponse 後進入 Recomputing，使用 publish_hash 對應結構重新計算可見題目。"}, "validations": [{"id": "v.t.feature_response_submit.0001.01", "type": "semantic-check", "description": "提交開始後應防止重複送出。", "expected": "Submitting response"}], "intent": {"category": "action", "summary": "submitResponse"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.Init --> ResponseSubmitFeature.Recomputing : submitResponse"}}},
+        {"id": "t.feature_response_submit.0002", "from": "feature.ResponseSubmitFeature.Recomputing", "to": "feature.ResponseSubmitFeature.Validating", "event": "visibleQuestionsRecomputed", "roles": [], "narrative": {"summary": "提交前的可見題目已重算完成。", "taskDescription": "當 visibleQuestionsRecomputed 完成時進入 Validating，僅針對 visible 題目進行 required 與題型 schema 驗證。"}, "validations": [{"id": "v.t.feature_response_submit.0002.01", "type": "semantic-check", "description": "hidden 題目答案在此階段不得被接受。", "expected": "Visible questions recomputed"}], "intent": {"category": "action", "summary": "visibleQuestionsRecomputed"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.Recomputing --> ResponseSubmitFeature.Validating : visibleQuestionsRecomputed"}}},
+        {"id": "t.feature_response_submit.0003", "from": "feature.ResponseSubmitFeature.Validating", "to": "feature.ResponseSubmitFeature.RequiringAuth", "event": "namedSubmissionNeedsIdentity", "roles": [], "narrative": {"summary": "記名提交在未登入時需要先取得身分。", "taskDescription": "當 namedSubmissionNeedsIdentity 成立時進入 RequiringAuth，回應 401 並保留草稿答案供登入後繼續提交。"}, "validations": [{"id": "v.t.feature_response_submit.0003.01", "type": "semantic-check", "description": "未登入的記名提交不得建立 Response。", "expected": "Identity required"}], "intent": {"category": "action", "summary": "namedSubmissionNeedsIdentity"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.Validating --> ResponseSubmitFeature.RequiringAuth : namedSubmissionNeedsIdentity"}}},
+        {"id": "t.feature_response_submit.0004", "from": "feature.ResponseSubmitFeature.Validating", "to": "feature.ResponseSubmitFeature.ComputingHashes", "event": "submissionAccepted", "roles": [], "narrative": {"summary": "提交內容驗證通過並開始準備不可變雜湊。", "taskDescription": "當 submissionAccepted 完成時進入 ComputingHashes，準備 publish_hash 與 response_hash。"}, "validations": [{"id": "v.t.feature_response_submit.0004.01", "type": "semantic-check", "description": "只有 visible required 題目都合法時才可進入雜湊計算。", "expected": "Submission accepted"}], "intent": {"category": "action", "summary": "submissionAccepted"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.Validating --> ResponseSubmitFeature.ComputingHashes : submissionAccepted"}}},
+        {"id": "t.feature_response_submit.0005", "from": "feature.ResponseSubmitFeature.Validating", "to": "feature.ResponseSubmitFeature.Rejected", "event": "submissionRejected", "roles": [], "narrative": {"summary": "提交驗證失敗。", "taskDescription": "當 submissionRejected 發生時進入 Rejected，回報 required、格式或 hidden 題目答案等錯誤，且不得建立回覆資料。"}, "validations": [{"id": "v.t.feature_response_submit.0005.01", "type": "semantic-check", "description": "提交失敗時不得建立 Response 或 Answer。", "expected": "Submission rejected"}], "intent": {"category": "action", "summary": "submissionRejected"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.Validating --> ResponseSubmitFeature.Rejected : submissionRejected"}}},
+        {"id": "t.feature_response_submit.0006", "from": "feature.ResponseSubmitFeature.ComputingHashes", "to": "feature.ResponseSubmitFeature.WritingImmutableResponse", "event": "responseHashesPrepared", "roles": [], "narrative": {"summary": "提交雜湊計算完成並準備寫入不可變回覆。", "taskDescription": "當 responseHashesPrepared 完成時進入 WritingImmutableResponse，將 publish_hash 與 response_hash 連同回覆資料一起寫入。"}, "validations": [{"id": "v.t.feature_response_submit.0006.01", "type": "semantic-check", "description": "雜湊應可用於後續稽核與一致性追溯。", "expected": "Hashes prepared"}], "intent": {"category": "action", "summary": "responseHashesPrepared"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.ComputingHashes --> ResponseSubmitFeature.WritingImmutableResponse : responseHashesPrepared"}}},
+        {"id": "t.feature_response_submit.0007", "from": "feature.ResponseSubmitFeature.WritingImmutableResponse", "to": "feature.ResponseSubmitFeature.Written", "event": "responseCreated", "roles": [], "narrative": {"summary": "不可變回覆資料寫入完成。", "taskDescription": "當 responseCreated 成功時進入 Written，確保 Response 與 Answer 已建立且不可再修改。"}, "validations": [{"id": "v.t.feature_response_submit.0007.01", "type": "network-success", "description": "寫入成功後 Response 必須保存 publish_hash 與 response_hash。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "responseCreated"}, "meta": {"diagramId": "feature_response_submit", "source": {"raw": "ResponseSubmitFeature.WritingImmutableResponse --> ResponseSubmitFeature.Written : responseCreated"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_response_submit.invokes.page_login.a.redirect_to_login", "type": "invokes", "from": {"diagramId": "feature_response_submit", "stateId": "feature.ResponseSubmitFeature.RequiringAuth"}, "to": {"diagramId": "page_login", "stateId": "page.LoginPage.Init"}, "narrative": {"summary": "記名提交未登入時導向登入頁。", "taskDescription": "在 ResponseSubmitFeature.RequiringAuth 觸發 redirectToLogin 後，導向 /login 並保留 return_to=/s/:slug。"}, "validations": [{"id": "v.c.feature_response_submit.redirect_login.01", "type": "url-equals", "description": "登入頁需保留 return_to 並保留先前草稿答案。", "expected": "/login"}], "meta": {"reason": "redirectToLogin | navigate /login", "action": "redirectToLogin", "navigateTarget": "/login"}},
+        {"id": "c.feature_response_submit.invokes.page_survey_respond.a.return_to_respond_page_rejected", "type": "invokes", "from": {"diagramId": "feature_response_submit", "stateId": "feature.ResponseSubmitFeature.Rejected"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Init"}, "narrative": {"summary": "提交驗證失敗後返回填答頁。", "taskDescription": "在 ResponseSubmitFeature.Rejected 觸發 returnToRespondPage 後，導向 /s/:slug 並回到 SurveyRespondPage.Init。"}, "validations": [{"id": "v.c.feature_response_submit.return_rejected.01", "type": "url-equals", "description": "返回後應保留草稿答案與具體錯誤。", "expected": "/s/:slug"}], "meta": {"reason": "returnToRespondPage | navigate /s/:slug", "action": "returnToRespondPage", "navigateTarget": "/s/:slug"}},
+        {"id": "c.feature_response_submit.invokes.page_survey_respond.a.finish_response_on_same_route", "type": "invokes", "from": {"diagramId": "feature_response_submit", "stateId": "feature.ResponseSubmitFeature.Written"}, "to": {"diagramId": "page_survey_respond", "stateId": "page.SurveyRespondPage.Completion"}, "narrative": {"summary": "提交成功後在同一路由顯示完成狀態。", "taskDescription": "在 ResponseSubmitFeature.Written 觸發 finishResponseOnSameRoute 後，維持 /s/:slug 並切換到 SurveyRespondPage.Completion。"}, "validations": [{"id": "v.c.feature_response_submit.finish_same_route.01", "type": "url-equals", "description": "成功後仍停留同一路由，但不得提供修改已提交答案的入口。", "expected": "/s/:slug"}], "meta": {"reason": "finishResponseOnSameRoute | navigate /s/:slug", "action": "finishResponseOnSameRoute", "navigateTarget": "/s/:slug"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ResponseSubmitFeature", "entryStateId": "feature.ResponseSubmitFeature.Init"}
+    },
+    {
+      "id": "feature_survey_publish_and_close",
+      "name": "Feature: Survey Publish And Close",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑰ Feature: Survey Publish And Close", "order": 17},
+      "groups": [],
+      "states": [
+        {"id": "feature.SurveyPublishCloseFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Init"}}},
+        {"id": "feature.SurveyPublishCloseFeature.CheckingTransition", "label": "CheckingTransition", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.CheckingTransition"}}},
+        {"id": "feature.SurveyPublishCloseFeature.Publishing", "label": "Publishing", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Publishing"}}},
+        {"id": "feature.SurveyPublishCloseFeature.Closing", "label": "Closing", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Closing"}}},
+        {"id": "feature.SurveyPublishCloseFeature.Rejected", "label": "Rejected", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Rejected"}}},
+        {"id": "feature.SurveyPublishCloseFeature.Published", "label": "Published", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Published"}}},
+        {"id": "feature.SurveyPublishCloseFeature.Closed", "label": "Closed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_survey_publish_and_close", "synthetic": false, "source": {"scope": "root", "raw": "SurveyPublishCloseFeature.Closed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_survey_publish_and_close.0001", "from": "feature.SurveyPublishCloseFeature.Init", "to": "feature.SurveyPublishCloseFeature.CheckingTransition", "event": "requestStatusChange", "roles": [], "narrative": {"summary": "問卷狀態變更請求開始檢查。", "taskDescription": "觸發 requestStatusChange 後進入 CheckingTransition，確認目前狀態與目標狀態是否合法。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0001.01", "type": "semantic-check", "description": "功能只應處理 Draft->Published 與 Published->Closed。", "expected": "Check status change"}], "intent": {"category": "action", "summary": "requestStatusChange"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.Init --> SurveyPublishCloseFeature.CheckingTransition : requestStatusChange"}}},
+        {"id": "t.feature_survey_publish_and_close.0002", "from": "feature.SurveyPublishCloseFeature.CheckingTransition", "to": "feature.SurveyPublishCloseFeature.Publishing", "event": "publishDraft", "roles": [], "narrative": {"summary": "合法的 Draft 發佈流程開始。", "taskDescription": "當 publishDraft 成立時進入 Publishing，再次確認結構驗證通過並準備寫入 publish_hash。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0002.01", "type": "semantic-check", "description": "只有 Draft 問卷可進入發佈流程。", "expected": "Publish draft"}], "intent": {"category": "action", "summary": "publishDraft"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.CheckingTransition --> SurveyPublishCloseFeature.Publishing : publishDraft"}}},
+        {"id": "t.feature_survey_publish_and_close.0003", "from": "feature.SurveyPublishCloseFeature.CheckingTransition", "to": "feature.SurveyPublishCloseFeature.Closing", "event": "closePublishedSurvey", "roles": [], "narrative": {"summary": "合法的 Published 關閉流程開始。", "taskDescription": "當 closePublishedSurvey 成立時進入 Closing，準備把目前問卷切換為 Closed 並停止接受新回覆。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0003.01", "type": "semantic-check", "description": "只有 Published 問卷可進入關閉流程。", "expected": "Close published survey"}], "intent": {"category": "action", "summary": "closePublishedSurvey"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.CheckingTransition --> SurveyPublishCloseFeature.Closing : closePublishedSurvey"}}},
+        {"id": "t.feature_survey_publish_and_close.0004", "from": "feature.SurveyPublishCloseFeature.CheckingTransition", "to": "feature.SurveyPublishCloseFeature.Rejected", "event": "invalidStatusChange", "roles": [], "narrative": {"summary": "非法的狀態變更請求被拒絕。", "taskDescription": "當 invalidStatusChange 發生時進入 Rejected，確保 Survey.status 與 publish_hash 維持原值不變。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0004.01", "type": "semantic-check", "description": "例如 Closed 重新開啟或 Draft 直接關閉都必須被拒絕。", "expected": "Invalid status change"}], "intent": {"category": "action", "summary": "invalidStatusChange"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.CheckingTransition --> SurveyPublishCloseFeature.Rejected : invalidStatusChange"}}},
+        {"id": "t.feature_survey_publish_and_close.0005", "from": "feature.SurveyPublishCloseFeature.Publishing", "to": "feature.SurveyPublishCloseFeature.Published", "event": "publishCompleted", "roles": [], "narrative": {"summary": "問卷發佈完成。", "taskDescription": "當 publishCompleted 成功時進入 Published，將 Survey.status 設為 Published 並寫入 publish_hash。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0005.01", "type": "network-success", "description": "發佈成功後後續所有 Response 必須沿用相同 publish_hash。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "publishCompleted"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.Publishing --> SurveyPublishCloseFeature.Published : publishCompleted"}}},
+        {"id": "t.feature_survey_publish_and_close.0006", "from": "feature.SurveyPublishCloseFeature.Closing", "to": "feature.SurveyPublishCloseFeature.Closed", "event": "closeCompleted", "roles": [], "narrative": {"summary": "問卷關閉完成。", "taskDescription": "當 closeCompleted 成功時進入 Closed，後續 /s/:slug 必須視為不可填答。"}, "validations": [{"id": "v.t.feature_survey_publish_and_close.0006.01", "type": "network-success", "description": "關閉成功後既有回覆資料必須保留。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "closeCompleted"}, "meta": {"diagramId": "feature_survey_publish_and_close", "source": {"raw": "SurveyPublishCloseFeature.Closing --> SurveyPublishCloseFeature.Closed : closeCompleted"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_survey_publish_and_close.invokes.page_survey_edit.a.return_locked_survey", "type": "invokes", "from": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Published"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "發佈成功後返回鎖定的編輯頁。", "taskDescription": "在 SurveyPublishCloseFeature.Published 觸發 returnLockedSurvey 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_survey_publish_and_close.return_locked.01", "type": "url-equals", "description": "回到編輯頁後結構 UI 應鎖定。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnLockedSurvey | navigate /surveys/:id/edit", "action": "returnLockedSurvey", "navigateTarget": "/surveys/:id/edit"}},
+        {"id": "c.feature_survey_publish_and_close.invokes.page_surveys.a.return_to_survey_list_closed", "type": "invokes", "from": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Closed"}, "to": {"diagramId": "page_surveys", "stateId": "page.SurveysPage.Init"}, "narrative": {"summary": "關閉成功後返回問卷列表。", "taskDescription": "在 SurveyPublishCloseFeature.Closed 觸發 returnToSurveyList 後，導向 /surveys 並回到 SurveysPage.Init。"}, "validations": [{"id": "v.c.feature_survey_publish_and_close.closed.01", "type": "url-equals", "description": "列表中的問卷狀態應顯示為 Closed。", "expected": "/surveys"}], "meta": {"reason": "returnToSurveyList | navigate /surveys", "action": "returnToSurveyList", "navigateTarget": "/surveys"}},
+        {"id": "c.feature_survey_publish_and_close.invokes.page_survey_edit.a.return_status_issue", "type": "invokes", "from": {"diagramId": "feature_survey_publish_and_close", "stateId": "feature.SurveyPublishCloseFeature.Rejected"}, "to": {"diagramId": "page_survey_edit", "stateId": "page.SurveyEditPage.Init"}, "narrative": {"summary": "非法狀態變更被拒後返回編輯頁。", "taskDescription": "在 SurveyPublishCloseFeature.Rejected 觸發 returnStatusIssue 後，導向 /surveys/:id/edit 並回到 SurveyEditPage.Init。"}, "validations": [{"id": "v.c.feature_survey_publish_and_close.rejected.01", "type": "url-equals", "description": "返回後應顯示狀態錯誤訊息，且原值不變。", "expected": "/surveys/:id/edit"}], "meta": {"reason": "returnStatusIssue | navigate /surveys/:id/edit", "action": "returnStatusIssue", "navigateTarget": "/surveys/:id/edit"}}
+      ],
+      "meta": {"pageName": null, "featureName": "SurveyPublishCloseFeature", "entryStateId": "feature.SurveyPublishCloseFeature.Init"}
+    },
+    {
+      "id": "feature_results_analytics",
+      "name": "Feature: Results Analytics",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑱ Feature: Results Analytics", "order": 18},
+      "groups": [],
+      "states": [
+        {"id": "feature.ResultsAnalyticsFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_results_analytics", "synthetic": false, "source": {"scope": "root", "raw": "ResultsAnalyticsFeature.Init"}}},
+        {"id": "feature.ResultsAnalyticsFeature.LoadingSummary", "label": "LoadingSummary", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_results_analytics", "synthetic": false, "source": {"scope": "root", "raw": "ResultsAnalyticsFeature.LoadingSummary"}}},
+        {"id": "feature.ResultsAnalyticsFeature.ReadySummary", "label": "ReadySummary", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_results_analytics", "synthetic": false, "source": {"scope": "root", "raw": "ResultsAnalyticsFeature.ReadySummary"}}},
+        {"id": "feature.ResultsAnalyticsFeature.Empty", "label": "Empty", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_results_analytics", "synthetic": false, "source": {"scope": "root", "raw": "ResultsAnalyticsFeature.Empty"}}},
+        {"id": "feature.ResultsAnalyticsFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_results_analytics", "synthetic": false, "source": {"scope": "root", "raw": "ResultsAnalyticsFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_results_analytics.0001", "from": "feature.ResultsAnalyticsFeature.Init", "to": "feature.ResultsAnalyticsFeature.LoadingSummary", "event": "requestAnalytics", "roles": [], "narrative": {"summary": "結果分析功能開始請求統計資料。", "taskDescription": "觸發 requestAnalytics 後進入 LoadingSummary，向後端請求目前 Survey 的分析資料。"}, "validations": [{"id": "v.t.feature_results_analytics.0001.01", "type": "semantic-check", "description": "分析只應處理目前 owner 可見的單一 Survey 資料。", "expected": "Request analytics"}], "intent": {"category": "action", "summary": "requestAnalytics"}, "meta": {"diagramId": "feature_results_analytics", "source": {"raw": "ResultsAnalyticsFeature.Init --> ResultsAnalyticsFeature.LoadingSummary : requestAnalytics"}}},
+        {"id": "t.feature_results_analytics.0002", "from": "feature.ResultsAnalyticsFeature.LoadingSummary", "to": "feature.ResultsAnalyticsFeature.ReadySummary", "event": "analyticsReady", "roles": [], "narrative": {"summary": "結果分析資料已可用。", "taskDescription": "當 analyticsReady 成功時進入 ReadySummary，顯示回覆數與各題彙總統計。"}, "validations": [{"id": "v.t.feature_results_analytics.0002.01", "type": "network-success", "description": "統計資料應與原始 Response/Answer 一致。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "analyticsReady"}, "meta": {"diagramId": "feature_results_analytics", "source": {"raw": "ResultsAnalyticsFeature.LoadingSummary --> ResultsAnalyticsFeature.ReadySummary : analyticsReady"}}},
+        {"id": "t.feature_results_analytics.0003", "from": "feature.ResultsAnalyticsFeature.LoadingSummary", "to": "feature.ResultsAnalyticsFeature.Empty", "event": "noResponsesYet", "roles": [], "narrative": {"summary": "分析結果因尚無回覆而為空。", "taskDescription": "當 noResponsesYet 成立時進入 Empty，清楚表示目前還沒有任何可分析的回覆。"}, "validations": [{"id": "v.t.feature_results_analytics.0003.01", "type": "semantic-check", "description": "Empty 狀態不得顯示非零統計或假資料。", "expected": "No responses yet"}], "intent": {"category": "action", "summary": "noResponsesYet"}, "meta": {"diagramId": "feature_results_analytics", "source": {"raw": "ResultsAnalyticsFeature.LoadingSummary --> ResultsAnalyticsFeature.Empty : noResponsesYet"}}},
+        {"id": "t.feature_results_analytics.0004", "from": "feature.ResultsAnalyticsFeature.LoadingSummary", "to": "feature.ResultsAnalyticsFeature.Failed", "event": "analyticsUnavailable", "roles": [], "narrative": {"summary": "結果分析資料無法取得。", "taskDescription": "當 analyticsUnavailable 發生時進入 Failed，保證錯誤不會改寫既有回覆資料。"}, "validations": [{"id": "v.t.feature_results_analytics.0004.01", "type": "network-failed", "description": "分析失敗時可返回結果頁重試，且不應產生錯誤統計。", "expected": "Analytics unavailable"}], "intent": {"category": "action", "summary": "analyticsUnavailable"}, "meta": {"diagramId": "feature_results_analytics", "source": {"raw": "ResultsAnalyticsFeature.LoadingSummary --> ResultsAnalyticsFeature.Failed : analyticsUnavailable"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_results_analytics.invokes.page_survey_results.a.return_to_results_page_ready", "type": "invokes", "from": {"diagramId": "feature_results_analytics", "stateId": "feature.ResultsAnalyticsFeature.ReadySummary"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "分析完成後返回結果頁。", "taskDescription": "在 ResultsAnalyticsFeature.ReadySummary 觸發 returnToResultsPage 後，導向 /surveys/:id/results 並回到 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.feature_results_analytics.ready.01", "type": "url-equals", "description": "返回後應顯示最新統計。", "expected": "/surveys/:id/results"}], "meta": {"reason": "returnToResultsPage | navigate /surveys/:id/results", "action": "returnToResultsPage", "navigateTarget": "/surveys/:id/results"}},
+        {"id": "c.feature_results_analytics.invokes.page_survey_results.a.return_to_results_page_empty", "type": "invokes", "from": {"diagramId": "feature_results_analytics", "stateId": "feature.ResultsAnalyticsFeature.Empty"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "無資料分析狀態返回結果頁。", "taskDescription": "在 ResultsAnalyticsFeature.Empty 觸發 returnToResultsPage 後，導向 /surveys/:id/results 並回到 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.feature_results_analytics.empty.01", "type": "url-equals", "description": "返回後畫面仍應維持 Empty。", "expected": "/surveys/:id/results"}], "meta": {"reason": "returnToResultsPage | navigate /surveys/:id/results", "action": "returnToResultsPage", "navigateTarget": "/surveys/:id/results"}},
+        {"id": "c.feature_results_analytics.invokes.page_survey_results.a.return_to_results_page_failed", "type": "invokes", "from": {"diagramId": "feature_results_analytics", "stateId": "feature.ResultsAnalyticsFeature.Failed"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "分析失敗後返回結果頁。", "taskDescription": "在 ResultsAnalyticsFeature.Failed 觸發 returnToResultsPage 後，導向 /surveys/:id/results 並回到 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.feature_results_analytics.failed.01", "type": "url-equals", "description": "返回後可再次重試載入分析。", "expected": "/surveys/:id/results"}], "meta": {"reason": "returnToResultsPage | navigate /surveys/:id/results", "action": "returnToResultsPage", "navigateTarget": "/surveys/:id/results"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ResultsAnalyticsFeature", "entryStateId": "feature.ResultsAnalyticsFeature.Init"}
+    },
+    {
+      "id": "feature_export_responses",
+      "name": "Feature: Export Responses",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [],
+      "variant": {"kind": "standalone", "baseDiagramId": null, "deltaDiagramIdsByRole": {}, "appliesToRoles": []},
+      "source": {"type": "mermaid", "sectionTitle": "⑲ Feature: Export Responses", "order": 19},
+      "groups": [],
+      "states": [
+        {"id": "feature.ExportResponsesFeature.Init", "label": "Init", "type": "start", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_export_responses", "synthetic": false, "source": {"scope": "root", "raw": "ExportResponsesFeature.Init"}}},
+        {"id": "feature.ExportResponsesFeature.Exporting", "label": "Exporting", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_export_responses", "synthetic": false, "source": {"scope": "root", "raw": "ExportResponsesFeature.Exporting"}}},
+        {"id": "feature.ExportResponsesFeature.Exported", "label": "Exported", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_export_responses", "synthetic": false, "source": {"scope": "root", "raw": "ExportResponsesFeature.Exported"}}},
+        {"id": "feature.ExportResponsesFeature.Failed", "label": "Failed", "type": "normal", "groupId": null, "tags": ["feature"], "meta": {"diagramId": "feature_export_responses", "synthetic": false, "source": {"scope": "root", "raw": "ExportResponsesFeature.Failed"}}}
+      ],
+      "transitions": [
+        {"id": "t.feature_export_responses.0001", "from": "feature.ExportResponsesFeature.Init", "to": "feature.ExportResponsesFeature.Exporting", "event": "requestExport", "roles": [], "narrative": {"summary": "回覆匯出流程開始。", "taskDescription": "觸發 requestExport 後進入 Exporting，開始準備目前 Survey 的回覆匯出資料。"}, "validations": [{"id": "v.t.feature_export_responses.0001.01", "type": "semantic-check", "description": "匯出內容應只涵蓋目前 Survey 的回覆資料。", "expected": "Request export"}], "intent": {"category": "action", "summary": "requestExport"}, "meta": {"diagramId": "feature_export_responses", "source": {"raw": "ExportResponsesFeature.Init --> ExportResponsesFeature.Exporting : requestExport"}}},
+        {"id": "t.feature_export_responses.0002", "from": "feature.ExportResponsesFeature.Exporting", "to": "feature.ExportResponsesFeature.Exported", "event": "exportPrepared", "roles": [], "narrative": {"summary": "回覆匯出內容已準備完成。", "taskDescription": "當 exportPrepared 成功時進入 Exported，讓下載內容可對應目前 Survey 的回覆與 publish_hash。"}, "validations": [{"id": "v.t.feature_export_responses.0002.01", "type": "network-success", "description": "匯出資料應與結果頁統計一致且不得混入其他 Survey 回覆。", "expected": "HTTP 200"}], "intent": {"category": "action", "summary": "exportPrepared"}, "meta": {"diagramId": "feature_export_responses", "source": {"raw": "ExportResponsesFeature.Exporting --> ExportResponsesFeature.Exported : exportPrepared"}}},
+        {"id": "t.feature_export_responses.0003", "from": "feature.ExportResponsesFeature.Exporting", "to": "feature.ExportResponsesFeature.Failed", "event": "exportRejected", "roles": [], "narrative": {"summary": "回覆匯出失敗。", "taskDescription": "當 exportRejected 發生時進入 Failed，顯示錯誤並保留結果頁既有的統計資料。"}, "validations": [{"id": "v.t.feature_export_responses.0003.01", "type": "network-failed", "description": "匯出失敗時不得產生不完整檔案當成成功結果。", "expected": "Export rejected"}], "intent": {"category": "action", "summary": "exportRejected"}, "meta": {"diagramId": "feature_export_responses", "source": {"raw": "ExportResponsesFeature.Exporting --> ExportResponsesFeature.Failed : exportRejected"}}}
+      ],
+      "connectors": [
+        {"id": "c.feature_export_responses.invokes.page_survey_results.a.return_to_results_page_exported", "type": "invokes", "from": {"diagramId": "feature_export_responses", "stateId": "feature.ExportResponsesFeature.Exported"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "匯出完成後返回結果頁。", "taskDescription": "在 ExportResponsesFeature.Exported 觸發 returnToResultsPage 後，導向 /surveys/:id/results 並回到 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.feature_export_responses.exported.01", "type": "url-equals", "description": "返回後仍應顯示同一份 Survey 的結果。", "expected": "/surveys/:id/results"}], "meta": {"reason": "returnToResultsPage | navigate /surveys/:id/results", "action": "returnToResultsPage", "navigateTarget": "/surveys/:id/results"}},
+        {"id": "c.feature_export_responses.invokes.page_survey_results.a.return_to_results_page_failed", "type": "invokes", "from": {"diagramId": "feature_export_responses", "stateId": "feature.ExportResponsesFeature.Failed"}, "to": {"diagramId": "page_survey_results", "stateId": "page.SurveyResultsPage.Init"}, "narrative": {"summary": "匯出失敗後返回結果頁。", "taskDescription": "在 ExportResponsesFeature.Failed 觸發 returnToResultsPage 後，導向 /surveys/:id/results 並回到 SurveyResultsPage.Init。"}, "validations": [{"id": "v.c.feature_export_responses.failed.01", "type": "url-equals", "description": "返回後使用者可再次嘗試匯出。", "expected": "/surveys/:id/results"}], "meta": {"reason": "returnToResultsPage | navigate /surveys/:id/results", "action": "returnToResultsPage", "navigateTarget": "/surveys/:id/results"}}
+      ],
+      "meta": {"pageName": null, "featureName": "ExportResponsesFeature", "entryStateId": "feature.ExportResponsesFeature.Init"}
+    }
+  ],
+  "hierarchy": {
+    "roots": [
+      "page_entry"
+    ],
+    "childrenByDiagramId": {
+      "page_entry": [
+        "page_login",
+        "page_surveys",
+        "page_survey_edit",
+        "page_survey_preview",
+        "page_survey_respond",
+        "page_survey_results",
+        "feature_login_submission",
+        "feature_survey_creation",
+        "feature_survey_structure_editing",
+        "feature_rule_validation",
+        "feature_preview_simulation",
+        "feature_response_draft_session",
+        "feature_response_submit",
+        "feature_survey_publish_and_close",
+        "feature_results_analytics",
+        "feature_export_responses"
+      ],
+      "page_survey_respond": [
+        "page_survey_respond_guest",
+        "page_survey_respond_user"
+      ]
+    }
+  },
+  "meta": {
+    "warnings": [
+      "page.SurveyRespondPage.Completion 依據 Survey Respond Page 章節前的 Completion 說明補齊為 synthetic state。"
+    ]
+  }
+}

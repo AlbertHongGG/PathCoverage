@@ -1,0 +1,5628 @@
+{
+  "system": "PersonalExpenseTrackingMonthlyReportSystem",
+  "version": "1.0",
+  "generatedAt": "2026-03-16T00:00:00.000Z",
+  "inputs": {
+    "specPath": "StateTranstionDiagram/spec.md",
+    "transitionPath": "StateTranstionDiagram/transition.md"
+  },
+  "spec": {
+    "raw": null,
+    "summary": {
+      "productName": "個人記帳＋月報表網站",
+      "goals": [
+        "讓使用者能快速、方便地記錄每日收入與支出",
+        "透過日期分組、類別統計與視覺化圖表呈現財務狀況",
+        "自動產生月報表，協助使用者掌握每月財務變化"
+      ],
+      "roles": [
+        {
+          "id": "guest",
+          "label": "Guest"
+        },
+        {
+          "id": "user",
+          "label": "User"
+        }
+      ]
+    }
+  },
+  "diagrams": [
+    {
+      "id": "page_entry",
+      "name": "Entry",
+      "level": "page",
+      "parentDiagramId": null,
+      "roles": [],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "① Entry State Machine",
+        "order": 1
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.Entry.Init",
+          "label": "Entry.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page"
+          ],
+          "meta": {
+            "diagramId": "page_entry",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "Entry.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_entry.entry.01",
+                "type": "semantic-check",
+                "description": "進站後提供公開入口並準備進入登入流程；Header 僅顯示 Logo、登入、註冊；Header 不顯示帳務列表、月報表、類別管理、登出",
+                "expected": null
+              }
+            ]
+          }
+        }
+      ],
+      "transitions": [],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_login",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Login Page",
+            "taskDescription": "建立 page_entry 與 page_login 的父子關係，表示登入頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_entry.contains.page_register",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Register Page",
+            "taskDescription": "建立 page_entry 與 page_register 的父子關係，表示註冊頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_entry.invokes.page_login.s.page_Entry_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": "page.Entry.Init"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "入口導向登入頁",
+            "taskDescription": "在 Entry.Init 觸發 openLogin 導航，並成功進入 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_entry.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /login；登入頁顯示 Email、密碼、登入送出按鈕與註冊連結；Header 只有一個登入連結，頁面內只有表單送出按鈕而沒有第二個導覽型登入入口",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "openLogin | navigate /login",
+            "action": "openLogin",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "Entry",
+        "featureName": null,
+        "entryStateId": "page.Entry.Init"
+      }
+    },
+    {
+      "id": "page_login",
+      "name": "Login Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "guest",
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "② Login Page State Machine",
+        "order": 2
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.LoginPage.Init",
+          "label": "LoginPage.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LoginPage.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_login.entry.01",
+                "type": "semantic-check",
+                "description": "進入 /login 時顯示登入頁框架；Guest 只看到 Logo、登入、註冊；已登入使用者若進入此頁會套用自動導向規則",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.LoginPage.Ready",
+          "label": "LoginPage.Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LoginPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.LoginPage.Failed",
+          "label": "LoginPage.Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LoginPage.Failed"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_login.0001",
+          "from": "page.LoginPage.Init",
+          "to": "page.LoginPage.Ready",
+          "event": "showLoginForm",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "顯示登入表單",
+            "taskDescription": "在 LoginPage.Init 觸發 showLoginForm，讓登入頁進入可輸入帳密的 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_login.0001.01",
+              "type": "semantic-check",
+              "description": "Email 與密碼輸入框可見；登入按鈕可點擊；註冊連結可點擊；Header 仍不顯示受保護頁導覽",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showLoginForm"
+          },
+          "meta": {
+            "diagramId": "page_login",
+            "source": {
+              "raw": "LoginPage.Init --> LoginPage.Ready: showLoginForm"
+            }
+          }
+        },
+        {
+          "id": "t.page_login.0002",
+          "from": "page.LoginPage.Failed",
+          "to": "page.LoginPage.Ready",
+          "event": "editCredentials",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "修正登入資訊後回到可送出狀態",
+            "taskDescription": "在 LoginPage.Failed 重新編輯帳號密碼，讓頁面恢復到 LoginPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_login.0002.01",
+              "type": "semantic-check",
+              "description": "錯誤訊息在重新輸入後可被覆蓋；Email 欄位保留已輸入內容；登入按鈕恢復可點擊",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "editCredentials"
+          },
+          "meta": {
+            "diagramId": "page_login",
+            "source": {
+              "raw": "LoginPage.Failed --> LoginPage.Ready: editCredentials"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_login",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Login Page",
+            "taskDescription": "建立 page_entry 與 page_login 的父子關係，表示登入頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_entry.invokes.page_login.s.page_Entry_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": "page.Entry.Init"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "入口導向登入頁",
+            "taskDescription": "在 Entry.Init 觸發 openLogin 導航，並成功進入 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_entry.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /login；登入頁顯示 Email、密碼、登入送出按鈕與註冊連結；Header 只有一個登入連結，頁面內只有表單送出按鈕而沒有第二個導覽型登入入口",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "openLogin | navigate /login",
+            "action": "openLogin",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.page_register.s.page_LoginPage_Ready.to.page_RegisterPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Init"
+          },
+          "narrative": {
+            "summary": "登入頁前往註冊頁",
+            "taskDescription": "在 LoginPage.Ready 點擊註冊連結，並進入 RegisterPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.page_register.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /register；登入頁未送出任何登入請求；註冊頁表單為初始狀態",
+              "expected": "/register"
+            }
+          ],
+          "meta": {
+            "reason": "clickRegisterLink | navigate /register",
+            "action": "clickRegisterLink",
+            "navigateTarget": "/register"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.page_transactions.s.page_LoginPage_Init.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "已登入使用者從登入頁轉回帳務頁",
+            "taskDescription": "在 LoginPage.Init 偵測已登入狀態後自動導向，並進入 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "已登入使用者進入 /login 時直接導向 /transactions；Header 顯示帳務列表、月報表、類別管理、登出；登入與註冊連結隱藏",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "redirectAuthenticatedUser | navigate /transactions",
+            "action": "redirectAuthenticatedUser",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_login.contains.feature_auth_login",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_auth_login",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Login Page 包含 AuthLoginFeature",
+            "taskDescription": "建立 page_login 與 feature_auth_login 的父子關係，表示登入功能流程由登入頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.feature_auth_login.s.page_LoginPage_Ready.to.feature_AuthLoginFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Init"
+          },
+          "narrative": {
+            "summary": "登入頁送出登入流程",
+            "taskDescription": "在 LoginPage.Ready 送出登入表單，並進入 AuthLoginFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.feature_auth_login.01",
+              "type": "semantic-check",
+              "description": "點擊登入後進入登入功能流程；頁面只存在單一登入送出動作；不會在 Header 額外出現第二個登入 CTA",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "submitLogin | navigate AuthLoginFeature",
+            "action": "submitLogin",
+            "navigateTarget": "AuthLoginFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "LoginPage",
+        "featureName": null,
+        "entryStateId": "page.LoginPage.Init"
+      }
+    },
+    {
+      "id": "page_register",
+      "name": "Register Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "guest",
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "③ Register Page State Machine",
+        "order": 3
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.RegisterPage.Init",
+          "label": "RegisterPage.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "RegisterPage.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_register.entry.01",
+                "type": "semantic-check",
+                "description": "進入 /register 時顯示註冊頁框架；Guest 僅看到公開導覽；已登入使用者若進入此頁會套用自動導向規則",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.RegisterPage.Ready",
+          "label": "RegisterPage.Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "RegisterPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.RegisterPage.Failed",
+          "label": "RegisterPage.Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "RegisterPage.Failed"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_register.0001",
+          "from": "page.RegisterPage.Init",
+          "to": "page.RegisterPage.Ready",
+          "event": "showRegisterForm",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "顯示註冊表單",
+            "taskDescription": "在 RegisterPage.Init 觸發 showRegisterForm，讓註冊頁進入可輸入資料的 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_register.0001.01",
+              "type": "semantic-check",
+              "description": "Email、密碼、確認密碼輸入框可見；註冊按鈕可點擊；登入連結可點擊；Header 不顯示受保護頁導覽",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showRegisterForm"
+          },
+          "meta": {
+            "diagramId": "page_register",
+            "source": {
+              "raw": "RegisterPage.Init --> RegisterPage.Ready: showRegisterForm"
+            }
+          }
+        },
+        {
+          "id": "t.page_register.0002",
+          "from": "page.RegisterPage.Failed",
+          "to": "page.RegisterPage.Ready",
+          "event": "editRegistrationForm",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "修正註冊資料後回到可送出狀態",
+            "taskDescription": "在 RegisterPage.Failed 重新編輯註冊表單，讓頁面恢復到 RegisterPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_register.0002.01",
+              "type": "semantic-check",
+              "description": "更正輸入後可再次送出；錯誤訊息依新驗證結果更新；表單欄位保留尚未修正的值",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "editRegistrationForm"
+          },
+          "meta": {
+            "diagramId": "page_register",
+            "source": {
+              "raw": "RegisterPage.Failed --> RegisterPage.Ready: editRegistrationForm"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_register",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Register Page",
+            "taskDescription": "建立 page_entry 與 page_register 的父子關係，表示註冊頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.page_register.s.page_LoginPage_Ready.to.page_RegisterPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Init"
+          },
+          "narrative": {
+            "summary": "登入頁前往註冊頁",
+            "taskDescription": "在 LoginPage.Ready 點擊註冊連結，並進入 RegisterPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.page_register.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /register；登入頁未送出任何登入請求；註冊頁表單為初始狀態",
+              "expected": "/register"
+            }
+          ],
+          "meta": {
+            "reason": "clickRegisterLink | navigate /register",
+            "action": "clickRegisterLink",
+            "navigateTarget": "/register"
+          }
+        },
+        {
+          "id": "c.page_register.invokes.page_login.s.page_RegisterPage_Ready.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "註冊頁返回登入頁",
+            "taskDescription": "在 RegisterPage.Ready 點擊登入連結，並回到 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_register.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /login；註冊流程未送出；登入頁表單為初始狀態",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "clickLoginLink | navigate /login",
+            "action": "clickLoginLink",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_register.invokes.page_transactions.s.page_RegisterPage_Init.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Init"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "已登入使用者從註冊頁轉回帳務頁",
+            "taskDescription": "在 RegisterPage.Init 偵測已登入狀態後自動導向，並進入 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_register.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "已登入使用者進入 /register 時直接導向 /transactions；Header 顯示使用者導覽；登入與註冊連結隱藏",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "redirectAuthenticatedUser | navigate /transactions",
+            "action": "redirectAuthenticatedUser",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_register.contains.feature_auth_register",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_auth_register",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Register Page 包含 AuthRegisterFeature",
+            "taskDescription": "建立 page_register 與 feature_auth_register 的父子關係，表示註冊功能流程由註冊頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_register.invokes.feature_auth_register.s.page_RegisterPage_Ready.to.feature_AuthRegisterFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_auth_register",
+            "stateId": "feature.AuthRegisterFeature.Init"
+          },
+          "narrative": {
+            "summary": "註冊頁送出註冊流程",
+            "taskDescription": "在 RegisterPage.Ready 送出註冊表單，並進入 AuthRegisterFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_register.invokes.feature_auth_register.01",
+              "type": "semantic-check",
+              "description": "點擊註冊後進入註冊功能流程；頁面內只有單一註冊送出按鈕；Header 沒有重複的註冊 CTA",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "submitRegister | navigate AuthRegisterFeature",
+            "action": "submitRegister",
+            "navigateTarget": "AuthRegisterFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "RegisterPage",
+        "featureName": null,
+        "entryStateId": "page.RegisterPage.Init"
+      }
+    },
+    {
+      "id": "page_transactions",
+      "name": "Transactions Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "④ Transactions Page State Machine",
+        "order": 4
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.TransactionsPage.Init",
+          "label": "TransactionsPage.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_transactions",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionsPage.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_transactions.entry.01",
+                "type": "semantic-check",
+                "description": "進入 /transactions 時檢查登入狀態並準備載入帳務列表；Header 顯示帳務列表、月報表、類別管理、登出；Header 不顯示登入與註冊",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.TransactionsPage.Ready",
+          "label": "TransactionsPage.Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_transactions",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionsPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.TransactionsPage.Empty",
+          "label": "TransactionsPage.Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_transactions",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionsPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.TransactionsPage.Failed",
+          "label": "TransactionsPage.Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_transactions",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionsPage.Failed"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_transactions.0001",
+          "from": "page.TransactionsPage.Init",
+          "to": "page.TransactionsPage.Ready",
+          "event": "loadTransactionsDone",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入帳務資料成功",
+            "taskDescription": "在 TransactionsPage.Init 完成帳務列表載入，讓頁面進入 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_transactions.0001.01",
+              "type": "semantic-check",
+              "description": "帳務列表 API 回傳 200 且有資料；列表依日期分組且最新日期在最上方；每個日期區塊顯示當日總收入與總支出；同日帳務依時間倒序；新增帳務按鈕只出現在本頁而不出現在 Header",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadTransactionsDone"
+          },
+          "meta": {
+            "diagramId": "page_transactions",
+            "source": {
+              "raw": "TransactionsPage.Init --> TransactionsPage.Ready: loadTransactionsDone"
+            }
+          }
+        },
+        {
+          "id": "t.page_transactions.0002",
+          "from": "page.TransactionsPage.Init",
+          "to": "page.TransactionsPage.Empty",
+          "event": "loadTransactionsEmpty",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入後無帳務資料",
+            "taskDescription": "在 TransactionsPage.Init 完成載入但沒有帳務資料，讓頁面進入 Empty 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_transactions.0002.01",
+              "type": "semantic-check",
+              "description": "帳務列表 API 回傳 200 且無資料；顯示空狀態提示與新增帳務入口；Header 仍只顯示使用者導覽；頁面沒有重複的新增帳務 CTA",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadTransactionsEmpty"
+          },
+          "meta": {
+            "diagramId": "page_transactions",
+            "source": {
+              "raw": "TransactionsPage.Init --> TransactionsPage.Empty: loadTransactionsEmpty"
+            }
+          }
+        },
+        {
+          "id": "t.page_transactions.0003",
+          "from": "page.TransactionsPage.Init",
+          "to": "page.TransactionsPage.Failed",
+          "event": "loadTransactionsFailed",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入帳務資料失敗",
+            "taskDescription": "在 TransactionsPage.Init 載入帳務時發生錯誤，讓頁面進入 Failed 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_transactions.0003.01",
+              "type": "semantic-check",
+              "description": "帳務列表 API 回傳 5xx 或非授權外的失敗時顯示錯誤訊息與重試按鈕；既有日期分組與統計不顯示過期資料",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadTransactionsFailed"
+          },
+          "meta": {
+            "diagramId": "page_transactions",
+            "source": {
+              "raw": "TransactionsPage.Init --> TransactionsPage.Failed: loadTransactionsFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_transactions.0004",
+          "from": "page.TransactionsPage.Ready",
+          "to": "page.TransactionsPage.Ready",
+          "event": "loadMoreTransactions",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "持續載入更多帳務",
+            "taskDescription": "在 TransactionsPage.Ready 觸發 loadMoreTransactions，將新資料追加到既有列表中並維持 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_transactions.0004.01",
+              "type": "semantic-check",
+              "description": "載入下一頁 30 筆或更多帳務時，新資料追加到正確日期分組；日統計仍與列表資料一致；舊資料順序不被破壞",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadMoreTransactions"
+          },
+          "meta": {
+            "diagramId": "page_transactions",
+            "source": {
+              "raw": "TransactionsPage.Ready --> TransactionsPage.Ready: loadMoreTransactions"
+            }
+          }
+        },
+        {
+          "id": "t.page_transactions.0005",
+          "from": "page.TransactionsPage.Failed",
+          "to": "page.TransactionsPage.Init",
+          "event": "retryLoad",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "重試載入帳務列表",
+            "taskDescription": "在 TransactionsPage.Failed 點擊重試，讓頁面回到 Init 並重新查詢帳務資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_transactions.0005.01",
+              "type": "semantic-check",
+              "description": "點擊重試後重新發送帳務列表 API；Loading、Ready、Empty 或 Failed 依最新回應更新；不會重複新增任何帳務項目",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad"
+          },
+          "meta": {
+            "diagramId": "page_transactions",
+            "source": {
+              "raw": "TransactionsPage.Failed --> TransactionsPage.Init: retryLoad"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_transactions",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Transactions Page",
+            "taskDescription": "建立 page_entry 與 page_transactions 的父子關係，表示帳務頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.page_transactions.s.page_LoginPage_Init.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "已登入使用者從登入頁被導向帳務頁",
+            "taskDescription": "在 LoginPage.Init 判定為已登入後，直接導向 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "已登入使用者進入 /login 時直接導向 /transactions；Header 顯示帳務列表、月報表、類別管理、登出；登入與註冊連結隱藏",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "redirectAuthenticatedUser | navigate /transactions",
+            "action": "redirectAuthenticatedUser",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_register.invokes.page_transactions.s.page_RegisterPage_Init.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Init"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "已登入使用者從註冊頁被導向帳務頁",
+            "taskDescription": "在 RegisterPage.Init 判定為已登入後，直接導向 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_register.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "已登入使用者進入 /register 時直接導向 /transactions；Header 顯示使用者導覽；登入與註冊連結隱藏",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "redirectAuthenticatedUser | navigate /transactions",
+            "action": "redirectAuthenticatedUser",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_login.s.page_TransactionsPage_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁要求登入時返回登入頁",
+            "taskDescription": "在 TransactionsPage.Init 偵測未登入或憑證過期時，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "未登入或 Session/Token 過期時導向 /login；保留 returnTo=/transactions；401 時清除無效 Session/Token；Guest 不可看到受保護導覽",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "authRequired | navigate /login",
+            "action": "authRequired",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_reports.s.page_TransactionsPage_Ready.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁導向月報表頁",
+            "taskDescription": "在 TransactionsPage.Ready 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_reports.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /reports；開始載入所選年月報表；Header 導覽維持使用者狀態",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_categories.s.page_TransactionsPage_Ready.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁導向類別管理頁",
+            "taskDescription": "在 TransactionsPage.Ready 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；開始載入類別清單；Header 導覽維持使用者狀態",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_reports.s.page_TransactionsPage_Empty.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁仍可前往月報表頁",
+            "taskDescription": "在 TransactionsPage.Empty 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_reports.02",
+              "type": "url-equals",
+              "description": "即使沒有帳務資料仍可前往報表頁；URL 變更為 /reports；報表頁依資料量決定顯示 Empty 或 Ready",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_categories.s.page_TransactionsPage_Empty.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁仍可前往類別管理頁",
+            "taskDescription": "在 TransactionsPage.Empty 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；類別管理頁可正常載入；使用者導覽不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_transactions.contains.feature_transaction_form",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Transactions Page 包含 TransactionFormFeature",
+            "taskDescription": "建立 page_transactions 與 feature_transaction_form 的父子關係，表示帳務表單流程由帳務頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.contains.feature_transaction_delete",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Transactions Page 包含 TransactionDeleteFeature",
+            "taskDescription": "建立 page_transactions 與 feature_transaction_delete 的父子關係，表示帳務刪除流程由帳務頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Ready.to.feature_TransactionFormFeature_Init.add",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁從清單開啟新增帳務流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊新增帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.01",
+              "type": "semantic-check",
+              "description": "開啟新增帳務 Modal；表單類別選項僅包含 is_active=true 且符合帳務類型的類別；Modal 開啟前列表資料不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddTransaction | navigate TransactionFormFeature",
+            "action": "clickAddTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Ready.to.feature_TransactionFormFeature_Init.edit",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁從清單開啟編輯帳務流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊編輯帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.02",
+              "type": "semantic-check",
+              "description": "開啟編輯帳務 Modal；表單預填 type、amount、category_id、date、note；仍僅能編輯自己的帳務資料",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickEditTransaction | navigate TransactionFormFeature",
+            "action": "clickEditTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_delete.s.page_TransactionsPage_Ready.to.feature_TransactionDeleteFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": "feature.TransactionDeleteFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁開啟刪除確認流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊刪除帳務，並進入 TransactionDeleteFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_delete.01",
+              "type": "semantic-check",
+              "description": "開啟刪除確認流程；顯示帳務摘要；尚未確認前列表、每日統計與月報表資料均不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickDeleteTransaction | navigate TransactionDeleteFeature",
+            "action": "clickDeleteTransaction",
+            "navigateTarget": "TransactionDeleteFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Empty.to.feature_TransactionFormFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁開啟新增帳務流程",
+            "taskDescription": "在 TransactionsPage.Empty 點擊新增帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.03",
+              "type": "semantic-check",
+              "description": "從空狀態開啟新增帳務 Modal；表單初始值為空白；類別選項只顯示可用類別",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddTransaction | navigate TransactionFormFeature",
+            "action": "clickAddTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_logout.s.page_TransactionsPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁啟動登出流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；準備清除 Session/Token；登出入口只在 Header 右側出現一次",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_logout.s.page_TransactionsPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁啟動登出流程",
+            "taskDescription": "在 TransactionsPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；空狀態畫面在登出後不可再存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "TransactionsPage",
+        "featureName": null,
+        "entryStateId": "page.TransactionsPage.Init"
+      }
+    },
+    {
+      "id": "page_reports",
+      "name": "Reports Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑤ Reports Page State Machine",
+        "order": 5
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.ReportsPage.Init",
+          "label": "ReportsPage.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_reports",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "ReportsPage.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_reports.entry.01",
+                "type": "semantic-check",
+                "description": "進入 /reports 時檢查登入狀態並準備載入當前年月資料；Header 顯示使用者導覽；匯出 CSV 按鈕只會在本頁出現而不會出現在 Header",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.ReportsPage.Ready",
+          "label": "ReportsPage.Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_reports",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "ReportsPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.ReportsPage.Empty",
+          "label": "ReportsPage.Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_reports",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "ReportsPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.ReportsPage.Failed",
+          "label": "ReportsPage.Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_reports",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "ReportsPage.Failed"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_reports.0001",
+          "from": "page.ReportsPage.Init",
+          "to": "page.ReportsPage.Ready",
+          "event": "loadReportDone",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入報表成功",
+            "taskDescription": "在 ReportsPage.Init 成功取得報表資料，讓頁面進入 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0001.01",
+              "type": "semantic-check",
+              "description": "報表 API 回傳 200 且有資料；統計卡片顯示總收入、總支出、淨收支；圓餅圖只統計 expense 類型；長條圖以有資料的日期顯示收入與支出；統計、圖表與帳務列表資料來源一致",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadReportDone"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Init --> ReportsPage.Ready: loadReportDone"
+            }
+          }
+        },
+        {
+          "id": "t.page_reports.0002",
+          "from": "page.ReportsPage.Init",
+          "to": "page.ReportsPage.Empty",
+          "event": "loadReportEmpty",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入報表後無資料",
+            "taskDescription": "在 ReportsPage.Init 查詢報表但所選月份沒有帳務資料，讓頁面進入 Empty 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0002.01",
+              "type": "semantic-check",
+              "description": "報表 API 回傳 200 且所選年月無帳務；統計卡片顯示 0；圓餅圖顯示「本月無支出」；長條圖顯示「本月無資料」；匯出 CSV 按鈕 disabled",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadReportEmpty"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Init --> ReportsPage.Empty: loadReportEmpty"
+            }
+          }
+        },
+        {
+          "id": "t.page_reports.0003",
+          "from": "page.ReportsPage.Init",
+          "to": "page.ReportsPage.Failed",
+          "event": "loadReportFailed",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入報表失敗",
+            "taskDescription": "在 ReportsPage.Init 查詢報表發生錯誤，讓頁面進入 Failed 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0003.01",
+              "type": "semantic-check",
+              "description": "報表 API 回傳 5xx 或其他失敗時顯示錯誤訊息與重試按鈕；不顯示不一致的舊統計數字",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadReportFailed"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Init --> ReportsPage.Failed: loadReportFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_reports.0004",
+          "from": "page.ReportsPage.Ready",
+          "to": "page.ReportsPage.Init",
+          "event": "changeYearOrMonth",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "切換年月重新載入報表",
+            "taskDescription": "在 ReportsPage.Ready 變更年份或月份後，回到 Init 重新查詢指定年月資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0004.01",
+              "type": "semantic-check",
+              "description": "年份選單至少可選當年與前 2 年；月份可選 1 到 12 月；切換後重新載入指定年月資料；統計卡片、圓餅圖、長條圖與 CSV 匯出範圍同步切換",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "changeYearOrMonth"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Ready --> ReportsPage.Init: changeYearOrMonth"
+            }
+          }
+        },
+        {
+          "id": "t.page_reports.0005",
+          "from": "page.ReportsPage.Empty",
+          "to": "page.ReportsPage.Init",
+          "event": "changeYearOrMonth",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "空報表狀態切換年月重新查詢",
+            "taskDescription": "在 ReportsPage.Empty 變更年份或月份後，回到 Init 重新查詢資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0005.01",
+              "type": "semantic-check",
+              "description": "切換到其他年月後重新查詢；若有資料則進入 Ready；若仍無資料則維持 Empty；統計與圖表文案同步更新",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "changeYearOrMonth"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Empty --> ReportsPage.Init: changeYearOrMonth"
+            }
+          }
+        },
+        {
+          "id": "t.page_reports.0006",
+          "from": "page.ReportsPage.Failed",
+          "to": "page.ReportsPage.Init",
+          "event": "retryLoad",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "重試載入報表",
+            "taskDescription": "在 ReportsPage.Failed 點擊重試後，回到 Init 重新取得報表資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_reports.0006.01",
+              "type": "semantic-check",
+              "description": "點擊重試後重新發送報表 API；若成功則統計卡片、圖表與匯出能力依最新資料更新；若再次失敗則維持 Failed 並顯示最新錯誤",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad"
+          },
+          "meta": {
+            "diagramId": "page_reports",
+            "source": {
+              "raw": "ReportsPage.Failed --> ReportsPage.Init: retryLoad"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_reports",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Reports Page",
+            "taskDescription": "建立 page_entry 與 page_reports 的父子關係，表示月報表頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_reports.s.page_TransactionsPage_Ready.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁導向月報表頁",
+            "taskDescription": "在 TransactionsPage.Ready 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_reports.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /reports；開始載入所選年月報表；Header 導覽維持使用者狀態",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_reports.s.page_TransactionsPage_Empty.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁仍可前往月報表頁",
+            "taskDescription": "在 TransactionsPage.Empty 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_reports.02",
+              "type": "url-equals",
+              "description": "即使沒有帳務資料仍可前往報表頁；URL 變更為 /reports；報表頁依資料量決定顯示 Empty 或 Ready",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_login.s.page_ReportsPage_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁要求登入時返回登入頁",
+            "taskDescription": "在 ReportsPage.Init 偵測未登入或憑證過期時，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "未登入或 Session/Token 過期時導向 /login；保留 returnTo=/reports；Guest 不可看到月報表導覽項",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "authRequired | navigate /login",
+            "action": "authRequired",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_transactions.s.page_ReportsPage_Ready.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁導向帳務頁",
+            "taskDescription": "在 ReportsPage.Ready 點擊帳務列表導覽，並進入 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /transactions；帳務列表依最新資料載入；Header 導覽維持使用者狀態",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "clickTransactionsNav | navigate /transactions",
+            "action": "clickTransactionsNav",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_categories.s.page_ReportsPage_Ready.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁導向類別管理頁",
+            "taskDescription": "在 ReportsPage.Ready 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；類別管理頁載入成功；使用者導覽不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_transactions.s.page_ReportsPage_Empty.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "空報表頁回到帳務頁",
+            "taskDescription": "在 ReportsPage.Empty 點擊帳務列表導覽，並回到 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_transactions.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /transactions；可回到帳務列表頁繼續新增或檢視帳務",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "clickTransactionsNav | navigate /transactions",
+            "action": "clickTransactionsNav",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_categories.s.page_ReportsPage_Empty.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "空報表頁前往類別管理頁",
+            "taskDescription": "在 ReportsPage.Empty 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；可前往管理類別；Header 導覽維持使用者狀態",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_reports.contains.feature_csv_export",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_csv_export",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Reports Page 包含 CsvExportFeature",
+            "taskDescription": "建立 page_reports 與 feature_csv_export 的父子關係，表示匯出 CSV 流程由月報表頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_csv_export.s.page_ReportsPage_Ready.to.feature_CsvExportFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_csv_export",
+            "stateId": "feature.CsvExportFeature.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁啟動匯出 CSV 流程",
+            "taskDescription": "在 ReportsPage.Ready 點擊匯出 CSV，並進入 CsvExportFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_csv_export.01",
+              "type": "semantic-check",
+              "description": "只在有資料時可進入匯出流程；匯出範圍固定為目前選擇月份；頁面上不存在第二個重複的匯出 CSV 入口",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickExportCsv | navigate CsvExportFeature",
+            "action": "clickExportCsv",
+            "navigateTarget": "CsvExportFeature"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_logout.s.page_ReportsPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁啟動登出流程",
+            "taskDescription": "在 ReportsPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；登出前保留目前選擇的年月狀態僅於前端記憶，不再允許後續 API 存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_logout.s.page_ReportsPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空報表頁啟動登出流程",
+            "taskDescription": "在 ReportsPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；匯出按鈕 disabled 狀態不會影響登出成功",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "ReportsPage",
+        "featureName": null,
+        "entryStateId": "page.ReportsPage.Init"
+      }
+    },
+    {
+      "id": "page_categories",
+      "name": "Categories Page",
+      "level": "page",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑥ Categories Page State Machine",
+        "order": 6
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "page.CategoriesPage.Init",
+          "label": "CategoriesPage.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_categories",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoriesPage.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.page_categories.entry.01",
+                "type": "semantic-check",
+                "description": "進入 /categories 時檢查登入狀態並準備載入類別清單；Header 顯示使用者導覽；頁面內提供新增、編輯、停用或啟用入口",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "page.CategoriesPage.Ready",
+          "label": "CategoriesPage.Ready",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_categories",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoriesPage.Ready"
+            }
+          }
+        },
+        {
+          "id": "page.CategoriesPage.Empty",
+          "label": "CategoriesPage.Empty",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_categories",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoriesPage.Empty"
+            }
+          }
+        },
+        {
+          "id": "page.CategoriesPage.Failed",
+          "label": "CategoriesPage.Failed",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "page",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "page_categories",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoriesPage.Failed"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.page_categories.0001",
+          "from": "page.CategoriesPage.Init",
+          "to": "page.CategoriesPage.Ready",
+          "event": "loadCategoriesDone",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入類別資料成功",
+            "taskDescription": "在 CategoriesPage.Init 成功取得類別資料，讓頁面進入 Ready 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_categories.0001.01",
+              "type": "semantic-check",
+              "description": "類別 API 回傳 200 且存在自訂類別；列表同時顯示預設類別與自訂類別；每個類別顯示名稱、狀態、類型；預設類別不可刪除",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadCategoriesDone"
+          },
+          "meta": {
+            "diagramId": "page_categories",
+            "source": {
+              "raw": "CategoriesPage.Init --> CategoriesPage.Ready: loadCategoriesDone"
+            }
+          }
+        },
+        {
+          "id": "t.page_categories.0002",
+          "from": "page.CategoriesPage.Init",
+          "to": "page.CategoriesPage.Empty",
+          "event": "loadCustomCategoriesEmpty",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "沒有自訂類別資料",
+            "taskDescription": "在 CategoriesPage.Init 載入類別後發現沒有自訂類別，讓頁面進入 Empty 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_categories.0002.01",
+              "type": "semantic-check",
+              "description": "類別 API 回傳 200 且沒有自訂類別；頁面仍顯示預設類別；可從空自訂類別狀態新增第一個自訂類別",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadCustomCategoriesEmpty"
+          },
+          "meta": {
+            "diagramId": "page_categories",
+            "source": {
+              "raw": "CategoriesPage.Init --> CategoriesPage.Empty: loadCustomCategoriesEmpty"
+            }
+          }
+        },
+        {
+          "id": "t.page_categories.0003",
+          "from": "page.CategoriesPage.Init",
+          "to": "page.CategoriesPage.Failed",
+          "event": "loadCategoriesFailed",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "載入類別資料失敗",
+            "taskDescription": "在 CategoriesPage.Init 查詢類別發生錯誤，讓頁面進入 Failed 狀態。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_categories.0003.01",
+              "type": "semantic-check",
+              "description": "類別 API 回傳 5xx 或其他失敗時顯示錯誤訊息與重試按鈕；不顯示不一致的舊類別狀態",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "loadCategoriesFailed"
+          },
+          "meta": {
+            "diagramId": "page_categories",
+            "source": {
+              "raw": "CategoriesPage.Init --> CategoriesPage.Failed: loadCategoriesFailed"
+            }
+          }
+        },
+        {
+          "id": "t.page_categories.0004",
+          "from": "page.CategoriesPage.Failed",
+          "to": "page.CategoriesPage.Init",
+          "event": "retryLoad",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "重試載入類別資料",
+            "taskDescription": "在 CategoriesPage.Failed 點擊重試，讓頁面回到 Init 並重新查詢類別資料。"
+          },
+          "validations": [
+            {
+              "id": "v.t.page_categories.0004.01",
+              "type": "semantic-check",
+              "description": "點擊重試後重新發送類別 API；若成功則 Ready 或 Empty 依資料量更新；若再次失敗則維持 Failed 並顯示最新錯誤",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "retryLoad"
+          },
+          "meta": {
+            "diagramId": "page_categories",
+            "source": {
+              "raw": "CategoriesPage.Failed --> CategoriesPage.Init: retryLoad"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.page_categories",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 包含 Categories Page",
+            "taskDescription": "建立 page_entry 與 page_categories 的父子關係，表示類別管理頁由系統入口統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_categories.s.page_TransactionsPage_Ready.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁導向類別管理頁",
+            "taskDescription": "在 TransactionsPage.Ready 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；開始載入類別清單；Header 導覽維持使用者狀態",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.page_categories.s.page_TransactionsPage_Empty.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁仍可前往類別管理頁",
+            "taskDescription": "在 TransactionsPage.Empty 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；類別管理頁可正常載入；使用者導覽不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_categories.s.page_ReportsPage_Ready.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁導向類別管理頁",
+            "taskDescription": "在 ReportsPage.Ready 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；類別管理頁載入成功；使用者導覽不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.page_categories.s.page_ReportsPage_Empty.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "空報表頁前往類別管理頁",
+            "taskDescription": "在 ReportsPage.Empty 點擊類別管理導覽，並進入 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /categories；可前往管理類別；Header 導覽維持使用者狀態",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "clickCategoriesNav | navigate /categories",
+            "action": "clickCategoriesNav",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.page_login.s.page_CategoriesPage_Init.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "類別管理頁要求登入時返回登入頁",
+            "taskDescription": "在 CategoriesPage.Init 偵測未登入或憑證過期時，導向 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "未登入或 Session/Token 過期時導向 /login；保留 returnTo=/categories；Guest 不可看到類別管理導覽項",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "authRequired | navigate /login",
+            "action": "authRequired",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.page_transactions.s.page_CategoriesPage_Ready.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "類別管理頁導向帳務頁",
+            "taskDescription": "在 CategoriesPage.Ready 點擊帳務列表導覽，並進入 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /transactions；帳務列表頁載入成功；Header 導覽維持使用者狀態",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "clickTransactionsNav | navigate /transactions",
+            "action": "clickTransactionsNav",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.page_reports.s.page_CategoriesPage_Ready.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "類別管理頁導向月報表頁",
+            "taskDescription": "在 CategoriesPage.Ready 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.page_reports.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /reports；月報表頁載入成功；Header 導覽維持使用者狀態",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.page_transactions.s.page_CategoriesPage_Empty.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁回到帳務頁",
+            "taskDescription": "在 CategoriesPage.Empty 點擊帳務列表導覽，並回到 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.page_transactions.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /transactions；使用者可回到帳務列表頁",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "clickTransactionsNav | navigate /transactions",
+            "action": "clickTransactionsNav",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.page_reports.s.page_CategoriesPage_Empty.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁前往月報表頁",
+            "taskDescription": "在 CategoriesPage.Empty 點擊月報表導覽，並進入 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.page_reports.02",
+              "type": "url-equals",
+              "description": "URL 變更為 /reports；使用者可前往月報表頁",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "clickReportsNav | navigate /reports",
+            "action": "clickReportsNav",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.page_categories.contains.feature_category_form",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Categories Page 包含 CategoryFormFeature",
+            "taskDescription": "建立 page_categories 與 feature_category_form 的父子關係，表示類別表單流程由類別管理頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_categories.contains.feature_category_toggle",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_category_toggle",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Categories Page 包含 CategoryToggleFeature",
+            "taskDescription": "建立 page_categories 與 feature_category_toggle 的父子關係，表示類別狀態切換流程由類別管理頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Ready.to.feature_CategoryFormFeature_Init.add",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟新增類別流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊新增類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.01",
+              "type": "semantic-check",
+              "description": "開啟新增類別 Modal；名稱為空；type 可選 income、expense、both；新增入口只在頁面內容區出現",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddCategory | navigate CategoryFormFeature",
+            "action": "clickAddCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Ready.to.feature_CategoryFormFeature_Init.edit",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟編輯類別流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊編輯類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.02",
+              "type": "semantic-check",
+              "description": "開啟編輯類別 Modal；預填名稱與 type；仍只能操作自己的類別資料",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickEditCategory | navigate CategoryFormFeature",
+            "action": "clickEditCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_toggle.s.page_CategoriesPage_Ready.to.feature_CategoryToggleFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_toggle",
+            "stateId": "feature.CategoryToggleFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟類別狀態切換流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊切換類別狀態，並進入 CategoryToggleFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_toggle.01",
+              "type": "semantic-check",
+              "description": "開啟停用或啟用流程；若為停用需顯示歷史資料保留的提示；尚未確認前類別狀態不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickToggleCategoryStatus | navigate CategoryToggleFeature",
+            "action": "clickToggleCategoryStatus",
+            "navigateTarget": "CategoryToggleFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Empty.to.feature_CategoryFormFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁開啟新增類別流程",
+            "taskDescription": "在 CategoriesPage.Empty 點擊新增類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.03",
+              "type": "semantic-check",
+              "description": "從無自訂類別狀態開啟新增類別 Modal；表單為初始值；預設類別區塊仍保留可見",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddCategory | navigate CategoryFormFeature",
+            "action": "clickAddCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_logout.s.page_CategoriesPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁啟動登出流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；登出入口只在 Header 右側出現一次",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_logout.s.page_CategoriesPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁啟動登出流程",
+            "taskDescription": "在 CategoriesPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；空狀態畫面在登出後不可再存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": "CategoriesPage",
+        "featureName": null,
+        "entryStateId": "page.CategoriesPage.Init"
+      }
+    },
+    {
+      "id": "feature_auth_login",
+      "name": "AuthLoginFeature",
+      "level": "feature",
+      "parentDiagramId": "page_login",
+      "roles": [
+        "guest",
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑦ Feature: AuthLoginFeature",
+        "order": 7
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.AuthLoginFeature.Init",
+          "label": "AuthLoginFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthLoginFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_auth_login.entry.01",
+                "type": "semantic-check",
+                "description": "由登入頁送出登入表單後進入登入功能流程；登入按鈕進入 loading 前不可重複送出",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.AuthLoginFeature.Validating",
+          "label": "AuthLoginFeature.Validating",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthLoginFeature.Validating"
+            }
+          }
+        },
+        {
+          "id": "feature.AuthLoginFeature.Submitting",
+          "label": "AuthLoginFeature.Submitting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_login",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthLoginFeature.Submitting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_auth_login.0001",
+          "from": "feature.AuthLoginFeature.Init",
+          "to": "feature.AuthLoginFeature.Validating",
+          "event": "validateCredentials",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "開始驗證登入資料",
+            "taskDescription": "在 AuthLoginFeature.Init 觸發 validateCredentials，進入 AuthLoginFeature.Validating。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_auth_login.0001.01",
+              "type": "semantic-check",
+              "description": "檢查 Email 格式與密碼是否輸入；前端驗證尚未送出 API；表單欄位值保留供錯誤顯示使用",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validateCredentials"
+          },
+          "meta": {
+            "diagramId": "feature_auth_login",
+            "source": {
+              "raw": "AuthLoginFeature.Init --> AuthLoginFeature.Validating: validateCredentials"
+            }
+          }
+        },
+        {
+          "id": "t.feature_auth_login.0002",
+          "from": "feature.AuthLoginFeature.Validating",
+          "to": "feature.AuthLoginFeature.Submitting",
+          "event": "validationPassed",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "登入驗證通過後送出",
+            "taskDescription": "在 AuthLoginFeature.Validating 驗證通過後，進入 AuthLoginFeature.Submitting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_auth_login.0002.01",
+              "type": "semantic-check",
+              "description": "Email 格式正確且密碼不為空；登入按鈕 disabled；開始送出登入 API",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationPassed"
+          },
+          "meta": {
+            "diagramId": "feature_auth_login",
+            "source": {
+              "raw": "AuthLoginFeature.Validating --> AuthLoginFeature.Submitting: validationPassed"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_login.contains.feature_auth_login",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_auth_login",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Login Page 包含 AuthLoginFeature",
+            "taskDescription": "建立 page_login 與 feature_auth_login 的父子關係，表示登入功能流程由登入頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_login.invokes.feature_auth_login.s.page_LoginPage_Ready.to.feature_AuthLoginFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Init"
+          },
+          "narrative": {
+            "summary": "登入頁送出登入流程",
+            "taskDescription": "在 LoginPage.Ready 送出登入表單，並進入 AuthLoginFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_login.invokes.feature_auth_login.01",
+              "type": "semantic-check",
+              "description": "點擊登入後進入登入功能流程；頁面只存在單一登入送出動作；不會在 Header 額外出現第二個登入 CTA",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "submitLogin | navigate AuthLoginFeature",
+            "action": "submitLogin",
+            "navigateTarget": "AuthLoginFeature"
+          }
+        },
+        {
+          "id": "c.feature_auth_login.invokes.page_login.s.feature_AuthLoginFeature_Validating.to.page_LoginPage_Failed",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Validating"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Failed"
+          },
+          "narrative": {
+            "summary": "登入驗證失敗回到登入頁錯誤狀態",
+            "taskDescription": "在 AuthLoginFeature.Validating 驗證被拒絕後，回到 LoginPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_login.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "Email 格式錯誤或密碼空白時不呼叫 API；登入頁顯示對應錯誤訊息；Email 欄位保留原值；Header 維持 Guest 導覽",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "validationRejected | navigate /login",
+            "action": "validationRejected",
+            "navigateTarget": "/login"
+          }
+        },
+        {
+          "id": "c.feature_auth_login.invokes.page_transactions.s.feature_AuthLoginFeature_Submitting.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "登入成功後進入帳務頁",
+            "taskDescription": "在 AuthLoginFeature.Submitting 預設登入成功後，導向 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_login.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "登入 API 回傳 200 且未帶 returnTo 時導向 /transactions；Session/Token 儲存成功；Header 立即切換為帳務列表、月報表、類別管理、登出",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "loginSucceededDefault | navigate /transactions",
+            "action": "loginSucceededDefault",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_auth_login.invokes.page_reports.s.feature_AuthLoginFeature_Submitting.to.page_ReportsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Init"
+          },
+          "narrative": {
+            "summary": "登入成功後回到月報表頁",
+            "taskDescription": "在 AuthLoginFeature.Submitting 依 returnTo=/reports 導向 ReportsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_login.invokes.page_reports.01",
+              "type": "url-equals",
+              "description": "原先因未登入被導向登入且 returnTo=/reports 時，登入 API 回傳 200 後回到 /reports；報表頁重新以目前使用者資料載入",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "loginSucceededReturnReports | navigate /reports",
+            "action": "loginSucceededReturnReports",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.feature_auth_login.invokes.page_categories.s.feature_AuthLoginFeature_Submitting.to.page_CategoriesPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Init"
+          },
+          "narrative": {
+            "summary": "登入成功後回到類別頁",
+            "taskDescription": "在 AuthLoginFeature.Submitting 依 returnTo=/categories 導向 CategoriesPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_login.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "原先因未登入被導向登入且 returnTo=/categories 時，登入 API 回傳 200 後回到 /categories；類別頁重新以目前使用者資料載入",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "loginSucceededReturnCategories | navigate /categories",
+            "action": "loginSucceededReturnCategories",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.feature_auth_login.invokes.page_login.s.feature_AuthLoginFeature_Submitting.to.page_LoginPage_Failed",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_login",
+            "stateId": "feature.AuthLoginFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Failed"
+          },
+          "narrative": {
+            "summary": "登入被拒回到登入頁錯誤狀態",
+            "taskDescription": "在 AuthLoginFeature.Submitting 登入被拒後，回到 LoginPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_login.invokes.page_login.02",
+              "type": "url-equals",
+              "description": "登入 API 回傳 401 時顯示帳號或密碼錯誤；回傳 5xx 時顯示伺服器錯誤；Token 不寫入；Header 仍只顯示公開導覽",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "loginRejected | navigate /login",
+            "action": "loginRejected",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "AuthLoginFeature",
+        "entryStateId": "feature.AuthLoginFeature.Init"
+      }
+    },
+    {
+      "id": "feature_auth_register",
+      "name": "AuthRegisterFeature",
+      "level": "feature",
+      "parentDiagramId": "page_register",
+      "roles": [
+        "guest",
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑧ Feature: AuthRegisterFeature",
+        "order": 8
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.AuthRegisterFeature.Init",
+          "label": "AuthRegisterFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthRegisterFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_auth_register.entry.01",
+                "type": "semantic-check",
+                "description": "由註冊頁送出註冊表單後進入註冊功能流程；註冊按鈕進入 loading 前不可重複送出",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.AuthRegisterFeature.Validating",
+          "label": "AuthRegisterFeature.Validating",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthRegisterFeature.Validating"
+            }
+          }
+        },
+        {
+          "id": "feature.AuthRegisterFeature.Submitting",
+          "label": "AuthRegisterFeature.Submitting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "guest",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_auth_register",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "AuthRegisterFeature.Submitting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_auth_register.0001",
+          "from": "feature.AuthRegisterFeature.Init",
+          "to": "feature.AuthRegisterFeature.Validating",
+          "event": "validateRegistrationForm",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "開始驗證註冊資料",
+            "taskDescription": "在 AuthRegisterFeature.Init 觸發 validateRegistrationForm，進入 AuthRegisterFeature.Validating。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_auth_register.0001.01",
+              "type": "semantic-check",
+              "description": "檢查 Email 格式、密碼至少 8 字元、確認密碼一致；尚未送出 API；表單值保留供錯誤訊息使用",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validateRegistrationForm"
+          },
+          "meta": {
+            "diagramId": "feature_auth_register",
+            "source": {
+              "raw": "AuthRegisterFeature.Init --> AuthRegisterFeature.Validating: validateRegistrationForm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_auth_register.0002",
+          "from": "feature.AuthRegisterFeature.Validating",
+          "to": "feature.AuthRegisterFeature.Submitting",
+          "event": "validationPassed",
+          "roles": [
+            "guest",
+            "user"
+          ],
+          "narrative": {
+            "summary": "註冊驗證通過後送出",
+            "taskDescription": "在 AuthRegisterFeature.Validating 驗證通過後，進入 AuthRegisterFeature.Submitting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_auth_register.0002.01",
+              "type": "semantic-check",
+              "description": "所有欄位通過驗證；註冊按鈕 disabled；開始送出註冊 API",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationPassed"
+          },
+          "meta": {
+            "diagramId": "feature_auth_register",
+            "source": {
+              "raw": "AuthRegisterFeature.Validating --> AuthRegisterFeature.Submitting: validationPassed"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_register.contains.feature_auth_register",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_auth_register",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Register Page 包含 AuthRegisterFeature",
+            "taskDescription": "建立 page_register 與 feature_auth_register 的父子關係，表示註冊功能流程由註冊頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_register.invokes.feature_auth_register.s.page_RegisterPage_Ready.to.feature_AuthRegisterFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_auth_register",
+            "stateId": "feature.AuthRegisterFeature.Init"
+          },
+          "narrative": {
+            "summary": "註冊頁送出註冊流程",
+            "taskDescription": "在 RegisterPage.Ready 送出註冊表單，並進入 AuthRegisterFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_register.invokes.feature_auth_register.01",
+              "type": "semantic-check",
+              "description": "點擊註冊後進入註冊功能流程；頁面內只有單一註冊送出按鈕；Header 沒有重複的註冊 CTA",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "submitRegister | navigate AuthRegisterFeature",
+            "action": "submitRegister",
+            "navigateTarget": "AuthRegisterFeature"
+          }
+        },
+        {
+          "id": "c.feature_auth_register.invokes.page_register.s.feature_AuthRegisterFeature_Validating.to.page_RegisterPage_Failed",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_register",
+            "stateId": "feature.AuthRegisterFeature.Validating"
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Failed"
+          },
+          "narrative": {
+            "summary": "註冊驗證失敗回到註冊頁錯誤狀態",
+            "taskDescription": "在 AuthRegisterFeature.Validating 驗證被拒絕後，回到 RegisterPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_register.invokes.page_register.01",
+              "type": "url-equals",
+              "description": "Email 格式錯誤、密碼不足 8 字元或確認密碼不符時不呼叫 API；註冊頁顯示對應錯誤訊息；Header 維持 Guest 導覽",
+              "expected": "/register"
+            }
+          ],
+          "meta": {
+            "reason": "validationRejected | navigate /register",
+            "action": "validationRejected",
+            "navigateTarget": "/register"
+          }
+        },
+        {
+          "id": "c.feature_auth_register.invokes.page_transactions.s.feature_AuthRegisterFeature_Submitting.to.page_TransactionsPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_register",
+            "stateId": "feature.AuthRegisterFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Init"
+          },
+          "narrative": {
+            "summary": "註冊成功後自動登入進入帳務頁",
+            "taskDescription": "在 AuthRegisterFeature.Submitting 註冊成功且自動登入後，導向 TransactionsPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_register.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "註冊 API 回傳 201 且自動登入成功；Session/Token 儲存成功；導向 /transactions；Header 立即切換為使用者導覽",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "registerSucceededAutoLogin | navigate /transactions",
+            "action": "registerSucceededAutoLogin",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_auth_register.invokes.page_register.s.feature_AuthRegisterFeature_Submitting.to.page_RegisterPage_Failed",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_auth_register",
+            "stateId": "feature.AuthRegisterFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_register",
+            "stateId": "page.RegisterPage.Failed"
+          },
+          "narrative": {
+            "summary": "註冊被拒回到註冊頁錯誤狀態",
+            "taskDescription": "在 AuthRegisterFeature.Submitting 註冊被拒後，回到 RegisterPage.Failed。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_auth_register.invokes.page_register.02",
+              "type": "url-equals",
+              "description": "註冊 API 回傳 409 時顯示 Email 已存在；回傳 400 時顯示欄位驗證錯誤；回傳 5xx 時顯示伺服器錯誤；不建立登入 Session/Token",
+              "expected": "/register"
+            }
+          ],
+          "meta": {
+            "reason": "registerRejected | navigate /register",
+            "action": "registerRejected",
+            "navigateTarget": "/register"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "AuthRegisterFeature",
+        "entryStateId": "feature.AuthRegisterFeature.Init"
+      }
+    },
+    {
+      "id": "feature_transaction_form",
+      "name": "TransactionFormFeature",
+      "level": "feature",
+      "parentDiagramId": "page_transactions",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑩ Feature: TransactionFormFeature",
+        "order": 10
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.TransactionFormFeature.Init",
+          "label": "TransactionFormFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionFormFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_transaction_form.entry.01",
+                "type": "semantic-check",
+                "description": "由帳務列表頁進入新增或編輯帳務 Modal；新增時欄位為空；編輯時預填 type、amount、category_id、date、note",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.TransactionFormFeature.Editing",
+          "label": "TransactionFormFeature.Editing",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionFormFeature.Editing"
+            }
+          }
+        },
+        {
+          "id": "feature.TransactionFormFeature.Validating",
+          "label": "TransactionFormFeature.Validating",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionFormFeature.Validating"
+            }
+          }
+        },
+        {
+          "id": "feature.TransactionFormFeature.Submitting",
+          "label": "TransactionFormFeature.Submitting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionFormFeature.Submitting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_transaction_form.0001",
+          "from": "feature.TransactionFormFeature.Init",
+          "to": "feature.TransactionFormFeature.Editing",
+          "event": "openTransactionForm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "開啟帳務表單",
+            "taskDescription": "在 TransactionFormFeature.Init 開啟表單，進入 TransactionFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_form.0001.01",
+              "type": "semantic-check",
+              "description": "Modal 可見；type 僅可選 income 或 expense；category 下拉只顯示 is_active=true 且符合 type 的類別；note 最多 200 字",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "openTransactionForm"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "source": {
+              "raw": "TransactionFormFeature.Init --> TransactionFormFeature.Editing: openTransactionForm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_form.0002",
+          "from": "feature.TransactionFormFeature.Editing",
+          "to": "feature.TransactionFormFeature.Validating",
+          "event": "submitTransactionForm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "送出前檢查帳務表單",
+            "taskDescription": "在 TransactionFormFeature.Editing 送出表單後，進入 TransactionFormFeature.Validating。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_form.0002.01",
+              "type": "semantic-check",
+              "description": "送出前檢查 amount 為正整數、date 為 YYYY-MM-DD、category_id 為可用類別；送出按鈕 disabled 以避免重複提交",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "submitTransactionForm"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "source": {
+              "raw": "TransactionFormFeature.Editing --> TransactionFormFeature.Validating: submitTransactionForm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_form.0003",
+          "from": "feature.TransactionFormFeature.Validating",
+          "to": "feature.TransactionFormFeature.Editing",
+          "event": "validationRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "帳務表單驗證失敗返回編輯",
+            "taskDescription": "在 TransactionFormFeature.Validating 驗證失敗後，回到 TransactionFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_form.0003.01",
+              "type": "semantic-check",
+              "description": "欄位驗證失敗時顯示對應錯誤訊息；不呼叫 API；使用者輸入值保留；列表、日統計、月報表與圖表資料不變",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationRejected"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "source": {
+              "raw": "TransactionFormFeature.Validating --> TransactionFormFeature.Editing: validationRejected"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_form.0004",
+          "from": "feature.TransactionFormFeature.Validating",
+          "to": "feature.TransactionFormFeature.Submitting",
+          "event": "validationPassed",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "帳務表單驗證通過後送出",
+            "taskDescription": "在 TransactionFormFeature.Validating 驗證通過後，進入 TransactionFormFeature.Submitting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_form.0004.01",
+              "type": "semantic-check",
+              "description": "所有必填欄位通過驗證；新增時準備送出 POST；編輯時準備送出 PUT；帳務仍自動綁定目前 user_id",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationPassed"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "source": {
+              "raw": "TransactionFormFeature.Validating --> TransactionFormFeature.Submitting: validationPassed"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_form.0005",
+          "from": "feature.TransactionFormFeature.Submitting",
+          "to": "feature.TransactionFormFeature.Editing",
+          "event": "saveRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "帳務儲存失敗返回編輯",
+            "taskDescription": "在 TransactionFormFeature.Submitting 儲存失敗後，回到 TransactionFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_form.0005.01",
+              "type": "semantic-check",
+              "description": "API 回傳 400 時顯示欄位錯誤；回傳 403 或 404 時顯示無權限或資料不存在；回傳 5xx 時顯示伺服器錯誤；Modal 保持開啟且表單值保留",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "saveRejected"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_form",
+            "source": {
+              "raw": "TransactionFormFeature.Submitting --> TransactionFormFeature.Editing: saveRejected"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_transactions.contains.feature_transaction_form",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Transactions Page 包含 TransactionFormFeature",
+            "taskDescription": "建立 page_transactions 與 feature_transaction_form 的父子關係，表示帳務表單流程由帳務頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Ready.to.feature_TransactionFormFeature_Init.add",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁從清單開啟新增帳務流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊新增帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.01",
+              "type": "semantic-check",
+              "description": "開啟新增帳務 Modal；表單類別選項僅包含 is_active=true 且符合帳務類型的類別；Modal 開啟前列表資料不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddTransaction | navigate TransactionFormFeature",
+            "action": "clickAddTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Ready.to.feature_TransactionFormFeature_Init.edit",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁從清單開啟編輯帳務流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊編輯帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.02",
+              "type": "semantic-check",
+              "description": "開啟編輯帳務 Modal；表單預填 type、amount、category_id、date、note；仍僅能編輯自己的帳務資料",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickEditTransaction | navigate TransactionFormFeature",
+            "action": "clickEditTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_form.s.page_TransactionsPage_Empty.to.feature_TransactionFormFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁開啟新增帳務流程",
+            "taskDescription": "在 TransactionsPage.Empty 點擊新增帳務，並進入 TransactionFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_form.03",
+              "type": "semantic-check",
+              "description": "從空狀態開啟新增帳務 Modal；表單初始值為空白；類別選項只顯示可用類別",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddTransaction | navigate TransactionFormFeature",
+            "action": "clickAddTransaction",
+            "navigateTarget": "TransactionFormFeature"
+          }
+        },
+        {
+          "id": "c.feature_transaction_form.invokes.page_transactions.s.feature_TransactionFormFeature_Submitting.to.page_TransactionsPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "narrative": {
+            "summary": "帳務儲存成功回到帳務清單",
+            "taskDescription": "在 TransactionFormFeature.Submitting 儲存成功後，回到 TransactionsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_form.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "API 回傳 200 或 201；新增帳務會出現在正確日期分組；編輯後若日期變更則移到新日期分組；當日總收入、當日總支出、月統計、圓餅圖、長條圖與匯出資料全部同步更新；使用者僅能寫入自己的帳務",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "saveSucceeded | navigate /transactions",
+            "action": "saveSucceeded",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_transaction_form.invokes.page_transactions.s.feature_TransactionFormFeature_Editing.to.page_TransactionsPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Editing"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "narrative": {
+            "summary": "從已有資料列表取消帳務編輯",
+            "taskDescription": "在 TransactionFormFeature.Editing 從已有資料列表取消時，回到 TransactionsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_form.invokes.page_transactions.02",
+              "type": "url-equals",
+              "description": "從已有資料的列表取消時關閉 Modal 並回到原列表；帳務列表、日統計、月報表與圖表完全不變",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "cancelFromReady | navigate /transactions",
+            "action": "cancelFromReady",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_transaction_form.invokes.page_transactions.s.feature_TransactionFormFeature_Editing.to.page_TransactionsPage_Empty",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_form",
+            "stateId": "feature.TransactionFormFeature.Editing"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "narrative": {
+            "summary": "從空狀態取消新增帳務",
+            "taskDescription": "在 TransactionFormFeature.Editing 從空狀態取消新增時，回到 TransactionsPage.Empty。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_form.invokes.page_transactions.03",
+              "type": "url-equals",
+              "description": "從空狀態新增流程取消時關閉 Modal 並回到空狀態；畫面仍顯示新增第一筆帳務提示",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "cancelFromEmpty | navigate /transactions",
+            "action": "cancelFromEmpty",
+            "navigateTarget": "/transactions"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "TransactionFormFeature",
+        "entryStateId": "feature.TransactionFormFeature.Init"
+      }
+    },
+    {
+      "id": "feature_transaction_delete",
+      "name": "TransactionDeleteFeature",
+      "level": "feature",
+      "parentDiagramId": "page_transactions",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑪ Feature: TransactionDeleteFeature",
+        "order": 11
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.TransactionDeleteFeature.Init",
+          "label": "TransactionDeleteFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionDeleteFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_transaction_delete.entry.01",
+                "type": "semantic-check",
+                "description": "由帳務列表頁的刪除入口進入刪除確認流程；Modal 顯示該筆帳務的日期、類別、金額摘要",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.TransactionDeleteFeature.Confirming",
+          "label": "TransactionDeleteFeature.Confirming",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionDeleteFeature.Confirming"
+            }
+          }
+        },
+        {
+          "id": "feature.TransactionDeleteFeature.Deleting",
+          "label": "TransactionDeleteFeature.Deleting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "TransactionDeleteFeature.Deleting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_transaction_delete.0001",
+          "from": "feature.TransactionDeleteFeature.Init",
+          "to": "feature.TransactionDeleteFeature.Confirming",
+          "event": "showDeleteConfirm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "顯示刪除確認視窗",
+            "taskDescription": "在 TransactionDeleteFeature.Init 顯示刪除確認，進入 TransactionDeleteFeature.Confirming。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_delete.0001.01",
+              "type": "semantic-check",
+              "description": "刪除確認 Modal 可見；需要二次確認；尚未確認前帳務列表與統計資料不變",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showDeleteConfirm"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "source": {
+              "raw": "TransactionDeleteFeature.Init --> TransactionDeleteFeature.Confirming: showDeleteConfirm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_delete.0002",
+          "from": "feature.TransactionDeleteFeature.Confirming",
+          "to": "feature.TransactionDeleteFeature.Deleting",
+          "event": "confirmDelete",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "確認刪除後開始送出",
+            "taskDescription": "在 TransactionDeleteFeature.Confirming 明確確認刪除後，進入 TransactionDeleteFeature.Deleting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_delete.0002.01",
+              "type": "semantic-check",
+              "description": "使用者明確點擊確認後才送出 DELETE；確認按鈕進入 loading；避免重複刪除同一筆資料",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "confirmDelete"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "source": {
+              "raw": "TransactionDeleteFeature.Confirming --> TransactionDeleteFeature.Deleting: confirmDelete"
+            }
+          }
+        },
+        {
+          "id": "t.feature_transaction_delete.0003",
+          "from": "feature.TransactionDeleteFeature.Deleting",
+          "to": "feature.TransactionDeleteFeature.Confirming",
+          "event": "deleteRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "刪除失敗返回確認狀態",
+            "taskDescription": "在 TransactionDeleteFeature.Deleting 刪除失敗後，回到 TransactionDeleteFeature.Confirming。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_transaction_delete.0003.01",
+              "type": "semantic-check",
+              "description": "API 回傳 403、404 或 5xx 時顯示對應錯誤訊息；帳務資料保持不變；使用者可再次確認或取消",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "deleteRejected"
+          },
+          "meta": {
+            "diagramId": "feature_transaction_delete",
+            "source": {
+              "raw": "TransactionDeleteFeature.Deleting --> TransactionDeleteFeature.Confirming: deleteRejected"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_transactions.contains.feature_transaction_delete",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Transactions Page 包含 TransactionDeleteFeature",
+            "taskDescription": "建立 page_transactions 與 feature_transaction_delete 的父子關係，表示帳務刪除流程由帳務頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_transaction_delete.s.page_TransactionsPage_Ready.to.feature_TransactionDeleteFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": "feature.TransactionDeleteFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁開啟刪除確認流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊刪除帳務，並進入 TransactionDeleteFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_transaction_delete.01",
+              "type": "semantic-check",
+              "description": "開啟刪除確認流程；顯示帳務摘要；尚未確認前列表、每日統計與月報表資料均不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickDeleteTransaction | navigate TransactionDeleteFeature",
+            "action": "clickDeleteTransaction",
+            "navigateTarget": "TransactionDeleteFeature"
+          }
+        },
+        {
+          "id": "c.feature_transaction_delete.invokes.page_transactions.s.feature_TransactionDeleteFeature_Deleting.to.page_TransactionsPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": "feature.TransactionDeleteFeature.Deleting"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "narrative": {
+            "summary": "刪除後仍有資料時回到帳務清單",
+            "taskDescription": "在 TransactionDeleteFeature.Deleting 刪除成功且清單仍有資料時，回到 TransactionsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_delete.invokes.page_transactions.01",
+              "type": "url-equals",
+              "description": "DELETE API 回傳 200 且該日期或整體列表仍有其他帳務；被刪除帳務從列表移除；對應日期的總收入或總支出重新計算；月統計、圖表與 CSV 匯出資料同步更新；不得刪除其他使用者資料",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "deleteSucceededKeepList | navigate /transactions",
+            "action": "deleteSucceededKeepList",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_transaction_delete.invokes.page_transactions.s.feature_TransactionDeleteFeature_Deleting.to.page_TransactionsPage_Empty",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": "feature.TransactionDeleteFeature.Deleting"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "narrative": {
+            "summary": "刪除最後一筆後回到空帳務頁",
+            "taskDescription": "在 TransactionDeleteFeature.Deleting 刪除最後一筆帳務成功後，回到 TransactionsPage.Empty。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_delete.invokes.page_transactions.02",
+              "type": "url-equals",
+              "description": "DELETE API 回傳 200 且刪除後已無任何帳務；列表切換為 Empty；空狀態提示可見；月報表同月份統計與圖表同步為空資料表現",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "deleteSucceededLastItem | navigate /transactions",
+            "action": "deleteSucceededLastItem",
+            "navigateTarget": "/transactions"
+          }
+        },
+        {
+          "id": "c.feature_transaction_delete.invokes.page_transactions.s.feature_TransactionDeleteFeature_Confirming.to.page_TransactionsPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_transaction_delete",
+            "stateId": "feature.TransactionDeleteFeature.Confirming"
+          },
+          "to": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "narrative": {
+            "summary": "取消刪除後回到帳務清單",
+            "taskDescription": "在 TransactionDeleteFeature.Confirming 取消刪除後，回到 TransactionsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_transaction_delete.invokes.page_transactions.03",
+              "type": "url-equals",
+              "description": "取消刪除後關閉 Modal 並回到原列表；帳務、日統計、月統計與圖表完全不變",
+              "expected": "/transactions"
+            }
+          ],
+          "meta": {
+            "reason": "cancelDelete | navigate /transactions",
+            "action": "cancelDelete",
+            "navigateTarget": "/transactions"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "TransactionDeleteFeature",
+        "entryStateId": "feature.TransactionDeleteFeature.Init"
+      }
+    },
+    {
+      "id": "feature_csv_export",
+      "name": "CsvExportFeature",
+      "level": "feature",
+      "parentDiagramId": "page_reports",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑭ Feature: CsvExportFeature",
+        "order": 14
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.CsvExportFeature.Init",
+          "label": "CsvExportFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_csv_export",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CsvExportFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_csv_export.entry.01",
+                "type": "semantic-check",
+                "description": "由月報表頁的匯出 CSV 按鈕進入匯出流程；只有在目前月份有帳務資料時才可進入此流程",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.CsvExportFeature.Exporting",
+          "label": "CsvExportFeature.Exporting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_csv_export",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CsvExportFeature.Exporting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_csv_export.0001",
+          "from": "feature.CsvExportFeature.Init",
+          "to": "feature.CsvExportFeature.Exporting",
+          "event": "exportCurrentMonth",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "開始匯出當月 CSV",
+            "taskDescription": "在 CsvExportFeature.Init 觸發 exportCurrentMonth，進入 CsvExportFeature.Exporting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_csv_export.0001.01",
+              "type": "semantic-check",
+              "description": "送出 CSV 匯出請求時帶入目前選擇的年月；匯出按鈕進入 loading；匯出範圍固定為畫面上所選月份",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "exportCurrentMonth"
+          },
+          "meta": {
+            "diagramId": "feature_csv_export",
+            "source": {
+              "raw": "CsvExportFeature.Init --> CsvExportFeature.Exporting: exportCurrentMonth"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_reports.contains.feature_csv_export",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_csv_export",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Reports Page 包含 CsvExportFeature",
+            "taskDescription": "建立 page_reports 與 feature_csv_export 的父子關係，表示匯出 CSV 流程由月報表頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_csv_export.s.page_ReportsPage_Ready.to.feature_CsvExportFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_csv_export",
+            "stateId": "feature.CsvExportFeature.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁啟動匯出 CSV 流程",
+            "taskDescription": "在 ReportsPage.Ready 點擊匯出 CSV，並進入 CsvExportFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_csv_export.01",
+              "type": "semantic-check",
+              "description": "只在有資料時可進入匯出流程；匯出範圍固定為目前選擇月份；頁面上不存在第二個重複的匯出 CSV 入口",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickExportCsv | navigate CsvExportFeature",
+            "action": "clickExportCsv",
+            "navigateTarget": "CsvExportFeature"
+          }
+        },
+        {
+          "id": "c.feature_csv_export.invokes.page_reports.s.feature_CsvExportFeature_Exporting.to.page_ReportsPage_Ready.success",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_csv_export",
+            "stateId": "feature.CsvExportFeature.Exporting"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "narrative": {
+            "summary": "匯出成功後回到報表頁",
+            "taskDescription": "在 CsvExportFeature.Exporting 匯出成功後，回到 ReportsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_csv_export.invokes.page_reports.01",
+              "type": "url-equals",
+              "description": "匯出 API 回傳 200 並觸發檔案下載；檔名格式為 transactions_YYYY_MM.csv；CSV 欄位為日期、類型、類別、金額、備註；匯出內容與目前報表、圖表與帳務列表資料一致",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "exportSucceeded | navigate /reports",
+            "action": "exportSucceeded",
+            "navigateTarget": "/reports"
+          }
+        },
+        {
+          "id": "c.feature_csv_export.invokes.page_reports.s.feature_CsvExportFeature_Exporting.to.page_ReportsPage_Ready.rejected",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_csv_export",
+            "stateId": "feature.CsvExportFeature.Exporting"
+          },
+          "to": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "narrative": {
+            "summary": "匯出失敗後留在報表頁",
+            "taskDescription": "在 CsvExportFeature.Exporting 匯出失敗後，回到 ReportsPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_csv_export.invokes.page_reports.02",
+              "type": "url-equals",
+              "description": "匯出 API 回傳 5xx 或其他失敗時顯示錯誤訊息；畫面仍停留在相同月份的報表頁；統計卡片與圖表資料不變",
+              "expected": "/reports"
+            }
+          ],
+          "meta": {
+            "reason": "exportRejected | navigate /reports",
+            "action": "exportRejected",
+            "navigateTarget": "/reports"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "CsvExportFeature",
+        "entryStateId": "feature.CsvExportFeature.Init"
+      }
+    },
+    {
+      "id": "feature_category_form",
+      "name": "CategoryFormFeature",
+      "level": "feature",
+      "parentDiagramId": "page_categories",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑫ Feature: CategoryFormFeature",
+        "order": 12
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.CategoryFormFeature.Init",
+          "label": "CategoryFormFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryFormFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_category_form.entry.01",
+                "type": "semantic-check",
+                "description": "由類別管理頁進入新增或編輯類別 Modal；新增時名稱為空；編輯時預填名稱與 type",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.CategoryFormFeature.Editing",
+          "label": "CategoryFormFeature.Editing",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryFormFeature.Editing"
+            }
+          }
+        },
+        {
+          "id": "feature.CategoryFormFeature.Validating",
+          "label": "CategoryFormFeature.Validating",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryFormFeature.Validating"
+            }
+          }
+        },
+        {
+          "id": "feature.CategoryFormFeature.Submitting",
+          "label": "CategoryFormFeature.Submitting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_form",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryFormFeature.Submitting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_category_form.0001",
+          "from": "feature.CategoryFormFeature.Init",
+          "to": "feature.CategoryFormFeature.Editing",
+          "event": "openCategoryForm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "開啟類別表單",
+            "taskDescription": "在 CategoryFormFeature.Init 開啟表單，進入 CategoryFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_form.0001.01",
+              "type": "semantic-check",
+              "description": "Modal 可見；name 最多 20 字；type 僅可選 income、expense、both；預設類別可被停用但不可被刪除",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "openCategoryForm"
+          },
+          "meta": {
+            "diagramId": "feature_category_form",
+            "source": {
+              "raw": "CategoryFormFeature.Init --> CategoryFormFeature.Editing: openCategoryForm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_form.0002",
+          "from": "feature.CategoryFormFeature.Editing",
+          "to": "feature.CategoryFormFeature.Validating",
+          "event": "submitCategoryForm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "送出前檢查類別表單",
+            "taskDescription": "在 CategoryFormFeature.Editing 送出表單後，進入 CategoryFormFeature.Validating。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_form.0002.01",
+              "type": "semantic-check",
+              "description": "送出前檢查名稱必填且長度不超過 20；同一使用者下名稱需唯一；送出按鈕 disabled 以避免重複提交",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "submitCategoryForm"
+          },
+          "meta": {
+            "diagramId": "feature_category_form",
+            "source": {
+              "raw": "CategoryFormFeature.Editing --> CategoryFormFeature.Validating: submitCategoryForm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_form.0003",
+          "from": "feature.CategoryFormFeature.Validating",
+          "to": "feature.CategoryFormFeature.Editing",
+          "event": "validationRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "類別表單驗證失敗返回編輯",
+            "taskDescription": "在 CategoryFormFeature.Validating 驗證失敗後，回到 CategoryFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_form.0003.01",
+              "type": "semantic-check",
+              "description": "名稱為空、名稱過長或前端偵測重複時顯示錯誤訊息；不呼叫 API；原輸入值保留",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationRejected"
+          },
+          "meta": {
+            "diagramId": "feature_category_form",
+            "source": {
+              "raw": "CategoryFormFeature.Validating --> CategoryFormFeature.Editing: validationRejected"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_form.0004",
+          "from": "feature.CategoryFormFeature.Validating",
+          "to": "feature.CategoryFormFeature.Submitting",
+          "event": "validationPassed",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "類別表單驗證通過後送出",
+            "taskDescription": "在 CategoryFormFeature.Validating 驗證通過後，進入 CategoryFormFeature.Submitting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_form.0004.01",
+              "type": "semantic-check",
+              "description": "欄位通過驗證後開始送出 POST 或 PUT；新類別或更新類別都綁定目前 user_id 或系統預設類別規則",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "validationPassed"
+          },
+          "meta": {
+            "diagramId": "feature_category_form",
+            "source": {
+              "raw": "CategoryFormFeature.Validating --> CategoryFormFeature.Submitting: validationPassed"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_form.0005",
+          "from": "feature.CategoryFormFeature.Submitting",
+          "to": "feature.CategoryFormFeature.Editing",
+          "event": "saveRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "類別儲存失敗返回編輯",
+            "taskDescription": "在 CategoryFormFeature.Submitting 儲存失敗後，回到 CategoryFormFeature.Editing。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_form.0005.01",
+              "type": "semantic-check",
+              "description": "API 回傳 409 時顯示同使用者名稱重複；回傳 400 時顯示欄位錯誤；回傳 5xx 時顯示伺服器錯誤；Modal 保持開啟且輸入值保留",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "saveRejected"
+          },
+          "meta": {
+            "diagramId": "feature_category_form",
+            "source": {
+              "raw": "CategoryFormFeature.Submitting --> CategoryFormFeature.Editing: saveRejected"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_categories.contains.feature_category_form",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Categories Page 包含 CategoryFormFeature",
+            "taskDescription": "建立 page_categories 與 feature_category_form 的父子關係，表示類別表單流程由類別管理頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Ready.to.feature_CategoryFormFeature_Init.add",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟新增類別流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊新增類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.01",
+              "type": "semantic-check",
+              "description": "開啟新增類別 Modal；名稱為空；type 可選 income、expense、both；新增入口只在頁面內容區出現",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddCategory | navigate CategoryFormFeature",
+            "action": "clickAddCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Ready.to.feature_CategoryFormFeature_Init.edit",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟編輯類別流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊編輯類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.02",
+              "type": "semantic-check",
+              "description": "開啟編輯類別 Modal；預填名稱與 type；仍只能操作自己的類別資料",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickEditCategory | navigate CategoryFormFeature",
+            "action": "clickEditCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_form.s.page_CategoriesPage_Empty.to.feature_CategoryFormFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁開啟新增類別流程",
+            "taskDescription": "在 CategoriesPage.Empty 點擊新增類別，並進入 CategoryFormFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_form.03",
+              "type": "semantic-check",
+              "description": "從無自訂類別狀態開啟新增類別 Modal；表單為初始值；預設類別區塊仍保留可見",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickAddCategory | navigate CategoryFormFeature",
+            "action": "clickAddCategory",
+            "navigateTarget": "CategoryFormFeature"
+          }
+        },
+        {
+          "id": "c.feature_category_form.invokes.page_categories.s.feature_CategoryFormFeature_Submitting.to.page_CategoriesPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "narrative": {
+            "summary": "類別儲存成功回到類別列表",
+            "taskDescription": "在 CategoryFormFeature.Submitting 儲存成功後，回到 CategoriesPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_category_form.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "API 回傳 200 或 201；新增成功時新類別出現在列表；編輯成功時列表名稱立即更新；帳務表單中的類別選項同步使用最新名稱；歷史帳務與類別關聯保持一致",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "saveSucceeded | navigate /categories",
+            "action": "saveSucceeded",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.feature_category_form.invokes.page_categories.s.feature_CategoryFormFeature_Editing.to.page_CategoriesPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Editing"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "narrative": {
+            "summary": "從列表狀態取消類別編輯",
+            "taskDescription": "在 CategoryFormFeature.Editing 從已有自訂類別狀態取消時，回到 CategoriesPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_category_form.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "從已有自訂類別狀態取消時關閉 Modal 並回到列表；類別資料與帳務表單選項完全不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "cancelFromReady | navigate /categories",
+            "action": "cancelFromReady",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.feature_category_form.invokes.page_categories.s.feature_CategoryFormFeature_Editing.to.page_CategoriesPage_Empty",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_category_form",
+            "stateId": "feature.CategoryFormFeature.Editing"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "narrative": {
+            "summary": "從空狀態取消新增類別",
+            "taskDescription": "在 CategoryFormFeature.Editing 從無自訂類別狀態取消新增時，回到 CategoriesPage.Empty。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_category_form.invokes.page_categories.03",
+              "type": "url-equals",
+              "description": "從無自訂類別狀態取消新增時關閉 Modal 並回到 Empty；預設類別區塊仍可見；自訂類別仍為空",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "cancelFromEmpty | navigate /categories",
+            "action": "cancelFromEmpty",
+            "navigateTarget": "/categories"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "CategoryFormFeature",
+        "entryStateId": "feature.CategoryFormFeature.Init"
+      }
+    },
+    {
+      "id": "feature_category_toggle",
+      "name": "CategoryToggleFeature",
+      "level": "feature",
+      "parentDiagramId": "page_categories",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑬ Feature: CategoryToggleFeature",
+        "order": 13
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.CategoryToggleFeature.Init",
+          "label": "CategoryToggleFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryToggleFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_category_toggle.entry.01",
+                "type": "semantic-check",
+                "description": "由類別管理頁進入停用或啟用流程；目標類別屬於目前使用者或為可管理的預設類別；仍不提供刪除功能",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.CategoryToggleFeature.Confirming",
+          "label": "CategoryToggleFeature.Confirming",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryToggleFeature.Confirming"
+            }
+          }
+        },
+        {
+          "id": "feature.CategoryToggleFeature.Submitting",
+          "label": "CategoryToggleFeature.Submitting",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "CategoryToggleFeature.Submitting"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_category_toggle.0001",
+          "from": "feature.CategoryToggleFeature.Init",
+          "to": "feature.CategoryToggleFeature.Confirming",
+          "event": "showToggleConfirm",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "顯示類別狀態切換確認",
+            "taskDescription": "在 CategoryToggleFeature.Init 顯示狀態切換確認，進入 CategoryToggleFeature.Confirming。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_toggle.0001.01",
+              "type": "semantic-check",
+              "description": "停用時顯示「停用後不可用於新帳務，但歷史資料保留」提示；啟用時顯示狀態變更確認；尚未確認前 is_active 不變",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "showToggleConfirm"
+          },
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "source": {
+              "raw": "CategoryToggleFeature.Init --> CategoryToggleFeature.Confirming: showToggleConfirm"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_toggle.0002",
+          "from": "feature.CategoryToggleFeature.Confirming",
+          "to": "feature.CategoryToggleFeature.Submitting",
+          "event": "confirmToggle",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "確認後送出類別狀態更新",
+            "taskDescription": "在 CategoryToggleFeature.Confirming 明確確認後，進入 CategoryToggleFeature.Submitting。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_toggle.0002.01",
+              "type": "semantic-check",
+              "description": "使用者確認後送出更新 is_active 的 API；按鈕進入 loading；避免重複提交",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "confirmToggle"
+          },
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "source": {
+              "raw": "CategoryToggleFeature.Confirming --> CategoryToggleFeature.Submitting: confirmToggle"
+            }
+          }
+        },
+        {
+          "id": "t.feature_category_toggle.0003",
+          "from": "feature.CategoryToggleFeature.Submitting",
+          "to": "feature.CategoryToggleFeature.Confirming",
+          "event": "toggleRejected",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "類別狀態切換失敗返回確認",
+            "taskDescription": "在 CategoryToggleFeature.Submitting 失敗後，回到 CategoryToggleFeature.Confirming。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_category_toggle.0003.01",
+              "type": "semantic-check",
+              "description": "API 回傳 403、404 或 5xx 時顯示錯誤訊息；類別狀態不變；帳務表單可用類別集合不變",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "toggleRejected"
+          },
+          "meta": {
+            "diagramId": "feature_category_toggle",
+            "source": {
+              "raw": "CategoryToggleFeature.Submitting --> CategoryToggleFeature.Confirming: toggleRejected"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_categories.contains.feature_category_toggle",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_category_toggle",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Categories Page 包含 CategoryToggleFeature",
+            "taskDescription": "建立 page_categories 與 feature_category_toggle 的父子關係，表示類別狀態切換流程由類別管理頁統轄。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_category_toggle.s.page_CategoriesPage_Ready.to.feature_CategoryToggleFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_category_toggle",
+            "stateId": "feature.CategoryToggleFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁開啟類別狀態切換流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊切換類別狀態，並進入 CategoryToggleFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_category_toggle.01",
+              "type": "semantic-check",
+              "description": "開啟停用或啟用流程；若為停用需顯示歷史資料保留的提示；尚未確認前類別狀態不變",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickToggleCategoryStatus | navigate CategoryToggleFeature",
+            "action": "clickToggleCategoryStatus",
+            "navigateTarget": "CategoryToggleFeature"
+          }
+        },
+        {
+          "id": "c.feature_category_toggle.invokes.page_categories.s.feature_CategoryToggleFeature_Submitting.to.page_CategoriesPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_category_toggle",
+            "stateId": "feature.CategoryToggleFeature.Submitting"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "narrative": {
+            "summary": "類別狀態切換成功回到類別列表",
+            "taskDescription": "在 CategoryToggleFeature.Submitting 成功後，回到 CategoriesPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_category_toggle.invokes.page_categories.01",
+              "type": "url-equals",
+              "description": "API 回傳 200；停用後 is_active=false 且帳務新增/編輯表單不再顯示該類別；啟用後 is_active=true 且帳務表單可再次選取；歷史帳務保留原類別名稱與關聯資料",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "toggleSucceeded | navigate /categories",
+            "action": "toggleSucceeded",
+            "navigateTarget": "/categories"
+          }
+        },
+        {
+          "id": "c.feature_category_toggle.invokes.page_categories.s.feature_CategoryToggleFeature_Confirming.to.page_CategoriesPage_Ready",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_category_toggle",
+            "stateId": "feature.CategoryToggleFeature.Confirming"
+          },
+          "to": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "narrative": {
+            "summary": "取消類別狀態切換回到類別列表",
+            "taskDescription": "在 CategoryToggleFeature.Confirming 取消後，回到 CategoriesPage.Ready。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_category_toggle.invokes.page_categories.02",
+              "type": "url-equals",
+              "description": "取消後關閉確認提示並回到類別列表；類別狀態與歷史帳務資料完全不變",
+              "expected": "/categories"
+            }
+          ],
+          "meta": {
+            "reason": "cancelToggle | navigate /categories",
+            "action": "cancelToggle",
+            "navigateTarget": "/categories"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "CategoryToggleFeature",
+        "entryStateId": "feature.CategoryToggleFeature.Init"
+      }
+    },
+    {
+      "id": "feature_logout",
+      "name": "LogoutFeature",
+      "level": "feature",
+      "parentDiagramId": "page_entry",
+      "roles": [
+        "user"
+      ],
+      "variant": {
+        "kind": "standalone",
+        "baseDiagramId": null,
+        "deltaDiagramIdsByRole": {},
+        "appliesToRoles": []
+      },
+      "source": {
+        "type": "mermaid",
+        "sectionTitle": "⑨ Feature: LogoutFeature",
+        "order": 9
+      },
+      "groups": [],
+      "states": [
+        {
+          "id": "feature.LogoutFeature.Init",
+          "label": "LogoutFeature.Init",
+          "type": "start",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_logout",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LogoutFeature.Init"
+            },
+            "entryValidations": [
+              {
+                "id": "v.s.feature_logout.entry.01",
+                "type": "semantic-check",
+                "description": "由任一使用者頁面的 Header 登出入口進入登出流程；登出按鈕在流程完成前不可重複觸發",
+                "expected": null
+              }
+            ]
+          }
+        },
+        {
+          "id": "feature.LogoutFeature.ClearingSession",
+          "label": "LogoutFeature.ClearingSession",
+          "type": "normal",
+          "groupId": null,
+          "tags": [
+            "feature",
+            "user"
+          ],
+          "meta": {
+            "diagramId": "feature_logout",
+            "synthetic": false,
+            "source": {
+              "scope": "root",
+              "raw": "LogoutFeature.ClearingSession"
+            }
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t.feature_logout.0001",
+          "from": "feature.LogoutFeature.Init",
+          "to": "feature.LogoutFeature.ClearingSession",
+          "event": "clearSession",
+          "roles": [
+            "user"
+          ],
+          "narrative": {
+            "summary": "清除登入 Session",
+            "taskDescription": "在 LogoutFeature.Init 觸發 clearSession，進入 LogoutFeature.ClearingSession。"
+          },
+          "validations": [
+            {
+              "id": "v.t.feature_logout.0001.01",
+              "type": "semantic-check",
+              "description": "Session/Token 從 Cookie 或 localStorage 清除；後續受保護 API 請求不再帶有效憑證",
+              "expected": null
+            }
+          ],
+          "intent": {
+            "category": "action",
+            "summary": "clearSession"
+          },
+          "meta": {
+            "diagramId": "feature_logout",
+            "source": {
+              "raw": "LogoutFeature.Init --> LogoutFeature.ClearingSession: clearSession"
+            }
+          }
+        }
+      ],
+      "connectors": [
+        {
+          "id": "c.page_entry.contains.feature_logout",
+          "type": "contains",
+          "from": {
+            "diagramId": "page_entry",
+            "stateId": null
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": null
+          },
+          "narrative": {
+            "summary": "Entry 連結共用 LogoutFeature",
+            "taskDescription": "建立 page_entry 與 feature_logout 的父子關係，表示共用登出流程掛載於系統入口層級。"
+          },
+          "validations": [],
+          "meta": {
+            "reason": "derived from parentDiagramId"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_logout.s.page_TransactionsPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "帳務頁啟動登出流程",
+            "taskDescription": "在 TransactionsPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；準備清除 Session/Token；登出入口只在 Header 右側出現一次",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_transactions.invokes.feature_logout.s.page_TransactionsPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_transactions",
+            "stateId": "page.TransactionsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空帳務頁啟動登出流程",
+            "taskDescription": "在 TransactionsPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_transactions.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；空狀態畫面在登出後不可再存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_logout.s.page_ReportsPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "月報表頁啟動登出流程",
+            "taskDescription": "在 ReportsPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；登出前保留目前選擇的年月狀態僅於前端記憶，不再允許後續 API 存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_reports.invokes.feature_logout.s.page_ReportsPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_reports",
+            "stateId": "page.ReportsPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空報表頁啟動登出流程",
+            "taskDescription": "在 ReportsPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_reports.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；匯出按鈕 disabled 狀態不會影響登出成功",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_logout.s.page_CategoriesPage_Ready.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Ready"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "類別頁啟動登出流程",
+            "taskDescription": "在 CategoriesPage.Ready 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_logout.01",
+              "type": "semantic-check",
+              "description": "觸發登出流程；登出入口只在 Header 右側出現一次",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.page_categories.invokes.feature_logout.s.page_CategoriesPage_Empty.to.feature_LogoutFeature_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "page_categories",
+            "stateId": "page.CategoriesPage.Empty"
+          },
+          "to": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.Init"
+          },
+          "narrative": {
+            "summary": "空類別頁啟動登出流程",
+            "taskDescription": "在 CategoriesPage.Empty 點擊登出，並進入 LogoutFeature.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.page_categories.invokes.feature_logout.02",
+              "type": "semantic-check",
+              "description": "觸發登出流程；空狀態畫面在登出後不可再存取",
+              "expected": null
+            }
+          ],
+          "meta": {
+            "reason": "clickLogout | navigate LogoutFeature",
+            "action": "clickLogout",
+            "navigateTarget": "LogoutFeature"
+          }
+        },
+        {
+          "id": "c.feature_logout.invokes.page_login.s.feature_LogoutFeature_ClearingSession.to.page_LoginPage_Init",
+          "type": "invokes",
+          "from": {
+            "diagramId": "feature_logout",
+            "stateId": "feature.LogoutFeature.ClearingSession"
+          },
+          "to": {
+            "diagramId": "page_login",
+            "stateId": "page.LoginPage.Init"
+          },
+          "narrative": {
+            "summary": "登出成功後回到登入頁",
+            "taskDescription": "在 LogoutFeature.ClearingSession 完成登出後，回到 LoginPage.Init。"
+          },
+          "validations": [
+            {
+              "id": "v.c.feature_logout.invokes.page_login.01",
+              "type": "url-equals",
+              "description": "URL 變更為 /login；Header 只顯示 Logo、登入、註冊；帳務列表、月報表、類別管理、登出 全部隱藏；重新整理後仍不可存取先前的受保護資料",
+              "expected": "/login"
+            }
+          ],
+          "meta": {
+            "reason": "logoutSucceeded | navigate /login",
+            "action": "logoutSucceeded",
+            "navigateTarget": "/login"
+          }
+        }
+      ],
+      "meta": {
+        "pageName": null,
+        "featureName": "LogoutFeature",
+        "entryStateId": "feature.LogoutFeature.Init"
+      }
+    }
+  ],
+  "hierarchy": {
+    "roots": [
+      "page_entry"
+    ],
+    "childrenByDiagramId": {
+      "page_entry": [
+        "page_login",
+        "page_register",
+        "page_transactions",
+        "page_reports",
+        "page_categories",
+        "feature_logout"
+      ],
+      "page_login": [
+        "feature_auth_login"
+      ],
+      "page_register": [
+        "feature_auth_register"
+      ],
+      "page_transactions": [
+        "feature_transaction_form",
+        "feature_transaction_delete"
+      ],
+      "page_reports": [
+        "feature_csv_export"
+      ],
+      "page_categories": [
+        "feature_category_form",
+        "feature_category_toggle"
+      ]
+    }
+  },
+  "meta": {
+    "warnings": [],
+    "generationStage": 4,
+    "generationStageCount": 4
+  }
+}
