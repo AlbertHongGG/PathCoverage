@@ -34,10 +34,13 @@ class PathCoverageService:
         graph_file: Path,
         path_files: list[Path],
         output_dir: Path,
+        max_paths: int | None = None,
     ) -> AnalysisResult:
         graph = self._graph_loader.load(graph_file)
         aggregated_paths = self._path_loader.load_many(path_files)
         sorted_paths = self._sorter.sort(aggregated_paths, graph)
+        if max_paths is not None:
+            sorted_paths = sorted_paths[:max_paths]
         coverage_points, totals = self._coverage_calculator.calculate(
             [path.edge_ids for path in sorted_paths],
             graph,
@@ -52,6 +55,7 @@ class PathCoverageService:
             totals.total_states,
             totals.total_transitions,
             output_dir,
+            max_paths=max_paths,
         )
         self._plotter.plot(coverage_points, totals, output_dir, file_prefix=project_name)
 
@@ -106,10 +110,12 @@ class PathCoverageService:
         total_states: int,
         total_transitions: int,
         output_dir: Path,
+        max_paths: int | None = None,
     ) -> None:
         payload = {
             "strategyName": strategy_name,
             "projectName": project_name,
+            "maxPathsPerProject": max_paths,
             "totals": {
                 "states": total_states,
                 "transitions": total_transitions,

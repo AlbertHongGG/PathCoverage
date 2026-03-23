@@ -2,6 +2,14 @@
 
 Use `uv run main.py` to process each matching strategy/project folder under `graph/` and `path/`, sort the path planner JSON files by incremental coverage, and generate absolute-count and ratio charts.
 
+If you want every strategy/project output to compare only up to the same number of paths, pass `--max-paths-per-project <N>`. The limit is applied after sorting, so each chart and JSON summary uses at most the top `N` paths for that strategy/project.
+
+Example:
+
+```bash
+uv run main.py --max-paths-per-project 20
+```
+
 Expected layout:
 
 ```text
@@ -47,4 +55,5 @@ Notes:
 - `graph/<project>/data.json` remains the single source of graph data for each project.
 - `path/<strategy>/<project>/*.json` contains one strategy's routing results for one project.
 - Each strategy/project pair produces its own JSON summaries and four single-strategy charts under `output/<strategy>/<project>/`.
+- `--max-paths-per-project` can be used to cap how many sorted paths are included per strategy/project, which makes cross-strategy project comparison easier when the original path counts differ.
 - After all runs finish, the tool generates four comparison charts for every discovered project under `output/comparison/<project>/`, so the comparison folder structure follows the actual project folders found under the strategy inputs.

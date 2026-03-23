@@ -9,6 +9,13 @@ from path_coverage.models import AnalysisResult
 from path_coverage.settings import SettingsLoader
 
 
+def positive_int(value: str) -> int:
+    parsed_value = int(value)
+    if parsed_value <= 0:
+        raise argparse.ArgumentTypeError("Value must be a positive integer.")
+    return parsed_value
+
+
 def parse_args() -> argparse.Namespace:
     settings = SettingsLoader(project_root=Path(__file__).resolve().parent).load()
     parser = argparse.ArgumentParser(
@@ -32,6 +39,12 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Directory for sorted output and charts. Defaults to PATH_COVERAGE_OUTPUT_DIR from .env.",
     )
+    parser.add_argument(
+        "--max-paths-per-project",
+        type=positive_int,
+        default=32,
+        help="Maximum number of sorted paths to keep per strategy/project when generating summaries and charts. Defaults to no limit.",
+    )
     return parser.parse_args()
 
 
@@ -52,6 +65,10 @@ def main() -> None:
     print(f"Graph root: {args.graph_dir.resolve()}")
     print(f"Path root: {args.path_dir.resolve()}")
     print(f"Output root: {args.output_dir.resolve()}")
+    print(
+        "Max paths per project: "
+        f"{args.max_paths_per_project if args.max_paths_per_project is not None else 'unlimited'}"
+    )
 
     for project_input in project_inputs:
         result = service.run(
@@ -60,6 +77,7 @@ def main() -> None:
             graph_file=project_input.graph_file,
             path_files=project_input.path_files,
             output_dir=project_input.output_dir,
+            max_paths=args.max_paths_per_project,
         )
         results_by_project.setdefault(project_input.project_name, {})[project_input.strategy_name] = result
 
