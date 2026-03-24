@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from pathlib import Path
+import re
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,6 +11,18 @@ from .models import AnalysisResult, CoveragePoint, CoverageTotals
 
 
 class CoveragePlotter:
+    _COMPARISON_PALETTE = [
+        "#3D5A80",
+        "#2A9D8F",
+        "#5B8E3E",
+        "#B08968",
+        "#E07A5F",
+        "#B56576",
+        "#6D597A",
+        "#8D99AE",
+        "#CDA15E",
+    ]
+
     def __init__(self) -> None:
         sns.set_theme(style="whitegrid")
 
@@ -87,7 +100,7 @@ class CoveragePlotter:
 
         ordered_results = {
             strategy_name: strategy_results[strategy_name]
-            for strategy_name in sorted(strategy_results)
+            for strategy_name in sorted(strategy_results, key=self._natural_label_key)
         }
         first_result = next(iter(ordered_results.values()))
         for strategy_name, result in ordered_results.items():
@@ -183,7 +196,7 @@ class CoveragePlotter:
             )
 
         ax.axhline(total_value, linestyle="--", linewidth=1.2, color="#6B7280", label=f"Total = {total_value}")
-        ax.set_title(title)
+        ax.set_title(title, pad=20)
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
         if total_value == 1.0:
@@ -204,8 +217,10 @@ class CoveragePlotter:
         value_resolver: Callable[[CoveragePoint, CoverageTotals], float],
         ratio_mode: bool = False,
     ) -> None:
-        fig, ax = plt.subplots(figsize=(12, 7))
-        palette = sns.color_palette("tab10", n_colors=max(len(strategy_results), 3))
+        fig, ax = plt.subplots(figsize=(13, 7))
+        palette = self._build_comparison_palette(len(strategy_results))
+        annotation_targets: list[dict[str, object]] = []
+        max_path_count = 0
 
         for index, (strategy_name, result) in enumerate(strategy_results.items()):
             x_values = [point.path_count for point in result.coverage_points]
@@ -213,13 +228,52 @@ class CoveragePlotter:
             if not x_values:
                 continue
 
+            max_path_count = max(max_path_count, max(x_values))
+
             ax.plot(
                 x_values,
                 y_values,
                 marker="o",
-                linewidth=2.2,
+                markersize=4.5,
+                linewidth=2.0,
                 color=palette[index],
                 label=strategy_name,
+                alpha=0.95,
+            )
+
+            target_path_count, target_value, reached_total = self._select_annotation_target(
+                x_values=x_values,
+                y_values=y_values,
+                total_value=total_value,
+            )
+            annotation_targets.append(
+                {
+                    "strategy_name": strategy_name,
+                    "target_path_count": target_path_count,
+                    "target_value": target_value,
+                    "label_text": f"{target_path_count}",
+                    "color": palette[index],
+                    "reached_total": reached_total,
+                }
+            )
+
+        if max_path_count == 0:
+            raise ValueError("At least one strategy must include coverage points to generate a comparison chart.")
+
+        label_y_offsets = self._build_annotation_offsets(
+            target_values=[float(target["target_value"]) for target in annotation_targets],
+        )
+        for target, label_y_offset in zip(annotation_targets, label_y_offsets, strict=True):
+            ax.annotate(
+                target["label_text"],
+                xy=(float(target["target_path_count"]), float(target["target_value"])),
+                xytext=(0, label_y_offset),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                fontsize=9,
+                fontweight="semibold",
+                color=target["color"],
             )
 
         reference_label = f"Total = {total_value:.2f}" if ratio_mode else f"Total = {int(total_value)}"
@@ -227,9 +281,61 @@ class CoveragePlotter:
         ax.set_title(title)
         ax.set_xlabel(x_label)
         ax.set_ylabel(y_label)
+        ax.set_xlim(1, max_path_count + 1)
         if ratio_mode:
-            ax.set_ylim(0, 1.05)
-        ax.legend(title="Strategy")
+            ax.set_ylim(0, 1.1)
+        else:
+            ax.set_ylim(0, total_value * 1.1)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.text(
+            0.015,
+            0.98,
+            f"Dashed line: {reference_label}",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=9,
+            color="#4B5563",
+        )
+        ax.legend(title="Strategy", loc="lower right", frameon=True)
         fig.tight_layout()
         fig.savefig(output_file, dpi=200)
         plt.close(fig)
+
+    def _select_annotation_target(
+        self,
+        x_values: list[int],
+        y_values: list[float],
+        total_value: float,
+    ) -> tuple[int, float, bool]:
+        tolerance = 1e-9
+        for path_count, coverage_value in zip(x_values, y_values, strict=True):
+            if coverage_value >= total_value - tolerance:
+                return path_count, coverage_value, True
+
+        return x_values[-1], y_values[-1], False
+
+    def _build_annotation_offsets(
+        self,
+        target_values: list[float],
+    ) -> list[int]:
+        if not target_values:
+            return []
+
+        sorted_pairs = sorted(enumerate(target_values), key=lambda pair: pair[1])
+        offsets = [0] * len(target_values)
+        for index, (original_index, _target_value) in enumerate(sorted_pairs):
+            offsets[original_index] = 6 + index * 4
+
+        return offsets
+
+    def _build_comparison_palette(self, color_count: int) -> list[tuple[float, float, float]]:
+        if color_count <= len(self._COMPARISON_PALETTE):
+            return sns.color_palette(self._COMPARISON_PALETTE[:color_count])
+
+        extra_colors = sns.color_palette("husl", n_colors=color_count - len(self._COMPARISON_PALETTE))
+        return sns.color_palette(self._COMPARISON_PALETTE) + list(extra_colors)
+
+    def _natural_label_key(self, label: str) -> tuple[object, ...]:
+        parts = re.split(r"(\d+)", label.casefold())
+        return tuple(int(part) if part.isdigit() else part for part in parts)
