@@ -3,9 +3,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from path_coverage import PathCoverageService
+from path_coverage import CoverageApplication
 from path_coverage.input_resolver import PathInputResolver
-from path_coverage.models import AnalysisResult
 from path_coverage.settings import SettingsLoader
 
 
@@ -50,7 +49,6 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    service = PathCoverageService()
     resolver = PathInputResolver()
     project_inputs = resolver.resolve_projects(
         graph_root_dir=args.graph_dir,
@@ -58,7 +56,7 @@ def main() -> None:
         output_root_dir=args.output_dir,
     )
     strategy_names = sorted({project_input.strategy_name for project_input in project_inputs})
-    results_by_project: dict[str, dict[str, AnalysisResult]] = {}
+    app = CoverageApplication(resolver=resolver)
 
     print(f"Strategy/project pairs: {len(project_inputs)}")
     print(f"Strategies: {len(strategy_names)} ({', '.join(strategy_names)})")
@@ -70,17 +68,16 @@ def main() -> None:
         f"{args.max_paths_per_project if args.max_paths_per_project is not None else 'unlimited'}"
     )
 
-    for project_input in project_inputs:
-        result = service.run(
-            strategy_name=project_input.strategy_name,
-            project_name=project_input.project_name,
-            graph_file=project_input.graph_file,
-            path_files=project_input.path_files,
-            output_dir=project_input.output_dir,
-            max_paths=args.max_paths_per_project,
-        )
-        results_by_project.setdefault(project_input.project_name, {})[project_input.strategy_name] = result
+    summary = app.run(
+        graph_root_dir=args.graph_dir,
+        path_root_dir=args.path_dir,
+        output_root_dir=args.output_dir,
+        max_paths_per_project=args.max_paths_per_project,
+    )
 
+    for project_result in summary.project_results:
+        project_input = project_result.project_input
+        result = project_result.result
         project_label = f"{project_input.strategy_name}/{project_input.project_name}"
         print(f"[{project_label}] Sorted paths: {len(result.sorted_paths)}")
         print(f"[{project_label}] Path JSON files: {len(project_input.path_files)}")
@@ -89,21 +86,20 @@ def main() -> None:
         print(f"[{project_label}] Total states: {result.totals.total_states}")
         print(f"[{project_label}] Total transitions: {result.totals.total_transitions}")
 
-    comparison_root_dir = args.output_dir.resolve() / "comparison"
-    for project_name in sorted(results_by_project):
-        comparison_results = results_by_project[project_name]
+    for project_name in sorted(summary.results_by_project):
+        comparison_results = summary.results_by_project[project_name]
         if not comparison_results:
             print(f"[comparison/{project_name}] No strategy results were found; comparison charts were skipped.")
             continue
 
-        comparison_output_dir = comparison_root_dir / project_name
-        service.write_strategy_comparison(
-            project_name=project_name,
-            strategy_results=comparison_results,
-            output_dir=comparison_output_dir,
-        )
+        comparison_output_dir = summary.comparison_root_dir / project_name
         print(f"[comparison/{project_name}] Strategies: {len(comparison_results)}")
         print(f"[comparison/{project_name}] Output directory: {comparison_output_dir}")
+
+    print(f"[comparison] Strategy score summary: {summary.strategy_score_summary_path}")
+    print(f"[comparison] Strategy score chart: {summary.strategy_score_chart_path}")
+    print(f"[path_count_compare] Output directory: {summary.path_count_compare_root_dir}")
+    print(f"[path_scatter] Output directory: {summary.path_scatter_root_dir}")
 
 
 if __name__ == "__main__":
