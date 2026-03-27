@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from adjustText import adjust_text
 
 from .base import BaseChart
 from .common import build_comparison_palette, save_and_close
@@ -25,6 +26,7 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
 
         x_values = [self._resolve_x_value(point, metric) for point in dataset.strategy_points]
         y_values = [point.average_path_length for point in dataset.strategy_points]
+        texts = []
         for index, point in enumerate(dataset.strategy_points):
             x_value = self._resolve_x_value(point, metric)
             ax.scatter(
@@ -45,19 +47,31 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
                 fontsize=9,
                 color=palette[index],
             )
+            texts.append(
+                ax.text(
+                x_value,
+                point.average_path_length,
+                self._build_label_text(point.strategy_name, x_value, point.average_path_length, metric),
+                fontsize=8.5,
+                color=palette[index],
+                ha="left",
+                va="bottom",
+                bbox={
+                    "boxstyle": "round,pad=0.22",
+                    "facecolor": "white",
+                    "edgecolor": palette[index],
+                    "alpha": 0.82,
+                    "linewidth": 0.8,
+                },
+                )
+            )
 
         ax.set_title(self._metric_resolver.scatter_title(metric, dataset.project_name, dataset.path_limit), pad=20)
         ax.set_xlabel(self._metric_resolver.y_label(metric))
         ax.set_ylabel("Average Path Length")
         ax.spines[["top", "right"]].set_visible(False)
-        if x_values:
-            max_x = max(x_values)
-            ax.set_xlim(0, max_x * 1.1 if max_x else 1.0)
-            if self._metric_resolver.is_ratio(metric):
-                ax.set_xlim(0, 1.05)
-        if y_values:
-            max_y = max(y_values)
-            ax.set_ylim(0, max_y * 1.15 if max_y else 1.0)
+        self._set_axis_limits(ax, x_values, y_values, metric)
+        self._adjust_labels(ax, texts, x_values, y_values)
         ax.legend(title="Strategy", loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
         save_and_close(fig, output_file)
         return output_file
@@ -71,10 +85,78 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
             return float(point.transition_coverage)
         return point.transition_coverage_ratio
 
+    def _build_label_text(
+        self,
+        strategy_name: str,
+        x_value: float,
+        y_value: float,
+        metric: CoverageMetric,
+    ) -> str:
+        return (
+            f"{strategy_name}\n"
+            f"x={self._format_value(x_value, metric)}\n"
+            f"y={self._format_number(y_value)}"
+        )
 
+    def _format_value(self, value: float, metric: CoverageMetric) -> str:
+        return self._format_number(value, ratio=self._metric_resolver.is_ratio(metric))
+
+    def _format_number(self, value: float, ratio: bool = False) -> str:
+        if ratio:
+            return f"{value:.3f}"
+        rounded_value = round(value)
+        if abs(value - rounded_value) < 1e-9:
+            return f"{int(rounded_value)}"
+        return f"{value:.2f}"
+
+    def _set_axis_limits(
+        self,
+        ax,
+        x_values: list[float],
+        y_values: list[float],
+        metric: CoverageMetric,
+    ) -> None:
+        if x_values:
+            max_x = max(x_values)
+            ax.set_xlim(0, max_x * 1.1 if max_x else 1.0)
+            if self._metric_resolver.is_ratio(metric):
+                ax.set_xlim(0, 1.05)
+        if y_values:
+            max_y = max(y_values)
+            ax.set_ylim(0, max_y * 1.15 if max_y else 1.0)
+
+    def _adjust_labels(
+        self,
+        ax,
+        texts: list,
+        x_values: list[float],
+        y_values: list[float],
+    ) -> None:
+        if not texts:
+            return
+
+        adjust_text(
+            texts,
+            x=x_values,
+            y=y_values,
+            ax=ax,
+            expand=(1.15, 1.35),
+            force_text=(0.35, 0.45),
+            force_static=(0.2, 0.25),
+            only_move={"text": "xy", "static": "xy", "explode": "xy", "pull": "xy"},
+            arrowprops={
+                "arrowstyle": "-",
+                "color": "#6B7280",
+                "lw": 0.8,
+                "alpha": 0.6,
+                "shrinkA": 4,
+                "shrinkB": 4,
+            },
+        )
 class ComparisonAveragePathLengthScatterChart(BaseChart):
     def __init__(self, metric_resolver: CoverageMetricResolver | None = None) -> None:
         self._metric_resolver = metric_resolver or CoverageMetricResolver()
+        self._project_chart = TransitionCoveragePathLengthScatterChart(self._metric_resolver)
 
     def render(
         self,
@@ -87,6 +169,7 @@ class ComparisonAveragePathLengthScatterChart(BaseChart):
 
         x_values = [self._resolve_x_value(point, metric) for point in dataset.strategy_points]
         y_values = [point.average_path_length_average for point in dataset.strategy_points]
+        texts = []
         for index, point in enumerate(dataset.strategy_points):
             x_value = self._resolve_x_value(point, metric)
             ax.scatter(
@@ -97,15 +180,28 @@ class ComparisonAveragePathLengthScatterChart(BaseChart):
                 label=point.strategy_name,
                 alpha=0.9,
             )
-            ax.annotate(
-                point.strategy_name,
-                (x_value, point.average_path_length_average),
-                textcoords="offset points",
-                xytext=(6, 6),
-                ha="left",
-                va="bottom",
-                fontsize=9,
-                color=palette[index],
+            texts.append(
+                ax.text(
+                    x_value,
+                    point.average_path_length_average,
+                    self._project_chart._build_label_text(
+                        point.strategy_name,
+                        x_value,
+                        point.average_path_length_average,
+                        metric,
+                    ),
+                    fontsize=8.5,
+                    color=palette[index],
+                    ha="left",
+                    va="bottom",
+                    bbox={
+                        "boxstyle": "round,pad=0.22",
+                        "facecolor": "white",
+                        "edgecolor": palette[index],
+                        "alpha": 0.82,
+                        "linewidth": 0.8,
+                    },
+                )
             )
 
         ax.set_title(
@@ -116,14 +212,8 @@ class ComparisonAveragePathLengthScatterChart(BaseChart):
         ax.set_xlabel(f"Average {self._metric_resolver.y_label(metric)}")
         ax.set_ylabel("Average Path Length")
         ax.spines[["top", "right"]].set_visible(False)
-        if x_values:
-            max_x = max(x_values)
-            ax.set_xlim(0, max_x * 1.1 if max_x else 1.0)
-            if self._metric_resolver.is_ratio(metric):
-                ax.set_xlim(0, 1.05)
-        if y_values:
-            max_y = max(y_values)
-            ax.set_ylim(0, max_y * 1.15 if max_y else 1.0)
+        self._project_chart._set_axis_limits(ax, x_values, y_values, metric)
+        self._project_chart._adjust_labels(ax, texts, x_values, y_values)
         ax.legend(title="Strategy", loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
         save_and_close(fig, output_file)
         return output_file
