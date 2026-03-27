@@ -7,6 +7,8 @@ from .snapshots import PathLimitSnapshotSelector
 from ..common import DEFAULT_PATH_LIMITS, natural_label_key
 from ..models import (
     AnalysisResult,
+    ComparisonScatterDataset,
+    ComparisonScatterPoint,
     CoverageMetric,
     PathCountComparisonDataset,
     PathCountComparisonRow,
@@ -128,3 +130,89 @@ class ProjectScatterDatasetBuilder:
                 )
 
         return datasets
+
+
+class ComparisonScatterDatasetBuilder:
+    def __init__(
+        self,
+        snapshot_selector: PathLimitSnapshotSelector | None = None,
+        metric_resolver: CoverageMetricResolver | None = None,
+    ) -> None:
+        self._snapshot_selector = snapshot_selector or PathLimitSnapshotSelector()
+        self._metric_resolver = metric_resolver or CoverageMetricResolver()
+
+    def build(
+        self,
+        results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
+        path_limits: tuple[int, ...] = DEFAULT_PATH_LIMITS,
+    ) -> list[ComparisonScatterDataset]:
+        ordered_project_names = sorted(results_by_project, key=natural_label_key)
+        strategy_names = sorted(
+            {
+                strategy_name
+                for strategy_results in results_by_project.values()
+                for strategy_name in strategy_results
+            },
+            key=natural_label_key,
+        )
+
+        datasets: list[ComparisonScatterDataset] = []
+        for path_limit in path_limits:
+            snapshots_by_strategy: dict[str, list] = {strategy_name: [] for strategy_name in strategy_names}
+            for project_name in ordered_project_names:
+                strategy_results = results_by_project[project_name]
+                for strategy_name, result in strategy_results.items():
+                    snapshot = self._snapshot_selector.select(result, path_limit)
+                    if snapshot is not None:
+                        snapshots_by_strategy[strategy_name].append(snapshot)
+
+            strategy_points: list[ComparisonScatterPoint] = []
+            for strategy_name in strategy_names:
+                snapshots = snapshots_by_strategy[strategy_name]
+                if not snapshots:
+                    continue
+
+                actual_path_counts = {
+                    snapshot.project_name: snapshot.actual_path_count for snapshot in snapshots
+                }
+                strategy_points.append(
+                    ComparisonScatterPoint(
+                        strategy_name=strategy_name,
+                        state_coverage_average=self._average_metric(CoverageMetric.STATE_COVERAGE, snapshots),
+                        state_coverage_ratio_average=self._average_metric(
+                            CoverageMetric.STATE_COVERAGE_RATIO,
+                            snapshots,
+                        ),
+                        transition_coverage_average=self._average_metric(
+                            CoverageMetric.TRANSITION_COVERAGE,
+                            snapshots,
+                        ),
+                        transition_coverage_ratio_average=self._average_metric(
+                            CoverageMetric.TRANSITION_COVERAGE_RATIO,
+                            snapshots,
+                        ),
+                        average_path_length_average=sum(
+                            snapshot.average_path_length for snapshot in snapshots
+                        )
+                        / len(snapshots),
+                        project_count=len(snapshots),
+                        actual_path_counts=actual_path_counts,
+                    )
+                )
+
+            if not strategy_points:
+                continue
+
+            datasets.append(
+                ComparisonScatterDataset(
+                    path_limit=path_limit,
+                    strategy_order=strategy_names,
+                    project_names=ordered_project_names,
+                    strategy_points=strategy_points,
+                )
+            )
+
+        return datasets
+
+    def _average_metric(self, metric: CoverageMetric, snapshots: list) -> float:
+        return sum(self._metric_resolver.value_from_snapshot(metric, snapshot) for snapshot in snapshots) / len(snapshots)

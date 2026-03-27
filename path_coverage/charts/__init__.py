@@ -4,10 +4,11 @@ from .line_charts import (
     StrategyComparisonLineChart,
     StrategyScoreCumulativeChart,
 )
-from .scatter_charts import TransitionCoveragePathLengthScatterChart
+from .scatter_charts import ComparisonAveragePathLengthScatterChart, TransitionCoveragePathLengthScatterChart
 
 __all__ = [
     "PathCountAverageBarChart",
+    "ComparisonAveragePathLengthScatterChart",
     "SingleCoverageLineChart",
     "StrategyComparisonLineChart",
     "StrategyScoreCumulativeChart",

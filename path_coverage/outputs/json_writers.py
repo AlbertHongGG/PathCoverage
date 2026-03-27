@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ..models import AnalysisResult, PathCountComparisonDataset, ProjectScatterDataset
+from ..models import AnalysisResult, ComparisonScatterDataset, PathCountComparisonDataset, ProjectScatterDataset
 
 
 class JsonWriter:
@@ -116,6 +116,33 @@ class ProjectScatterSummaryWriter:
                     "transitionCoverageRatio": point.transition_coverage_ratio,
                     "averagePathLength": point.average_path_length,
                     "actualPathCountUsed": point.actual_path_count_used,
+                }
+                for point in dataset.strategy_points
+            ],
+        }
+        return self._json_writer.write(payload, output_file)
+
+
+class ComparisonScatterSummaryWriter:
+    def __init__(self, json_writer: JsonWriter | None = None) -> None:
+        self._json_writer = json_writer or JsonWriter()
+
+    def write(self, dataset: ComparisonScatterDataset, output_file: Path) -> Path:
+        payload = {
+            "pathLimit": dataset.path_limit,
+            "strategyOrder": dataset.strategy_order,
+            "projectCount": len(dataset.project_names),
+            "projectNames": dataset.project_names,
+            "points": [
+                {
+                    "strategyName": point.strategy_name,
+                    "stateCoverageAverage": point.state_coverage_average,
+                    "stateCoverageRatioAverage": point.state_coverage_ratio_average,
+                    "transitionCoverageAverage": point.transition_coverage_average,
+                    "transitionCoverageRatioAverage": point.transition_coverage_ratio_average,
+                    "averagePathLengthAverage": point.average_path_length_average,
+                    "projectCount": point.project_count,
+                    "actualPathCounts": point.actual_path_counts,
                 }
                 for point in dataset.strategy_points
             ],

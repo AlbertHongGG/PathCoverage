@@ -69,6 +69,10 @@ class CoverageApplication:
         )
 
         path_scatter_root_dir = output_root_dir.resolve() / "path_scatter"
+        self._service.write_comparison_path_scatters(
+            results_by_project=results_by_project,
+            output_dir=path_scatter_root_dir / "comparison",
+        )
         self._service.write_project_path_scatters(
             results_by_project=results_by_project,
             output_dir=path_scatter_root_dir,

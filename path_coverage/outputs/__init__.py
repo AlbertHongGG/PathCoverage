@@ -1,4 +1,5 @@
 from .json_writers import (
+    ComparisonScatterSummaryWriter,
     CoverageSummaryWriter,
     JsonWriter,
     PathCountComparisonSummaryWriter,
@@ -7,6 +8,7 @@ from .json_writers import (
 )
 
 __all__ = [
+    "ComparisonScatterSummaryWriter",
     "CoverageSummaryWriter",
     "JsonWriter",
     "PathCountComparisonSummaryWriter",

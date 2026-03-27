@@ -5,6 +5,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from .analysis import (
+    ComparisonScatterDatasetBuilder,
     CoverageMetricResolver,
     PathCountComparisonBuilder,
     ProjectAnalysisRunner,
@@ -12,6 +13,7 @@ from .analysis import (
     StrategyScoreSummaryBuilder,
 )
 from .charts import (
+    ComparisonAveragePathLengthScatterChart,
     PathCountAverageBarChart,
     SingleCoverageLineChart,
     StrategyComparisonLineChart,
@@ -21,6 +23,7 @@ from .charts import (
 from .common import DEFAULT_PATH_LIMITS, path_limit_dir_name
 from .models import AnalysisResult, CoverageMetric
 from .outputs import (
+    ComparisonScatterSummaryWriter,
     CoverageSummaryWriter,
     JsonWriter,
     PathCountComparisonSummaryWriter,
@@ -47,13 +50,16 @@ class PathCoverageService:
         json_writer: JsonWriter | None = None,
         path_count_summary_writer: PathCountComparisonSummaryWriter | None = None,
         project_scatter_summary_writer: ProjectScatterSummaryWriter | None = None,
+        comparison_scatter_summary_writer: ComparisonScatterSummaryWriter | None = None,
         single_chart: SingleCoverageLineChart | None = None,
         comparison_chart: StrategyComparisonLineChart | None = None,
         score_chart: StrategyScoreCumulativeChart | None = None,
         path_count_chart: PathCountAverageBarChart | None = None,
         path_scatter_chart: TransitionCoveragePathLengthScatterChart | None = None,
+        comparison_path_scatter_chart: ComparisonAveragePathLengthScatterChart | None = None,
         path_count_comparison_builder: PathCountComparisonBuilder | None = None,
         project_scatter_builder: ProjectScatterDatasetBuilder | None = None,
+        comparison_scatter_builder: ComparisonScatterDatasetBuilder | None = None,
         strategy_score_summary_builder: StrategyScoreSummaryBuilder | None = None,
     ) -> None:
         self._analysis_runner = analysis_runner or ProjectAnalysisRunner()
@@ -63,15 +69,24 @@ class PathCoverageService:
         self._json_writer = json_writer or JsonWriter()
         self._path_count_summary_writer = path_count_summary_writer or PathCountComparisonSummaryWriter()
         self._project_scatter_summary_writer = project_scatter_summary_writer or ProjectScatterSummaryWriter()
+        self._comparison_scatter_summary_writer = (
+            comparison_scatter_summary_writer or ComparisonScatterSummaryWriter()
+        )
         self._single_chart = single_chart or SingleCoverageLineChart(self._metric_resolver)
         self._comparison_chart = comparison_chart or StrategyComparisonLineChart(self._metric_resolver)
         self._score_chart = score_chart or StrategyScoreCumulativeChart()
         self._path_count_chart = path_count_chart or PathCountAverageBarChart(self._metric_resolver)
         self._path_scatter_chart = path_scatter_chart or TransitionCoveragePathLengthScatterChart(self._metric_resolver)
+        self._comparison_path_scatter_chart = (
+            comparison_path_scatter_chart or ComparisonAveragePathLengthScatterChart(self._metric_resolver)
+        )
         self._path_count_comparison_builder = path_count_comparison_builder or PathCountComparisonBuilder(
             metric_resolver=self._metric_resolver,
         )
         self._project_scatter_builder = project_scatter_builder or ProjectScatterDatasetBuilder()
+        self._comparison_scatter_builder = comparison_scatter_builder or ComparisonScatterDatasetBuilder(
+            metric_resolver=self._metric_resolver,
+        )
         self._strategy_score_summary_builder = strategy_score_summary_builder or StrategyScoreSummaryBuilder(
             metric_resolver=self._metric_resolver,
         )
@@ -186,6 +201,32 @@ class PathCoverageService:
                 )
             output_paths.append(
                 self._project_scatter_summary_writer.write(dataset, scatter_dir / "summary.json")
+            )
+
+        return output_paths
+
+    def write_comparison_path_scatters(
+        self,
+        results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
+        output_dir: Path,
+        path_limits: tuple[int, ...] = DEFAULT_PATH_LIMITS,
+    ) -> list[Path]:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        datasets = self._comparison_scatter_builder.build(results_by_project, path_limits=path_limits)
+        output_paths: list[Path] = []
+        for dataset in datasets:
+            scatter_dir = output_dir / path_limit_dir_name(dataset.path_limit)
+            scatter_dir.mkdir(parents=True, exist_ok=True)
+            for metric in CHART_METRIC_ORDER:
+                output_paths.append(
+                    self._comparison_path_scatter_chart.render(
+                        dataset,
+                        metric,
+                        scatter_dir / f"{metric.value}_vs_average_path_length.png",
+                    )
+                )
+            output_paths.append(
+                self._comparison_scatter_summary_writer.write(dataset, scatter_dir / "summary.json")
             )
 
         return output_paths

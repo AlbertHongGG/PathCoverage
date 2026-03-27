@@ -165,6 +165,26 @@ class ProjectScatterDataset:
 
 
 @dataclass(frozen=True)
+class ComparisonScatterPoint:
+    strategy_name: str
+    state_coverage_average: float
+    state_coverage_ratio_average: float
+    transition_coverage_average: float
+    transition_coverage_ratio_average: float
+    average_path_length_average: float
+    project_count: int
+    actual_path_counts: dict[str, int]
+
+
+@dataclass(frozen=True)
+class ComparisonScatterDataset:
+    path_limit: int
+    strategy_order: list[str]
+    project_names: list[str]
+    strategy_points: list[ComparisonScatterPoint]
+
+
+@dataclass(frozen=True)
 class ApplicationProjectResult:
     project_input: ProjectInput
     result: AnalysisResult
