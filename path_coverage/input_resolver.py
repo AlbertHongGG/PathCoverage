@@ -3,6 +3,7 @@ from __future__ import annotations
 import warnings
 from pathlib import Path
 
+from .common import OUTPUT_COVERAGE_DIRNAME, OUTPUT_STRATEGY_RESULTS_DIRNAME
 from .models import ProjectInput
 
 
@@ -76,7 +77,13 @@ class PathInputResolver:
                         project_name=project_name,
                         graph_file=graph_file,
                         path_files=path_files,
-                        output_dir=resolved_output_root / strategy_name / project_name,
+                        output_dir=(
+                            resolved_output_root
+                            / OUTPUT_COVERAGE_DIRNAME
+                            / OUTPUT_STRATEGY_RESULTS_DIRNAME
+                            / strategy_name
+                            / project_name
+                        ),
                     )
                 )
 

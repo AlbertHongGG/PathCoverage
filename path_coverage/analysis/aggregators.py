@@ -7,6 +7,9 @@ from .snapshots import PathLimitSnapshotSelector
 from ..common import DEFAULT_PATH_LIMITS, natural_label_key
 from ..models import (
     AnalysisResult,
+    AverageComparisonDataset,
+    AverageComparisonPoint,
+    AverageComparisonSeries,
     ComparisonScatterDataset,
     ComparisonScatterPoint,
     CoverageMetric,
@@ -84,6 +87,120 @@ class PathCountComparisonBuilder:
                 )
 
         return datasets
+
+
+class AverageComparisonDatasetBuilder:
+    def __init__(
+        self,
+        snapshot_selector: PathLimitSnapshotSelector | None = None,
+        metric_resolver: CoverageMetricResolver | None = None,
+    ) -> None:
+        self._snapshot_selector = snapshot_selector or PathLimitSnapshotSelector()
+        self._metric_resolver = metric_resolver or CoverageMetricResolver()
+
+    def build(
+        self,
+        results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
+    ) -> list[AverageComparisonDataset]:
+        ordered_project_names = sorted(results_by_project, key=natural_label_key)
+        strategy_names = sorted(
+            {
+                strategy_name
+                for strategy_results in results_by_project.values()
+                for strategy_name in strategy_results
+            },
+            key=natural_label_key,
+        )
+        max_path_count = max(
+            (
+                len(result.coverage_points)
+                for strategy_results in results_by_project.values()
+                for result in strategy_results.values()
+            ),
+            default=0,
+        )
+        if max_path_count == 0:
+            return []
+
+        datasets: list[AverageComparisonDataset] = []
+        for metric in CoverageMetric:
+            series_rows: list[AverageComparisonSeries] = []
+            for strategy_name in strategy_names:
+                points: list[AverageComparisonPoint] = []
+                for path_count in range(1, max_path_count + 1):
+                    snapshots = []
+                    for project_name in ordered_project_names:
+                        result = results_by_project[project_name].get(strategy_name)
+                        if result is None:
+                            continue
+
+                        snapshot = self._snapshot_selector.select(result, path_count)
+                        if snapshot is not None:
+                            snapshots.append(snapshot)
+
+                    if not snapshots:
+                        continue
+
+                    actual_path_counts = {
+                        snapshot.project_name: snapshot.actual_path_count for snapshot in snapshots
+                    }
+                    average_value = sum(
+                        self._metric_resolver.value_from_snapshot(metric, snapshot)
+                        for snapshot in snapshots
+                    ) / len(snapshots)
+                    points.append(
+                        AverageComparisonPoint(
+                            path_count=path_count,
+                            average_value=average_value,
+                            project_count=len(snapshots),
+                            actual_path_counts=actual_path_counts,
+                        )
+                    )
+
+                if points:
+                    series_rows.append(
+                        AverageComparisonSeries(
+                            strategy_name=strategy_name,
+                            points=points,
+                        )
+                    )
+
+            if not series_rows:
+                continue
+
+            datasets.append(
+                AverageComparisonDataset(
+                    metric=metric,
+                    strategy_order=strategy_names,
+                    project_names=ordered_project_names,
+                    average_reference_total=self._average_reference_total(metric, results_by_project),
+                    max_path_count=max_path_count,
+                    strategy_series=series_rows,
+                )
+            )
+
+        return datasets
+
+    def _average_reference_total(
+        self,
+        metric: CoverageMetric,
+        results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
+    ) -> float:
+        reference_totals = []
+        for project_name in sorted(results_by_project, key=natural_label_key):
+            strategy_results = results_by_project[project_name]
+            if not strategy_results:
+                continue
+
+            first_result = next(iter(strategy_results.values()))
+            reference_totals.append(
+                self._metric_resolver.reference_total(metric, first_result.totals)
+            )
+
+        if not reference_totals:
+            return 0.0
+
+        return sum(reference_totals) / len(reference_totals)
 
 
 class ProjectScatterDatasetBuilder:

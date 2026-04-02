@@ -3,7 +3,13 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ..models import AnalysisResult, ComparisonScatterDataset, PathCountComparisonDataset, ProjectScatterDataset
+from ..models import (
+    AnalysisResult,
+    AverageComparisonDataset,
+    ComparisonScatterDataset,
+    PathCountComparisonDataset,
+    ProjectScatterDataset,
+)
 
 
 class JsonWriter:
@@ -92,6 +98,45 @@ class PathCountComparisonSummaryWriter:
                         }
                         for row in dataset.strategy_rows
                     ]
+                }
+                for dataset in datasets
+            },
+        }
+        return self._json_writer.write(payload, output_file)
+
+
+class AverageComparisonSummaryWriter:
+    def __init__(self, json_writer: JsonWriter | None = None) -> None:
+        self._json_writer = json_writer or JsonWriter()
+
+    def write(self, datasets: list[AverageComparisonDataset], output_file: Path) -> Path:
+        if not datasets:
+            raise ValueError("At least one dataset is required to write an average comparison summary.")
+
+        first_dataset = datasets[0]
+        payload = {
+            "projectCount": len(first_dataset.project_names),
+            "projectNames": first_dataset.project_names,
+            "maxPathCount": first_dataset.max_path_count,
+            "strategyOrder": first_dataset.strategy_order,
+            "metrics": {
+                dataset.metric.value: {
+                    "averageReferenceTotal": dataset.average_reference_total,
+                    "strategies": [
+                        {
+                            "strategyName": series.strategy_name,
+                            "points": [
+                                {
+                                    "pathCount": point.path_count,
+                                    "averageValue": point.average_value,
+                                    "projectCount": point.project_count,
+                                    "actualPathCounts": point.actual_path_counts,
+                                }
+                                for point in series.points
+                            ],
+                        }
+                        for series in dataset.strategy_series
+                    ],
                 }
                 for dataset in datasets
             },

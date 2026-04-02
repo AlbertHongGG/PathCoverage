@@ -42,7 +42,7 @@ def parse_args() -> argparse.Namespace:
         "--max-paths-per-project",
         type=positive_int,
         default=32,
-        help="Maximum number of sorted paths to keep per strategy/project when generating summaries and charts. Defaults to no limit.",
+        help="Maximum number of sorted paths to keep per strategy/project when generating summaries and charts. Defaults to 32.",
     )
     return parser.parse_args()
 
@@ -75,6 +75,9 @@ def main() -> None:
         max_paths_per_project=args.max_paths_per_project,
     )
 
+    print(f"Coverage output root: {summary.coverage_root_dir}")
+    print(f"Analysis output root: {summary.analysis_root_dir}")
+
     for project_result in summary.project_results:
         project_input = project_result.project_input
         result = project_result.result
@@ -89,17 +92,20 @@ def main() -> None:
     for project_name in sorted(summary.results_by_project):
         comparison_results = summary.results_by_project[project_name]
         if not comparison_results:
-            print(f"[comparison/{project_name}] No strategy results were found; comparison charts were skipped.")
+            print(
+                f"[coverage/comparison/{project_name}] No strategy results were found; comparison charts were skipped."
+            )
             continue
 
         comparison_output_dir = summary.comparison_root_dir / project_name
-        print(f"[comparison/{project_name}] Strategies: {len(comparison_results)}")
-        print(f"[comparison/{project_name}] Output directory: {comparison_output_dir}")
+        print(f"[coverage/comparison/{project_name}] Strategies: {len(comparison_results)}")
+        print(f"[coverage/comparison/{project_name}] Output directory: {comparison_output_dir}")
 
-    print(f"[comparison] Strategy score summary: {summary.strategy_score_summary_path}")
-    print(f"[comparison] Strategy score chart: {summary.strategy_score_chart_path}")
-    print(f"[path_count_compare] Output directory: {summary.path_count_compare_root_dir}")
-    print(f"[path_scatter] Output directory: {summary.path_scatter_root_dir}")
+    print(f"[coverage/comparison/average] Output directory: {summary.average_comparison_root_dir}")
+    print(f"[coverage/comparison] Strategy score summary: {summary.strategy_score_summary_path}")
+    print(f"[coverage/comparison] Strategy score chart: {summary.strategy_score_chart_path}")
+    print(f"[analysis/path_count_compare] Output directory: {summary.path_count_compare_root_dir}")
+    print(f"[analysis/path_scatter] Output directory: {summary.path_scatter_root_dir}")
 
 
 if __name__ == "__main__":

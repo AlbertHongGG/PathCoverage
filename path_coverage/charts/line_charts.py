@@ -10,7 +10,7 @@ from .base import BaseChart
 from .common import build_annotation_offsets, build_comparison_palette, save_and_close
 from ..analysis.metrics import CoverageMetricResolver
 from ..common import natural_label_key
-from ..models import AnalysisResult, CoverageMetric
+from ..models import AnalysisResult, AverageComparisonDataset, CoverageMetric
 
 
 class SingleCoverageLineChart(BaseChart):
@@ -222,3 +222,118 @@ class StrategyScoreCumulativeChart(BaseChart):
         ax.legend(title="Strategy", loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
         save_and_close(fig, output_file)
         return output_file
+
+
+class AverageStrategyComparisonLineChart(BaseChart):
+    def __init__(self, metric_resolver: CoverageMetricResolver | None = None) -> None:
+        self._metric_resolver = metric_resolver or CoverageMetricResolver()
+
+    def render(self, dataset: AverageComparisonDataset, output_file: Path) -> Path:
+        if not dataset.strategy_series:
+            raise ValueError("At least one strategy series is required to generate the average comparison chart.")
+
+        ordered_series = sorted(
+            dataset.strategy_series,
+            key=lambda series: natural_label_key(series.strategy_name),
+        )
+        fig, ax = plt.subplots(figsize=(13, 7))
+        palette = build_comparison_palette(len(ordered_series))
+        annotation_targets: list[dict[str, object]] = []
+        max_path_count = 0
+        total_value = dataset.average_reference_total
+
+        for index, series in enumerate(ordered_series):
+            x_values = [point.path_count for point in series.points]
+            y_values = [point.average_value for point in series.points]
+            if not x_values:
+                continue
+
+            max_path_count = max(max_path_count, max(x_values))
+            ax.plot(
+                x_values,
+                y_values,
+                marker="o",
+                markersize=4.5,
+                linewidth=2.0,
+                color=palette[index],
+                label=series.strategy_name,
+                alpha=0.95,
+            )
+
+            target_path_count, target_value = self._select_annotation_target(x_values, y_values, total_value)
+            annotation_targets.append(
+                {
+                    "target_path_count": target_path_count,
+                    "target_value": target_value,
+                    "label_text": f"{target_path_count}",
+                    "color": palette[index],
+                }
+            )
+
+        if max_path_count == 0:
+            raise ValueError("At least one strategy must include average coverage points to generate a chart.")
+
+        label_y_offsets = build_annotation_offsets(
+            [float(target["target_value"]) for target in annotation_targets]
+        )
+        for target, label_y_offset in zip(annotation_targets, label_y_offsets, strict=True):
+            ax.annotate(
+                target["label_text"],
+                xy=(float(target["target_path_count"]), float(target["target_value"])),
+                xytext=(0, label_y_offset),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                fontsize=9,
+                fontweight="semibold",
+                color=target["color"],
+            )
+
+        reference_prefix = "Total" if self._metric_resolver.is_ratio(dataset.metric) else "Average Total"
+        reference_label = (
+            f"{reference_prefix} = {total_value:.2f}"
+            if self._metric_resolver.is_ratio(dataset.metric)
+            else f"{reference_prefix} = {int(round(total_value))}"
+        )
+        ax.axhline(total_value, linestyle="--", linewidth=1.2, color="#6B7280", label=reference_label)
+        ax.set_title(
+            self._metric_resolver.average_comparison_title(
+                dataset.metric,
+                len(dataset.project_names),
+                dataset.max_path_count,
+            ),
+            pad=20,
+        )
+        ax.set_xlabel("Number of Paths")
+        ax.set_ylabel(f"Average {self._metric_resolver.y_label(dataset.metric)}")
+        ax.set_xlim(1, max(dataset.max_path_count, max_path_count) + 1)
+        if self._metric_resolver.is_ratio(dataset.metric):
+            ax.set_ylim(0, 1.1)
+        else:
+            ax.set_ylim(0, total_value * 1.1 if total_value else 1.0)
+        ax.spines[["top", "right"]].set_visible(False)
+        ax.text(
+            0.015,
+            0.98,
+            "Dashed line: average reachable total across projects",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=9,
+            color="#4B5563",
+        )
+        ax.legend(title="Strategy", loc="lower right", frameon=True)
+        save_and_close(fig, output_file)
+        return output_file
+
+    def _select_annotation_target(
+        self,
+        x_values: list[int],
+        y_values: list[float],
+        total_value: float,
+    ) -> tuple[int, float]:
+        tolerance = 1e-9
+        for path_count, coverage_value in zip(x_values, y_values, strict=True):
+            if coverage_value >= total_value - tolerance:
+                return path_count, coverage_value
+        return x_values[-1], y_values[-1]

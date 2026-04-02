@@ -147,6 +147,30 @@ class PathCountComparisonDataset:
 
 
 @dataclass(frozen=True)
+class AverageComparisonPoint:
+    path_count: int
+    average_value: float
+    project_count: int
+    actual_path_counts: dict[str, int]
+
+
+@dataclass(frozen=True)
+class AverageComparisonSeries:
+    strategy_name: str
+    points: list[AverageComparisonPoint]
+
+
+@dataclass(frozen=True)
+class AverageComparisonDataset:
+    metric: CoverageMetric
+    strategy_order: list[str]
+    project_names: list[str]
+    average_reference_total: float
+    max_path_count: int
+    strategy_series: list[AverageComparisonSeries]
+
+
+@dataclass(frozen=True)
 class ProjectScatterPoint:
     strategy_name: str
     state_coverage: int
@@ -195,7 +219,11 @@ class ApplicationRunSummary:
     strategy_names: list[str]
     project_results: list[ApplicationProjectResult]
     results_by_project: dict[str, dict[str, AnalysisResult]]
+    coverage_root_dir: Path
+    strategy_outputs_root_dir: Path
     comparison_root_dir: Path
+    average_comparison_root_dir: Path
+    analysis_root_dir: Path
     path_count_compare_root_dir: Path
     path_scatter_root_dir: Path
     strategy_score_summary_path: Path

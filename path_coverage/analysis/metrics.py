@@ -88,5 +88,16 @@ class CoverageMetricResolver:
     def average_title(self, metric: CoverageMetric, path_limit: int) -> str:
         return f"Average {self.display_name(metric)} Across Projects (Top {path_limit} Paths Cap)"
 
+    def average_comparison_title(
+        self,
+        metric: CoverageMetric,
+        project_count: int,
+        max_path_count: int,
+    ) -> str:
+        return (
+            f"Average {self.display_name(metric)} Comparison by Strategy Across {project_count} Projects "
+            f"(Up to {max_path_count} Paths)"
+        )
+
     def scatter_title(self, metric: CoverageMetric, project_name: str, path_limit: int) -> str:
         return f"{self.display_name(metric)} vs Average Path Length ({project_name}, Top {path_limit} Paths Cap)"

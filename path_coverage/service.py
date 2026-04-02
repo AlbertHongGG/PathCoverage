@@ -5,6 +5,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from .analysis import (
+    AverageComparisonDatasetBuilder,
     ComparisonScatterDatasetBuilder,
     CoverageMetricResolver,
     PathCountComparisonBuilder,
@@ -13,6 +14,7 @@ from .analysis import (
     StrategyScoreSummaryBuilder,
 )
 from .charts import (
+    AverageStrategyComparisonLineChart,
     ComparisonAveragePathLengthScatterChart,
     PathCountAverageBarChart,
     SingleCoverageLineChart,
@@ -23,6 +25,7 @@ from .charts import (
 from .common import DEFAULT_PATH_LIMITS, path_limit_dir_name
 from .models import AnalysisResult, CoverageMetric
 from .outputs import (
+    AverageComparisonSummaryWriter,
     ComparisonScatterSummaryWriter,
     CoverageSummaryWriter,
     JsonWriter,
@@ -48,15 +51,18 @@ class PathCoverageService:
         sorted_paths_writer: SortedPathsWriter | None = None,
         coverage_summary_writer: CoverageSummaryWriter | None = None,
         json_writer: JsonWriter | None = None,
+        average_comparison_summary_writer: AverageComparisonSummaryWriter | None = None,
         path_count_summary_writer: PathCountComparisonSummaryWriter | None = None,
         project_scatter_summary_writer: ProjectScatterSummaryWriter | None = None,
         comparison_scatter_summary_writer: ComparisonScatterSummaryWriter | None = None,
         single_chart: SingleCoverageLineChart | None = None,
         comparison_chart: StrategyComparisonLineChart | None = None,
+        average_comparison_chart: AverageStrategyComparisonLineChart | None = None,
         score_chart: StrategyScoreCumulativeChart | None = None,
         path_count_chart: PathCountAverageBarChart | None = None,
         path_scatter_chart: TransitionCoveragePathLengthScatterChart | None = None,
         comparison_path_scatter_chart: ComparisonAveragePathLengthScatterChart | None = None,
+        average_comparison_builder: AverageComparisonDatasetBuilder | None = None,
         path_count_comparison_builder: PathCountComparisonBuilder | None = None,
         project_scatter_builder: ProjectScatterDatasetBuilder | None = None,
         comparison_scatter_builder: ComparisonScatterDatasetBuilder | None = None,
@@ -67,6 +73,9 @@ class PathCoverageService:
         self._sorted_paths_writer = sorted_paths_writer or SortedPathsWriter()
         self._coverage_summary_writer = coverage_summary_writer or CoverageSummaryWriter()
         self._json_writer = json_writer or JsonWriter()
+        self._average_comparison_summary_writer = (
+            average_comparison_summary_writer or AverageComparisonSummaryWriter()
+        )
         self._path_count_summary_writer = path_count_summary_writer or PathCountComparisonSummaryWriter()
         self._project_scatter_summary_writer = project_scatter_summary_writer or ProjectScatterSummaryWriter()
         self._comparison_scatter_summary_writer = (
@@ -74,11 +83,17 @@ class PathCoverageService:
         )
         self._single_chart = single_chart or SingleCoverageLineChart(self._metric_resolver)
         self._comparison_chart = comparison_chart or StrategyComparisonLineChart(self._metric_resolver)
+        self._average_comparison_chart = (
+            average_comparison_chart or AverageStrategyComparisonLineChart(self._metric_resolver)
+        )
         self._score_chart = score_chart or StrategyScoreCumulativeChart()
         self._path_count_chart = path_count_chart or PathCountAverageBarChart(self._metric_resolver)
         self._path_scatter_chart = path_scatter_chart or TransitionCoveragePathLengthScatterChart(self._metric_resolver)
         self._comparison_path_scatter_chart = (
             comparison_path_scatter_chart or ComparisonAveragePathLengthScatterChart(self._metric_resolver)
+        )
+        self._average_comparison_builder = average_comparison_builder or AverageComparisonDatasetBuilder(
+            metric_resolver=self._metric_resolver,
         )
         self._path_count_comparison_builder = path_count_comparison_builder or PathCountComparisonBuilder(
             metric_resolver=self._metric_resolver,
@@ -133,6 +148,30 @@ class PathCoverageService:
             for metric in CHART_METRIC_ORDER
         ]
         return tuple(chart_paths)  # type: ignore[return-value]
+
+    def write_average_strategy_comparison(
+        self,
+        results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
+        output_dir: Path,
+    ) -> list[Path]:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        datasets = self._average_comparison_builder.build(results_by_project)
+        if not datasets:
+            return []
+
+        metric_order = {metric: index for index, metric in enumerate(CHART_METRIC_ORDER)}
+        ordered_datasets = sorted(datasets, key=lambda dataset: metric_order[dataset.metric])
+        output_paths = [
+            self._average_comparison_chart.render(
+                dataset,
+                output_dir / f"average_strategy_{dataset.metric.value}.png",
+            )
+            for dataset in ordered_datasets
+        ]
+        output_paths.append(
+            self._average_comparison_summary_writer.write(ordered_datasets, output_dir / "summary.json")
+        )
+        return output_paths
 
     def write_strategy_score_summary(
         self,
