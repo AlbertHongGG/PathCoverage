@@ -231,11 +231,20 @@ class PathCoverageService:
             scatter_dir = output_dir / dataset.project_name / path_limit_dir_name(dataset.path_limit)
             scatter_dir.mkdir(parents=True, exist_ok=True)
             for metric in CHART_METRIC_ORDER:
+                base_filename = f"{metric.value}_vs_average_path_length"
                 output_paths.append(
                     self._path_scatter_chart.render(
                         dataset,
                         metric,
-                        scatter_dir / f"{metric.value}_vs_average_path_length.png",
+                        scatter_dir / f"{base_filename}.png",
+                    )
+                )
+                output_paths.append(
+                    self._path_scatter_chart.render(
+                        dataset,
+                        metric,
+                        scatter_dir / f"{base_filename}_pareto_frontier.png",
+                        emphasize_frontier=True,
                     )
                 )
             output_paths.append(
@@ -257,11 +266,20 @@ class PathCoverageService:
             scatter_dir = output_dir / path_limit_dir_name(dataset.path_limit)
             scatter_dir.mkdir(parents=True, exist_ok=True)
             for metric in CHART_METRIC_ORDER:
+                base_filename = f"{metric.value}_vs_average_path_length"
                 output_paths.append(
                     self._comparison_path_scatter_chart.render(
                         dataset,
                         metric,
-                        scatter_dir / f"{metric.value}_vs_average_path_length.png",
+                        scatter_dir / f"{base_filename}.png",
+                    )
+                )
+                output_paths.append(
+                    self._comparison_path_scatter_chart.render(
+                        dataset,
+                        metric,
+                        scatter_dir / f"{base_filename}_pareto_frontier.png",
+                        emphasize_frontier=True,
                     )
                 )
             output_paths.append(

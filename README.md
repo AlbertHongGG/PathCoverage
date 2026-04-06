@@ -10,6 +10,8 @@ Example:
 uv run main.py --max-paths-per-project 20
 ```
 
+Chinese output guide: [docs/output-structure-zh.md](docs/output-structure-zh.md)
+
 Expected layout:
 
 ```text
@@ -99,6 +101,6 @@ Notes:
 - `output/coverage/comparison/average/` contains four average comparison line charts and a `summary.json`. Each chart averages the per-path coverage value across all discovered projects, and the X axis respects the effective `--max-paths-per-project` cap.
 - The root `output/coverage/comparison/` folder also includes an aggregated strategy scoreboard JSON and a cumulative score chart built from all project comparison metrics.
 - The root `output/analysis/path_count_compare/` folder contains one subfolder per fixed path cap (`paths-5`, `paths-10`, `paths-15`, `paths-20`, `paths-25`, `paths-30`). Each subfolder includes four bar charts that compare average coverage across all projects at that path cap, plus a `summary.json` file.
-- The root `output/analysis/path_scatter/comparison/` folder contains one subfolder per fixed path cap. Each subfolder includes four scatter plots where the X axis is the average value of one coverage metric across all projects, the Y axis is average path length across all projects, and every strategy is rendered as a labeled point.
-- The root `output/analysis/path_scatter/` folder contains one subfolder per project, and inside each project folder one subfolder per fixed path cap. Each of those subfolders contains four scatter plots where the X axis is one of state coverage, state coverage ratio, transition coverage, or transition coverage ratio, the Y axis is average path length, and every strategy is rendered as a labeled point.
+- The root `output/analysis/path_scatter/comparison/` folder contains one subfolder per fixed path cap. Each subfolder includes four scatter plots where the X axis is the average value of one coverage metric across all projects, the Y axis is average path length across all projects, and every strategy is rendered as a labeled point. Each metric also includes a matching `_pareto_frontier.png` variant that fades and crosses out dominated strategies so the Pareto-optimal choices stand out.
+- The root `output/analysis/path_scatter/` folder contains one subfolder per project, and inside each project folder one subfolder per fixed path cap. Each of those subfolders contains four scatter plots where the X axis is one of state coverage, state coverage ratio, transition coverage, or transition coverage ratio, the Y axis is average path length, and every strategy is rendered as a labeled point. Each metric also includes a matching `_pareto_frontier.png` variant that keeps the same data but highlights the Pareto frontier for "higher coverage, shorter paths" decisions.
 - The fixed path counts are treated as a path cap rather than a minimum requirement. If a strategy/project pair has fewer than `N` sorted paths, the charts use the last available coverage snapshot and the average path length over the actual available path count.
