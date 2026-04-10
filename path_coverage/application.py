@@ -73,10 +73,17 @@ class CoverageApplication:
             results_by_project.setdefault(project_input.project_name, {})[project_input.strategy_name] = result
             project_results.append(ApplicationProjectResult(project_input=project_input, result=result))
 
-        for project_name in sorted(results_by_project, key=natural_label_key):
+        ordered_project_names = sorted(results_by_project, key=natural_label_key)
+        project_display_names = {
+            project_name: str(index)
+            for index, project_name in enumerate(ordered_project_names, start=1)
+        }
+
+        for project_name in ordered_project_names:
             comparison_output_dir = comparison_root_dir / project_name
             self._service.write_strategy_comparison(
                 project_name=project_name,
+                display_project_name=project_display_names[project_name],
                 strategy_results=results_by_project[project_name],
                 output_dir=comparison_output_dir,
             )
@@ -103,6 +110,7 @@ class CoverageApplication:
         self._service.write_project_path_scatters(
             results_by_project=results_by_project,
             output_dir=path_scatter_root_dir,
+            project_display_names=project_display_names,
         )
 
         return ApplicationRunSummary(

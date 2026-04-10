@@ -43,8 +43,8 @@ class SingleCoverageLineChart(BaseChart):
         reference_label = f"Total = {total_value:.2f}" if self._metric_resolver.is_ratio(metric) else f"Total = {int(total_value)}"
         ax.axhline(total_value, linestyle="--", linewidth=1.2, color="#6B7280", label=reference_label)
         ax.set_title(self._metric_resolver.single_title(metric), pad=20)
-        ax.set_xlabel("Number of Paths")
-        ax.set_ylabel(self._metric_resolver.y_label(metric))
+        ax.set_xlabel("Path Count")
+        ax.set_ylabel(self._metric_resolver.value_label(metric))
         if self._metric_resolver.is_ratio(metric):
             ax.set_ylim(0, 1.05)
         ax.legend()
@@ -59,6 +59,7 @@ class StrategyComparisonLineChart(BaseChart):
     def render(
         self,
         project_name: str,
+        display_project_name: str | None,
         strategy_results: Mapping[str, AnalysisResult],
         metric: CoverageMetric,
         output_file: Path,
@@ -138,9 +139,9 @@ class StrategyComparisonLineChart(BaseChart):
 
         reference_label = f"Total = {total_value:.2f}" if self._metric_resolver.is_ratio(metric) else f"Total = {int(total_value)}"
         ax.axhline(total_value, linestyle="--", linewidth=1.2, color="#6B7280", label=reference_label)
-        ax.set_title(self._metric_resolver.comparison_title(metric, project_name), pad=20)
-        ax.set_xlabel("Number of Paths")
-        ax.set_ylabel(self._metric_resolver.y_label(metric))
+        ax.set_title(self._metric_resolver.comparison_title(metric, display_project_name or project_name), pad=20)
+        ax.set_xlabel("Path Count")
+        ax.set_ylabel(self._metric_resolver.value_label(metric))
         ax.set_xlim(1, max_path_count + 1)
         if self._metric_resolver.is_ratio(metric):
             ax.set_ylim(0, 1.1)
@@ -216,8 +217,8 @@ class StrategyScoreCumulativeChart(BaseChart):
                     color=palette[index],
                 )
 
-        ax.set_title("Cumulative Strategy Score by Project", pad=20)
-        ax.set_xlabel("Project")
+        ax.set_title("Cumulative Strategy Score by Project Order", pad=20)
+        ax.set_xlabel("Project Order")
         ax.set_ylabel("Cumulative Score")
         ax.set_xticks(x_positions)
         ax.set_xticklabels([str(index) for index in x_positions])
@@ -307,8 +308,8 @@ class AverageStrategyComparisonLineChart(BaseChart):
             ),
             pad=20,
         )
-        ax.set_xlabel("Number of Paths")
-        ax.set_ylabel(f"Average {self._metric_resolver.y_label(dataset.metric)}")
+        ax.set_xlabel("Path Count")
+        ax.set_ylabel(self._metric_resolver.average_value_label(dataset.metric))
         ax.set_xlim(1, max(dataset.max_path_count, max_path_count) + 1)
         if self._metric_resolver.is_ratio(dataset.metric):
             ax.set_ylim(0, 1.1)

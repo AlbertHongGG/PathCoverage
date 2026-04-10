@@ -36,7 +36,7 @@ class PathCountAverageBarChart(BaseChart):
 
         ax.set_title(self._metric_resolver.average_title(dataset.metric, dataset.path_limit), pad=20)
         ax.set_xlabel("Strategy")
-        ax.set_ylabel(self._metric_resolver.y_label(dataset.metric))
+        ax.set_ylabel(self._metric_resolver.average_value_label(dataset.metric))
         ax.spines[["top", "right"]].set_visible(False)
         if self._metric_resolver.is_ratio(dataset.metric):
             ax.set_ylim(0, 1.05)

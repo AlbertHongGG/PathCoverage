@@ -41,6 +41,7 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
         metric: CoverageMetric,
         output_file: Path,
         emphasize_frontier: bool = False,
+        display_project_name: str | None = None,
     ) -> Path:
         palette = build_comparison_palette(len(dataset.strategy_points))
         fig, ax = plt.subplots(figsize=(12, 7))
@@ -103,10 +104,15 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
         if emphasize_frontier:
             self._draw_frontier(ax, x_values, y_values, frontier_indices)
         ax.set_title(
-            self._build_title(metric, dataset.project_name, dataset.path_limit, emphasize_frontier),
+            self._build_title(
+                metric,
+                display_project_name or dataset.project_name,
+                dataset.path_limit,
+                emphasize_frontier,
+            ),
             pad=20,
         )
-        ax.set_xlabel(self._metric_resolver.y_label(metric))
+        ax.set_xlabel(self._metric_resolver.value_label(metric))
         ax.set_ylabel("Average Path Length")
         ax.spines[["top", "right"]].set_visible(False)
         self._set_axis_limits(ax, x_values, y_values, metric)
@@ -143,7 +149,7 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
         title = self._metric_resolver.scatter_title(metric, project_name, path_limit)
         if not emphasize_frontier:
             return title
-        return f"{title} - Pareto Frontier Highlighted"
+        return f"{title} (Pareto Frontier Highlighted)"
 
     def _format_value(self, value: float, metric: CoverageMetric) -> str:
         return self._format_number(value, ratio=self._metric_resolver.is_ratio(metric))
@@ -308,7 +314,7 @@ class ComparisonAveragePathLengthScatterChart(BaseChart):
             self._build_title(dataset, metric, emphasize_frontier),
             pad=20,
         )
-        ax.set_xlabel(f"Average {self._metric_resolver.y_label(metric)}")
+        ax.set_xlabel(self._metric_resolver.average_value_label(metric))
         ax.set_ylabel("Average Path Length")
         ax.spines[["top", "right"]].set_visible(False)
         self._project_chart._set_axis_limits(ax, x_values, y_values, metric)
@@ -332,10 +338,7 @@ class ComparisonAveragePathLengthScatterChart(BaseChart):
         metric: CoverageMetric,
         emphasize_frontier: bool,
     ) -> str:
-        title = (
-            f"Average {self._metric_resolver.display_name(metric)} vs Average Path Length Across Projects "
-            f"(Top {dataset.path_limit} Paths Cap)"
-        )
+        title = f"Average {self._metric_resolver.display_name(metric)} and Average Path Length Across Projects"
         if not emphasize_frontier:
             return title
-        return f"{title} - Pareto Frontier Highlighted"
+        return f"{title} (Pareto Frontier Highlighted)"

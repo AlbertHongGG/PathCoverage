@@ -7,16 +7,16 @@ from ..models import CoverageMetric, CoveragePoint, CoverageSnapshot, CoverageTo
 class CoverageMetricResolver:
     _DISPLAY_NAMES = {
         CoverageMetric.STATE_COVERAGE: "State Coverage",
-        CoverageMetric.STATE_COVERAGE_RATIO: "State Coverage Ratio",
+        CoverageMetric.STATE_COVERAGE_RATIO: "State Coverage",
         CoverageMetric.TRANSITION_COVERAGE: "Transition Coverage",
-        CoverageMetric.TRANSITION_COVERAGE_RATIO: "Transition Coverage Ratio",
+        CoverageMetric.TRANSITION_COVERAGE_RATIO: "Transition Coverage",
     }
 
-    _Y_LABELS = {
-        CoverageMetric.STATE_COVERAGE: "Covered States",
-        CoverageMetric.STATE_COVERAGE_RATIO: "Covered States / Total States",
-        CoverageMetric.TRANSITION_COVERAGE: "Covered Transitions",
-        CoverageMetric.TRANSITION_COVERAGE_RATIO: "Covered Transitions / Total Transitions",
+    _VALUE_LABELS = {
+        CoverageMetric.STATE_COVERAGE: "State Coverage",
+        CoverageMetric.STATE_COVERAGE_RATIO: "State Coverage",
+        CoverageMetric.TRANSITION_COVERAGE: "Transition Coverage",
+        CoverageMetric.TRANSITION_COVERAGE_RATIO: "Transition Coverage",
     }
 
     _LINE_COLORS = {
@@ -29,8 +29,14 @@ class CoverageMetricResolver:
     def display_name(self, metric: CoverageMetric) -> str:
         return self._DISPLAY_NAMES[metric]
 
+    def value_label(self, metric: CoverageMetric) -> str:
+        return self._VALUE_LABELS[metric]
+
+    def average_value_label(self, metric: CoverageMetric) -> str:
+        return f"Average {self.value_label(metric)}"
+
     def y_label(self, metric: CoverageMetric) -> str:
-        return self._Y_LABELS[metric]
+        return self.value_label(metric)
 
     def line_color(self, metric: CoverageMetric) -> str:
         return self._LINE_COLORS[metric]
@@ -80,13 +86,13 @@ class CoverageMetricResolver:
         return f"{int(round(value))}"
 
     def comparison_title(self, metric: CoverageMetric, project_name: str) -> str:
-        return f"{self.display_name(metric)} Comparison by Strategy ({project_name})"
+        return f"{self.display_name(metric)} by Strategy ({project_name})"
 
     def single_title(self, metric: CoverageMetric) -> str:
         return f"{self.display_name(metric)} by Path Count"
 
     def average_title(self, metric: CoverageMetric, path_limit: int) -> str:
-        return f"Average {self.display_name(metric)} Across Projects (Top {path_limit} Paths Cap)"
+        return f"Average {self.display_name(metric)} Across Strategies"
 
     def average_comparison_title(
         self,
@@ -94,10 +100,7 @@ class CoverageMetricResolver:
         project_count: int,
         max_path_count: int,
     ) -> str:
-        return (
-            f"Average {self.display_name(metric)} Comparison by Strategy Across {project_count} Projects "
-            f"(Up to {max_path_count} Paths)"
-        )
+        return f"Average {self.display_name(metric)} by Strategy Across Projects"
 
     def scatter_title(self, metric: CoverageMetric, project_name: str, path_limit: int) -> str:
-        return f"{self.display_name(metric)} vs Average Path Length ({project_name}, Top {path_limit} Paths Cap)"
+        return f"{self.display_name(metric)} and Average Path Length ({project_name})"

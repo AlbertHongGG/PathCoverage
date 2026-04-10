@@ -131,6 +131,7 @@ class PathCoverageService:
     def write_strategy_comparison(
         self,
         project_name: str,
+        display_project_name: str | None,
         strategy_results: Mapping[str, AnalysisResult],
         output_dir: Path,
     ) -> tuple[Path, Path, Path, Path]:
@@ -141,6 +142,7 @@ class PathCoverageService:
         chart_paths = [
             self._comparison_chart.render(
                 project_name=project_name,
+                display_project_name=display_project_name,
                 strategy_results=strategy_results,
                 metric=metric,
                 output_file=output_dir / f"{project_name}_strategy_{metric.value}.png",
@@ -223,6 +225,7 @@ class PathCoverageService:
         results_by_project: Mapping[str, Mapping[str, AnalysisResult]],
         output_dir: Path,
         path_limits: tuple[int, ...] = DEFAULT_PATH_LIMITS,
+        project_display_names: Mapping[str, str] | None = None,
     ) -> list[Path]:
         output_dir.mkdir(parents=True, exist_ok=True)
         datasets = self._project_scatter_builder.build(results_by_project, path_limits=path_limits)
@@ -237,6 +240,7 @@ class PathCoverageService:
                         dataset,
                         metric,
                         scatter_dir / f"{base_filename}.png",
+                        display_project_name=(project_display_names or {}).get(dataset.project_name, dataset.project_name),
                     )
                 )
                 output_paths.append(
@@ -245,6 +249,7 @@ class PathCoverageService:
                         metric,
                         scatter_dir / f"{base_filename}_pareto_frontier.png",
                         emphasize_frontier=True,
+                        display_project_name=(project_display_names or {}).get(dataset.project_name, dataset.project_name),
                     )
                 )
             output_paths.append(
