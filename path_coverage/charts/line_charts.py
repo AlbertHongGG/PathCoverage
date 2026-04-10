@@ -191,10 +191,11 @@ class StrategyScoreCumulativeChart(BaseChart):
             for strategy_name in sorted(strategy_cumulative_scores, key=natural_label_key)
         }
         palette = build_comparison_palette(len(ordered_series))
+        x_positions = list(range(1, len(project_labels) + 1))
         fig, ax = plt.subplots(figsize=(14, 7))
         for index, (strategy_name, cumulative_scores) in enumerate(ordered_series.items()):
             ax.plot(
-                project_labels,
+                x_positions,
                 cumulative_scores,
                 marker="o",
                 markersize=5,
@@ -206,7 +207,7 @@ class StrategyScoreCumulativeChart(BaseChart):
             if cumulative_scores:
                 ax.annotate(
                     f"{cumulative_scores[-1]}",
-                    (project_labels[-1], cumulative_scores[-1]),
+                    (x_positions[-1], cumulative_scores[-1]),
                     textcoords="offset points",
                     xytext=(8, 0),
                     ha="left",
@@ -218,6 +219,8 @@ class StrategyScoreCumulativeChart(BaseChart):
         ax.set_title("Cumulative Strategy Score by Project", pad=20)
         ax.set_xlabel("Project")
         ax.set_ylabel("Cumulative Score")
+        ax.set_xticks(x_positions)
+        ax.set_xticklabels([str(index) for index in x_positions])
         ax.spines[["top", "right"]].set_visible(False)
         ax.legend(title="Strategy", loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
         save_and_close(fig, output_file)

@@ -80,17 +80,6 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
                     alpha=0.9,
                     zorder=4,
                 )
-            ax.annotate(
-                point.strategy_name,
-                (x_value, point.average_path_length),
-                textcoords="offset points",
-                xytext=(6, 6),
-                ha="left",
-                va="bottom",
-                fontsize=9,
-                color=label_color,
-                alpha=label_text_alpha,
-            )
             texts.append(
                 ax.text(
                     x_value,
@@ -142,11 +131,7 @@ class TransitionCoveragePathLengthScatterChart(BaseChart):
         y_value: float,
         metric: CoverageMetric,
     ) -> str:
-        return (
-            f"{strategy_name}\n"
-            f"x={self._format_value(x_value, metric)}\n"
-            f"y={self._format_number(y_value)}"
-        )
+        return f"{strategy_name} ({self._format_value(x_value, metric)}, {self._format_number(y_value)})"
 
     def _build_title(
         self,
