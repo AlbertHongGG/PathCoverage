@@ -119,7 +119,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Generate project-level scatter charts where X is state/transition coverage and Y is "
-            "manual verification feature completion ratio computed from the top-N paths in 每個專案的 32 Path整理."
+            "manual verification feature coverage computed from the top-N paths in 每個專案的 32 Path整理."
         )
     )
     parser.add_argument(
@@ -138,7 +138,7 @@ def parse_args() -> argparse.Namespace:
         "--output-dir",
         type=Path,
         default=settings.output_dir / OUTPUT_ANALYSIS_DIRNAME / FEATURE_COMPLETION_OUTPUT_DIRNAME,
-        help="Directory for feature completion scatter outputs.",
+        help="Directory for feature coverage scatter outputs.",
     )
     parser.add_argument(
         "--checklist-root",
@@ -397,7 +397,7 @@ class FeatureCompletionScatterChart:
             self._draw_frontier(ax, x_values, y_values, frontier_indices)
         ax.set_title(self._build_title(dataset, metric, emphasize_frontier), pad=20)
         ax.set_xlabel(self._metric_resolver.y_label(metric))
-        ax.set_ylabel("Feature Completion Ratio")
+        ax.set_ylabel("Feature Coverage")
         ax.spines[["top", "right"]].set_visible(False)
         self._set_axis_limits(ax, x_values, metric)
         self._adjust_labels(ax, texts, x_values, y_values)
@@ -429,7 +429,7 @@ class FeatureCompletionScatterChart:
         emphasize_frontier: bool,
     ) -> str:
         title = (
-            f"{self._metric_resolver.display_name(metric)} vs Feature Completion Ratio "
+            f"{self._metric_resolver.display_name(metric)} vs Feature Coverage "
             f"({dataset.project_name}, Top {dataset.path_limit} Paths Cap)"
         )
         if not emphasize_frontier:
@@ -597,7 +597,7 @@ class FeatureCompletionComparisonScatterChart:
             self._draw_frontier(ax, x_values, y_values, frontier_indices)
         ax.set_title(self._build_title(dataset, metric, emphasize_frontier), pad=20)
         ax.set_xlabel(f"Average {self._metric_resolver.y_label(metric)}")
-        ax.set_ylabel("Average Feature Completion Ratio")
+        ax.set_ylabel("Average Feature Coverage")
         ax.spines[["top", "right"]].set_visible(False)
         self._set_axis_limits(ax, x_values, metric)
         self._adjust_labels(ax, texts, x_values, y_values)
@@ -632,7 +632,7 @@ class FeatureCompletionComparisonScatterChart:
         emphasize_frontier: bool,
     ) -> str:
         title = (
-            f"Average {self._metric_resolver.display_name(metric)} vs Average Feature Completion Ratio Across Projects "
+            f"Average {self._metric_resolver.display_name(metric)} vs Average Feature Coverage Across Projects "
             f"(Top {dataset.path_limit} Paths Cap)"
         )
         if not emphasize_frontier:

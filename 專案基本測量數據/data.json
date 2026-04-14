@@ -1,0 +1,1997 @@
+{
+  "meta": {
+    "database_id": "31709699-e764-8095-9c28-e8971cff254b",
+    "database_name": "Result",
+    "export_type": "full",
+    "selected_columns": [],
+    "selected_rows": [],
+    "order_property": "__NDM_INDEX__",
+    "exported_at": "2026-04-06T07:32:32.089416+00:00"
+  },
+  "rows": [
+    {
+      "index": 1,
+      "page_id": "31709699-e764-80c8-8233-cfbc0d3de3a3",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.39"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "41  (100.00%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "191"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 631,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 6,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "93"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "119"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.05"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "41"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "343"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 48,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.80"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "286"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "239"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "12450"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.25,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "35  (85.37%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "127"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "1-1"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "617"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.57"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.18,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "585"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "社團活動管理平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "80"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -32,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "11819"
+        },
+        "Index": {
+          "type": "title",
+          "value": "1"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "page_id": "31709699-e764-80f2-93f0-dcbb5a4a68a4",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.87"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "61  (98.39%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "267"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 1787,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 4,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "96"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "131"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.89"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "62"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "266"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 18,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.16"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "362"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "285"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "12475"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.27,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "57  (91.94%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "90"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "1-2"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "575"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.97"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.1,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "685"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "公司內部請假系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "93"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 110,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "10688"
+        },
+        "Index": {
+          "type": "title",
+          "value": "2"
+        }
+      }
+    },
+    {
+      "index": 3,
+      "page_id": "31709699-e764-80d8-abda-eead42bc0073",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.70"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "51  (100.00%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "332"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -2944,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 5,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "92"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "150"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.62"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "51"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "451"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -115,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.88"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "464"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "217"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "11264"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.26,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "46  (90.20%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "155"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "1-3"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "846"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.36"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": -0.34,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "751"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "個人記帳＋月報表"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "123"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -95,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "14208"
+        },
+        "Index": {
+          "type": "title",
+          "value": "3"
+        }
+      }
+    },
+    {
+      "index": 4,
+      "page_id": "31709699-e764-80a8-bef4-e237720e0879",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "3.30"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "68  (98.55%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "383"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -433,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 4,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "140"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "141"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.23"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "69"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "415"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -9,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.13"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "347"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "374"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "13708"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.1,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "64  (92.75%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "110"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "1-4"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "882"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.67"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": -0.63,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "774"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "客服工單系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "116"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -108,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "14141"
+        },
+        "Index": {
+          "type": "title",
+          "value": "4"
+        }
+      }
+    },
+    {
+      "index": 5,
+      "page_id": "31709699-e764-804d-aee6-ee6e0505150e",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.25"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "67  (98.53%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "333"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -1865,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 2,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "105"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "151"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.89"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "68"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "449"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -77,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.83"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "352"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "256"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "11219"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.06,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "65  (95.59%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "139"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "1-5"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "822"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.44"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.19,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "664"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "內部文件審核與簽核系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "148"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -158,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "13084"
+        },
+        "Index": {
+          "type": "title",
+          "value": "5"
+        }
+      }
+    },
+    {
+      "index": 6,
+      "page_id": "31709699-e764-80a2-96bb-d0ed6f49f387",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "3.41"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "76  (97.44%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "454"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -886,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 12,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "128"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "114"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.19"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "78"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "376"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -45,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.35"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "427"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "409"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "12855"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.16,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "64  (82.05%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "160"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "2-1"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "883"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "3.20"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": -0.21,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "934"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "線上課程平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "133"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 51,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "13741"
+        },
+        "Index": {
+          "type": "title",
+          "value": "6"
+        }
+      }
+    },
+    {
+      "index": 7,
+      "page_id": "31709699-e764-806d-9062-fdd075a21a9d",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "3.46"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "54  (93.10%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "381"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -12023,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 3,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "121"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "95"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.03"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "58"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "342"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -19,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.12"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "420"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "362"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "14306"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.09,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "51  (87.93%) "
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "123"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "2-2"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "724"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.99"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": -0.47,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "853"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "預約型服務網站"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "110"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 129,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "26329"
+        },
+        "Index": {
+          "type": "title",
+          "value": "7"
+        }
+      }
+    },
+    {
+      "index": 8,
+      "page_id": "31709699-e764-805c-97ae-d3e863a177fd",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.73"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "52  (96.30%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "374"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 3330,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": -1,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "183"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "137"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.91"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "54"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "470"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 170,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.09"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "708"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "544"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "18289"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.18,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "53  (98.15%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "151"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "3-5"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "982"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.97"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.24,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "1349"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "多使用者協作待辦系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "137"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 367,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "14959"
+        },
+        "Index": {
+          "type": "title",
+          "value": "8"
+        }
+      }
+    },
+    {
+      "index": 9,
+      "page_id": "31709699-e764-80f9-80b4-e562feb3484a",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "4.18"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "66  (95.65%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "510"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 1634,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "168"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "124"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.18"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "69"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "382"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 256,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.35"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "575"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "766"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "15025"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.17,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "66  (95.65%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "120"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "2-4"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "897"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "4.56"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.38,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "1255"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "問卷／表單系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "122"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 358,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "13391"
+        },
+        "Index": {
+          "type": "title",
+          "value": "9"
+        }
+      }
+    },
+    {
+      "index": 10,
+      "page_id": "31709699-e764-80e8-8ccc-ea243d49fae4",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.58"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "81  (90.00%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "537"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -17671,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": -5,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "130"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "144"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.01"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "90"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "521"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -55,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.08"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "550"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "482"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "14022"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": -0.07,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "86  (95.56%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "156"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "2-5"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "1086"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "3.71"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 1.13,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "1105"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "社群平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "208"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 19,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "31693"
+        },
+        "Index": {
+          "type": "title",
+          "value": "10"
+        }
+      }
+    },
+    {
+      "index": 11,
+      "page_id": "31709699-e764-8053-a510-d2b10d7db1e1",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.26"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "65  (91.55%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "267"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 4639,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 9,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "126"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "204"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.99"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "71"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "507"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 108,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.72"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "455"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "375"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "17830"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.27,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "56  (78.87%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "160"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "3-1"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "871"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.98"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.72,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "907"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "多商家電商平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "118"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 36,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "13191"
+        },
+        "Index": {
+          "type": "title",
+          "value": "11"
+        }
+      }
+    },
+    {
+      "index": 12,
+      "page_id": "31809699-e764-800c-abe8-c236de352175",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.49"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "76 (98.70%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "321"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 915,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 11,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "139"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "154"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "1.99"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "77"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "739"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 136,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.65"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "527"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "457"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "17020"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.34,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "65  (84.42%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "174"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "3-2"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "1221"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "3.29"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.8,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "1051"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "專案管理系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "129"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -170,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "16105"
+        },
+        "Index": {
+          "type": "title",
+          "value": "12"
+        }
+      }
+    },
+    {
+      "index": 13,
+      "page_id": "31809699-e764-80c8-9014-ebd30113ba84",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.46"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "59  (86.76%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "140"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 8206,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 10,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "139"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "138"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.31"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "68"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "354"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 277,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "1.52"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "426"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "417"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "17715"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.79,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "49  (72.06%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "116"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "3-3"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "537"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "3.00"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.54,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "983"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "訂閱制 SaaS 管理平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "57"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 446,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "9509"
+        },
+        "Index": {
+          "type": "title",
+          "value": "13"
+        }
+      }
+    },
+    {
+      "index": 14,
+      "page_id": "31809699-e764-8078-94fe-e13132032dfd",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "3.02"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "63  (90.00%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "366"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -766,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 3,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "121"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "165"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.13"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "70"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "456"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 21,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.01"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "406"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "387"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "13614"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.12,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "60  (85.71%) "
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "129"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "3-4"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "916"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "3.20"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0.18,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "865"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "金流前置模擬平台"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "121"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -51,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "14380"
+        },
+        "Index": {
+          "type": "title",
+          "value": "14"
+        }
+      }
+    },
+    {
+      "index": 15,
+      "page_id": "31809699-e764-80d3-9e00-daab00b4af9e",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": "3.24"
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "82  (96.47%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": "726"
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": -5231,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 20,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": "191"
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": "189"
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": "2.23"
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "85"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": "689"
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": -174,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": "2.21"
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": "513"
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": "552"
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": "14322"
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0.02,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "62  (72.94%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": "155"
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": "2-3"
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": "1525"
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": "2.89"
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": -0.35,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": "1142"
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": "API 平台與金鑰管理系統"
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": "224"
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": -383,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": "19553"
+        },
+        "Index": {
+          "type": "title",
+          "value": "15"
+        }
+      }
+    },
+    {
+      "index": 16,
+      "page_id": "31e09699-e764-80de-b16b-f4006fccb3cb",
+      "properties": {
+        "[Cog/Fn] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Func] Spec+Transition": {
+          "type": "rich_text",
+          "value": "960  (95.14%)"
+        },
+        "[Cog] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[行數] Diff": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[Func] Diff": {
+          "type": "formula",
+          "value": 82,
+          "readonly": true
+        },
+        "[CogFn] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Task] S+T ": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cyclo/Fn] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "總數量": {
+          "type": "rich_text",
+          "value": "1009"
+        },
+        "[CycloFn] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cog]": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[Cyclo/Fn] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[CycloFn] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cog] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[行數] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cyclo/Fn] Diff": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[Func] Spec ": {
+          "type": "rich_text",
+          "value": "878  (87.02%)"
+        },
+        "[Task] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "ID": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cyclo] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cog/Fn] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cog/Fn] Diff": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[Cyclo] S": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "專案名稱": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[CogFn] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "[Cyclo]": {
+          "type": "formula",
+          "value": 0,
+          "readonly": true
+        },
+        "[行數] S+T": {
+          "type": "rich_text",
+          "value": ""
+        },
+        "Index": {
+          "type": "title",
+          "value": ""
+        }
+      }
+    }
+  ]
+}
